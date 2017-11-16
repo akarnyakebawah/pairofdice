@@ -1,13 +1,13 @@
-### Twiggsy Web
+## Twiggsy Web
 This repository is cloned from react-redux-styled-boilerplate from @albertusangga.
 
 ## Usage
-** Run development server **
+* Run development server *
 ```
   npm run start *or* yarn start
 ```
 
-** Deployment **
+* Deployment *
 ```
   npm run build *or* yarn build
 ```
