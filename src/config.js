@@ -1,12 +1,12 @@
 const config = {
   production: {
-    API_URL: 'https://api.twiggsy.com',
+    API_URL: 'https://api.twiggsy.com/',
   },
   development: {
-    API_URL: 'http://twiggsy.herokuapp.com',
+    API_URL: 'http://twiggsy.herokuapp.com/',
   },
   local: {
-    API_URL: 'http://localhost:4000',
+    API_URL: 'http://localhost:4000/',
   },
 };
 
