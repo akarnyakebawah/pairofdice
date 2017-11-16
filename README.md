@@ -1,7 +1,14 @@
 ## Twiggsy Web
 This repository is cloned from react-redux-styled-boilerplate from @albertusangga.
 
-## Usage
+## Getting started
+* Installation*
+Install once globally:
+```
+  npm install
+```
+You will need Node >= 6 to run this project
+
 * Run development server *
 ```
   npm run start *or* yarn start
