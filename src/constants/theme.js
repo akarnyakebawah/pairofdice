@@ -1,5 +1,8 @@
 /*
-  Ascending rule
+  All style variables are declared here
+  - Fonts are used for font-family names
+  - Colors are HEX values / rgb() values
+  - Linear-gradients are linear-gradient CSS string
 */
 
 const color = {
