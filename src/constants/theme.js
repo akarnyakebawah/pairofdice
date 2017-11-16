@@ -8,6 +8,13 @@
 
 export const SFProDisplay = 'SFProDisplay';
 
+const breakpoint = {
+  mobile: '32rem',
+  tablet: '48rem',
+  desktop: '60rem',
+  largerDesktop: '72rem',
+};
+
 const color = {
   black: '#000',
   white: '#FFF',
@@ -23,17 +30,33 @@ const fontSize = {
   small: '1rem',
   medium: '1.5rem',
   large: '2rem',
+  jumbo: '3rem',
+  huge: '5rem',
 };
 
 const linearGradient = {
   main: `linear-gradient(305deg, ${color.salmon}, ${color.mediumPink})`,
 };
 
+const margin = {
+  small: '1rem',
+  medium: '2rem',
+  large: '3rem',
+};
+
+const transition = {
+  short: '1s',
+  long: '2s',
+};
+
 const theme = {
+  breakpoint,
   color,
   font,
   fontSize,
   linearGradient,
+  margin,
+  transition,
 };
 
 export default theme;

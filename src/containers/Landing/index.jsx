@@ -34,13 +34,21 @@ const Container = styled.div`
 
 const Title = styled.div`
   color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.large};
+  font-size: ${props => props.theme.fontSize.huge};
   font-weight: bold;
+  margin-left: ${props => props.theme.margin.small};
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.large};
+  }
 `;
 
 const Subtitle = styled.div`
   color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.medium};
+  font-size: ${props => props.theme.fontSize.large};
+  margin-left: ${props => props.theme.margin.small};
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
 `;
 
 export default Home;
