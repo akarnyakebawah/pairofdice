@@ -4,11 +4,6 @@ import * as apiUrl from '../constants/apiUrl';
 export const request = defaults();
 loadAuthorizationToken();
 
-export function setAuthorizationToken(token) {
-  localStorage.setItem('authenticationToken', token);
-  loadAuthorizationToken();
-}
-
 export function loadAuthorizationToken() {
   const token = localStorage.getItem('authenticationToken');
   if (!token) {
@@ -17,5 +12,5 @@ export function loadAuthorizationToken() {
 }
 
 export async function login(email, password) {
-  return request.post(auth()).send({ email, password });
+  return request.post(apiUrl.auth()).send({ email, password });
 }

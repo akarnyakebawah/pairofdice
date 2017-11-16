@@ -1,9 +1,23 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
+import LoginForm from '../../components/LoginForm';
+import { authLogin } from '../../redux/modules/auth';
+
+@connect(
+  state => ({
+    auth: state.auth,
+  }),
+  dispatch => ({
+    actionLogin: (username, password) => dispatch(authLogin(username, password)),
+  }),
+)
 class Login extends Component {
   render() {
+    const { actionLogin } = this.props;
+
     return (
-      <h1> hello </h1>
+      <LoginForm actionLogin={actionLogin} />
     );
   }
 };
