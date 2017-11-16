@@ -9,6 +9,6 @@ module.exports = (options, req) => ({
   },
   port: 3220,
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
   },
 });
