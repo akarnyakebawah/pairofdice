@@ -9,9 +9,11 @@ __pycache__
 /coverage
 
 # production
-/build
+/dist
 
 # misc
+log/
+
 .DS_Store
 .env.local
 .env.development.local
