@@ -1,27 +1,17 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
+import React from 'react';
+import { Switch, Router } from 'react-router-dom';
+import Landing from './Landing';
+import Login from './Login';
 
-// eslint-disable-next-line react/jsx-filename-extension
 class Home extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <h1 className="App-title" onClick={() => alert('hello')}>Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
-
-const Container = styled.div`
-  width: 100%;
-
-`;
+    render() {
+        return (
+            <Switch>
+                <Router exact path='/' component={Landing} />
+                <Router path='/#/login/' component={Login} />
+            </Switch>
+        );
+    }
+};
 
 export default Home;

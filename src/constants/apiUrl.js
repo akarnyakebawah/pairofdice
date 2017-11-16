@@ -13,8 +13,6 @@
 import config from '../config';
 
 // Base endpoints of the API
-const base = uri => config.API_URL + uri;
+export const base = uri => config.API_URL + uri;
 
-export const login = () => base('login');
-
-export default base;
+export const auth = () => base('auth');

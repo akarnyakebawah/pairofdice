@@ -3,7 +3,7 @@ const config = {
     API_URL: 'https://api.twiggsy.com/',
   },
   development: {
-    API_URL: 'http://twiggsy.herokuapp.com/',
+    API_URL: 'http://twiggsy-api.herokuapp.com/api/v1/',
   },
   local: {
     API_URL: 'http://localhost:4000/',
