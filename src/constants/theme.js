@@ -12,7 +12,12 @@ const breakpoint = {
   mobile: '32rem',
   tablet: '48rem',
   desktop: '60rem',
-  largerDesktop: '72rem',
+  largeDesktop: '72rem',
+};
+
+const button = {
+  medium: '10rem',
+  large: '20rem',
 };
 
 const color = {
@@ -30,18 +35,17 @@ const fontSize = {
   small: '1rem',
   medium: '1.5rem',
   large: '2rem',
-  jumbo: '3rem',
+  jumbo: '3.5rem',
   huge: '5rem',
+};
+
+const image = {
+  logo: '5rem',
+  logoMobile: '3rem',
 };
 
 const linearGradient = {
   main: `linear-gradient(305deg, ${color.salmon}, ${color.mediumPink})`,
-};
-
-const margin = {
-  small: '1rem',
-  medium: '2rem',
-  large: '3rem',
 };
 
 const transition = {
@@ -51,11 +55,12 @@ const transition = {
 
 const theme = {
   breakpoint,
+  button,
   color,
   font,
   fontSize,
+  image,
   linearGradient,
-  margin,
   transition,
 };
 

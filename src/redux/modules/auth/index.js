@@ -1,4 +1,4 @@
-import { login, setRequestAuthorization } from '../../../api';
+import { login } from '../../../api';
 
 const REHYDRATE = 'persist/REHYDRATE';
 const LOGIN = 'auth/login';
@@ -18,17 +18,18 @@ const INITIAL_STATE = {
 export default function reducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
     case REHYDRATE:
+      if (!action.payload.auth) return state;
       return {
         ...action.payload.auth,
         loading: false,
-      }
-    LOGIN:
+      };
+    case LOGIN:
       return {
         ...state,
         loading: true,
         error: null,
-      }
-    LOGIN_SUCCESS:
+      };
+    case LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -36,36 +37,48 @@ export default function reducer(state = INITIAL_STATE, action = {}) {
         loaded: false,
         user: { ...action.payload.user },
         token: action.payload.token,
-      }
-    LOGIN_ERROR:
+      };
+    case LOGIN_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error,
-      }
-    LOGOUT:
+      };
+    case LOGOUT:
       return {
         ...INITIAL_STATE,
-      }
+      };
+    default:
+      return state;
   }
 }
 
-export const authLogin = (username, password) => {
-  return dispatch => {
+// Action Creator
+export function successLogin(payload) {
+  return { type: LOGIN_SUCCESS, payload };
+}
+
+export function errorLogin(error) {
+  return { type: LOGIN_ERROR, error };
+}
+
+// Thunk
+export function authLogin(username, password) {
+  return async (dispatch) => {
     dispatch({ type: LOGIN });
-    login(username, password).then(value => {
-      const result = value.body;
+    try {
+      const { body: result } = await login(username, password);
       localStorage.setItem('authenticationToken', result.token);
-      return dispatch({ type: LOGIN_SUCCESS, payload: result });
-    }, error => {
-      return dispatch({ type: LOGIN_ERROR, error });
-    });
-  }
+      dispatch(successLogin(result));
+    } catch (error) {
+      dispatch(errorLogin(error));
+    }
+  };
 }
 
-export const authLogout = () => {
-  return dispatch => {
-    localStorage.setItem('authenticationToken', '');
+export function authLogout() {
+  return async (dispatch) => {
+    localStorage.removeItem('authenticationToken');
     return dispatch({ type: LOGOUT });
-  }
+  };
 }

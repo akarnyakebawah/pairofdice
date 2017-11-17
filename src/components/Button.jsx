@@ -3,19 +3,22 @@ import styled, { css } from 'styled-components';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Button = styled.button`
-  cursor: pointer;
-  letter-spacing: 0.7px;
-  color: ${props => props.primary || props.outline ? props.theme.white : props.theme.orange};
-  border: 2px
-    ${props => (props.outline ? props.theme.white : props.theme.orange)} solid;
-  background: ${props =>
-    props.primary ? props.theme.orange : props.theme.white};
-  padding: 0.5rem 3rem;
+  background: ${props => (props.primary ? props.theme.color.white : props.theme.linearGradient.main)};
   border-radius: 3rem;
+  border: 2px ${props => props.theme.color.white} solid;
+  color: ${props => props.theme.color.white};
+  cursor: pointer;
+  min-width: 10rem;
+  padding: 0 2rem;
   text-decoration: none;
   ${props => props.outline && 'background: transparent;'};
   ${props => props.caps && 'text-transform: uppercase;'};
-
+  > * {
+    background: ${props => props.primary && props.theme.linearGradient.main};
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
   &:hover,
   &:focus {
     background: ${props => props.theme.orange};
@@ -24,8 +27,6 @@ const Button = styled.button`
 
   &:disabled {
     cursor: not-allowed;
-    border-color: ${props => props.theme.disabled};
-    background: ${props => props.theme.disabled};
   }
 `;
 
@@ -35,26 +36,11 @@ export const Link = styled(({ primary, caps, bold, gray, ...rest }) => (
   ${props => props.size && `font-size: ${props.size};`} letter-spacing: 0.05rem;
   color: ${props => (props.primary ? props.theme.white : props.theme.orange)};
   border: 0.2rem ${props => props.theme.orange} solid;
-  background: ${props =>
-    props.primary ? props.theme.orange : props.theme.white};
-  ${props => props.bold && 'font-weight: 700;'} padding: .5rem 2rem;
+  background: ${props => props.primary ? props.theme.orange : props.theme.white};
   border-radius: 3rem;
   text-decoration: none;
-  ${props => props.caps && 'text-transform: uppercase;'} &:hover, &:focus {
-    background: ${props => props.theme.orange};
-    color: ${props => props.theme.white};
-  }
-
-  ${props =>
-    props.gray &&
-    `
-    color: ${props.theme.lightGray};
-    border-color: ${props.theme.lightGray};
-
-    &:hover {
-      background: ${props.theme.lightGray};
-    }
-  `};
+  ${props => props.bold && 'font-weight: 700;'} padding: .5rem 2rem;
+  ${props => props.caps && 'text-transform: uppercase;'}
 
   &:disabled {
     cursor: not-allowed;

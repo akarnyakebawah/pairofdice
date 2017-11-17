@@ -2,7 +2,6 @@ import defaults from 'superagent-defaults';
 import * as apiUrl from '../constants/apiUrl';
 
 export const request = defaults();
-loadAuthorizationToken();
 
 export function loadAuthorizationToken() {
   const token = localStorage.getItem('authenticationToken');

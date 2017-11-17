@@ -4,7 +4,7 @@ import SFProDisplayFontUrl from '../static/fonts/SanFranciscoDisplay-Regular.otf
 /* eslint-disable no-unused-expressions */
 injectGlobal`
   html {
-    font-size: 16px; // 1rem = 16px
+    font-size: 100%;
   }
   body {
     margin: 0;
