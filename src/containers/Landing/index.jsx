@@ -34,6 +34,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   color: ${props => props.theme.color.white};
+  display: grid;
   font-size: ${props => props.theme.fontSize.huge};
   font-weight: bold;
   margin-left: ${props => props.theme.margin.small};

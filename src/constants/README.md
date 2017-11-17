@@ -1,3 +1,5 @@
+### Constants
+
 ## apiUrl.js
 _All API endpoints are listed here_
 Rules & Styleguides:
