@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import ReactGA from 'react-ga';
+
+ReactGA.initialize('UA-109827623-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const title = 'Build a better campaign.';
 const subtitle = `When your event, your causes, or your friend's birthday needs to kick off a cool-ass campaign, Twiggsy is here to save your day.`;
