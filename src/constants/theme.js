@@ -22,9 +22,11 @@ const button = {
 
 const color = {
   black: '#000',
-  white: '#FFF',
-  salmon: '#ff7676',
+  gray: '#F0F0F0',
+  grayTransparent: opacity => `rgba(240, 240, 240, ${opacity})`,
   mediumPink: '#f54ea2',
+  salmon: '#ff7676',
+  white: '#FFF',
 };
 
 const font = {
@@ -32,6 +34,7 @@ const font = {
 };
 
 const fontSize = {
+  tiny: '0.75rem',
   small: '1rem',
   medium: '1.5rem',
   large: '2rem',
