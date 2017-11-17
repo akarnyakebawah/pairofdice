@@ -1,4 +1,4 @@
-import { login, setRequestAuthorization } from '../../api';
+import { login, setRequestAuthorization } from '../../../api';
 
 const REHYDRATE = 'persist/REHYDRATE';
 const LOGIN = 'auth/login';
