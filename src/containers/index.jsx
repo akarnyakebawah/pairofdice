@@ -20,6 +20,7 @@ import Logo from '../components/Logo';
 import CreateCampaign from './CreateCampaign';
 import Landing from './Landing';
 import Login from './Login';
+import Register from './Register';
 
 @withRouter
 @connect(state => ({ ...state }), { logout, reloadAuth })
@@ -80,15 +81,10 @@ class Home extends Component {
         <Switch>
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
+          <Route path={routes.REGISTER_ROUTE} component={Register} />
           {!token && <Redirect to={routes.LOGIN_ROUTE} />}
-          {Home.AUTHENTICATED_ROUTE.map(route => (
-            token &&
-            <Route
-              {...route}
-              key={route.path}
-              component={route.component}
-            />
-          ))}
+          {Home.AUTHENTICATED_ROUTE.map(route => token &&
+            <Route {...route} key={route.path} component={route.component} />)}
         </Switch>
         <Footer />
       </Container>

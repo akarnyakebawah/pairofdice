@@ -2,22 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 // Redux
 import { login } from '../../redux/modules/auth';
 
 // Components
 import { Button } from '../../components/Button';
-import { CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
+import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 @connect(
   state => ({
-    auth: state.auth,
+    auth: state.auth
   }),
-  { login },
+  { login }
 )
-class Login extends Component {
+class Register extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -26,8 +25,10 @@ class Login extends Component {
   };
 
   state = {
+    name: '',
+    birthDate: null,
     email: '',
-    password: ''
+    password: '',
   };
 
   onChangeState(event) {
@@ -37,18 +38,32 @@ class Login extends Component {
 
   async login(event) {
     event.preventDefault();
-    const { email, password } = this.state;
-    await this.props.login({ email, password });
+    await this.props.login(this.state);
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
     }
   }
 
   render() {
-    const { email, password } = this.state;
+    const { name, birthDate, email, password } = this.state;
     const { loading, error } = this.props.auth;
     return (
       <Form>
+        <FormTitle>Name</FormTitle>
+        <Input
+          name="name"
+          onChange={e => this.onChangeState(e)}
+          placeholder="Name"
+          value={name}
+        />
+        <FormTitle>Birth date</FormTitle>
+        <Input
+          name="birthDate"
+          onChange={e => this.onChangeState(e)}
+          placeholder="Birthdate"
+          type="date"
+          value={birthDate}
+        />
         <FormTitle>Email</FormTitle>
         <Input
           name="email"
@@ -65,13 +80,14 @@ class Login extends Component {
           type="password"
           value={password}
         />
-        <LoginButton onClick={e => this.login(e)} disabled={loading} style={{display: "flex"}}>
+        <LoginButton
+          onClick={e => this.login(e)}
+          disabled={loading}
+          style={{ display: 'flex' }}
+        >
           {!loading && <span>Login</span>}
           {loading && <span>Loading...</span>}
         </LoginButton>
-        <RedirectToRegister>
-          Doesn't have account yet? <Link to={REGISTER_ROUTE}>Register</Link>
-        </RedirectToRegister>
       </Form>
     );
   }
@@ -79,9 +95,7 @@ class Login extends Component {
 
 const margin = '1rem';
 
-const LoginButton = styled(Button)`
-  margin-top: 1rem;
-`;
+const LoginButton = styled(Button)`margin-top: 1rem;`;
 
 const Input = styled.input`
   border: none;
@@ -132,12 +146,4 @@ const FormTitle = styled.div`
   }
 `;
 
-const RedirectToRegister = styled.div`
-  margin-top: 1rem;
-  a {
-    font-weight: bold;
-    color: ${props => props.theme.color.white};
-  }
-`;
-
-export default Login;
+export default Register;

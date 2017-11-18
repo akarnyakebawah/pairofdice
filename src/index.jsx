@@ -10,11 +10,8 @@ import configureStore from './redux/configureStore';
 import App from './containers/';
 import theme from './constants/theme';
 import './style';
-import registerServiceWorker from './registerServiceWorker';
 
 const { persistor, store, history } = configureStore();
-
-registerServiceWorker();
 
 render(
   <Provider store={store}>
