@@ -47,38 +47,36 @@ class Login extends Component {
     const { email, password } = this.state;
     const { loading, error } = this.props.auth;
     return (
-      <Container>
+      <Form>
         <FormTitle>Email</FormTitle>
-        <form>
-          <Form
-            name="email"
-            onChange={e => this.onChangeState(e)}
-            placeholder="Email"
-            type="email"
-            value={email}
-          />
-          <FormTitle>Password</FormTitle>
-          <Form
-            name="password"
-            onChange={e => this.onChangeState(e)}
-            placeholder="Password"
-            type="password"
-            value={password}
-          />
-          <Button onClick={e => this.login(e)} disabled={loading}>
-            {!loading && <span>Login</span>}
-            {loading && <span>Loading...</span>}
-          </Button>
-        </form>
-      </Container>
+        <Input
+          name="email"
+          onChange={e => this.onChangeState(e)}
+          placeholder="Email"
+          type="email"
+          value={email}
+        />
+        <FormTitle>Password</FormTitle>
+        <Input
+          name="password"
+          onChange={e => this.onChangeState(e)}
+          placeholder="Password"
+          type="password"
+          value={password}
+        />
+        <LoginButton onClick={e => this.login(e)} disabled={loading} style={{display: "flex"}}>
+          {!loading && <span>Login</span>}
+          {loading && <span>Loading...</span>}
+        </LoginButton>
+      </Form>
     );
   }
 }
 
-const Container = styled.div`
-  align-self: center;
-  width: 80%;
-  color: ${props => props.theme.color.white};
+const margin = '1rem';
+
+const LoginButton = styled(Button)`
+  margin-top: 1rem;
 `;
 
 const Input = styled.input`
@@ -86,16 +84,12 @@ const Input = styled.input`
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
   padding: 1rem;
-`;
-
-const Form = styled(Input)`
   border: none;
   border-bottom: 1px ${props => props.theme.color.white} solid;
   background-color: transparent;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
   margin: 1rem 0;
-  width: 100%;
 
   &:focus {
     outline: none;
@@ -103,12 +97,35 @@ const Form = styled(Input)`
   &::placeholder {
     color: ${props => props.theme.color.grayTransparent(0.5)};
   }
+
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.small};
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+  }
+`;
+
+const Form = styled.form`
+  align-self: center;
+  width: 80%;
+  max-width: 30rem;
+  color: ${props => props.theme.color.white};
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const FormTitle = styled.div`
   font-size: ${props => props.theme.fontSize.large};
   font-weight: bolder;
   margin: 1rem 0;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
 `;
 
 export default Login;

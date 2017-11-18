@@ -98,12 +98,19 @@ const Container = styled.div`
   width: 80%;
   color: ${props => props.theme.color.white};
   margin-bottom: 2rem;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const FormTitle = styled.div`
   font-size: ${props => props.theme.fontSize.large};
   font-weight: bolder;
   margin-top: 2rem;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
 `;
 
 const UrlFormContainer = styled.div`
@@ -120,6 +127,7 @@ const UrlFormContainer = styled.div`
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     flex-direction: column;
     align-items: flex-start;
+    width: 95%;
   }
 `;
 
@@ -129,6 +137,7 @@ const Input = styled.input`
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
   padding: 1rem;
+  width: 100%;
 `;
 
 const CaptionsForm = styled.textarea`
@@ -142,9 +151,11 @@ const CaptionsForm = styled.textarea`
   padding: 1rem;
   resize: none;
   width: 100%;
-
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    padding: 0.25rem;
   }
 `;
 
@@ -159,6 +170,9 @@ const NameForm = styled(Input)`
   &:focus {
     outline: none;
   }
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    padding: 0.25rem;
+  }
 `;
 
 const UrlForm = styled(Input)`
@@ -168,6 +182,10 @@ const UrlForm = styled(Input)`
   width: 50%;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    width: 100%;
+    padding: 1rem 0.25rem;
   }
 `;
 

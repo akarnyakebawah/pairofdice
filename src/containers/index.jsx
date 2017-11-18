@@ -72,7 +72,7 @@ class Home extends Component {
       <Container>
         <Navbar>
           <Logo />
-          {token &&
+          {token && window.location.pathname !== routes.BASE_ROUTE &&
             <LogoutButton onClick={() => this.props.logout()}>
               <span>Logout</span>
             </LogoutButton>}
@@ -111,6 +111,9 @@ const LogoutButton = styled(Button)`
   height: 3rem;
   font-size: ${props => props.theme.fontSize.small};
   margin-right: 1rem;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    height: auto;
+  }
 `;
 
 const Navbar = styled.div`
@@ -118,6 +121,9 @@ const Navbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    flex-direction: column;
+  }
 `;
 
 const Footer = styled.div`

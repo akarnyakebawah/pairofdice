@@ -81,7 +81,7 @@ class FileUploader extends React.Component {
     const { isImageLoaded, imageDataUrl } = this.props;
     const labelClass = `${isDragging && 'hover'}`;
     if (isImageLoaded) {
-      return <img src={imageDataUrl} className={labelClass} alt="img" />;
+      return <Image src={imageDataUrl} className={labelClass} alt="img" />;
     }
     return (
       <Label
@@ -91,7 +91,7 @@ class FileUploader extends React.Component {
         onDragOver={this.onDragOver}
         onDrop={this.onDrop}
       >
-        <img src={plus} className={labelClass} alt="upload-icon" />
+        <Image src={plus} className={labelClass} alt="upload-icon" />
         <input
           type="file"
           accept="image/*"
@@ -115,7 +115,7 @@ const Label = styled.label`
     border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
     border-radius: 0.5rem;
     cursor: pointer;
-    height: 10rem;
+    width: 10rem;
     margin: 1rem 0;
     object-fit: scale-down;
     padding: 1rem;
@@ -125,5 +125,13 @@ const Label = styled.label`
     .loaded {
       display: none;
     }
+    @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+      width: auto;
+      max-width: 100%;
+    }
   }
+`;
+
+const Image = styled.img`
+  max-width: 100%;
 `;
