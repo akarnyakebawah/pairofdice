@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Logo from '../../components/Logo';
 import { Button, ButtonLink } from '../../components/Button';
-import { FORM_ROUTE } from '../../constants/routes.js';
+import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes.js';
 
 const title = 'Build a better campaign.';
 const subtitle = "When your event, your causes, or your friend's birthday needs to kick off a cool-ass campaign, Twiggsy is here to save your day.";
@@ -22,7 +22,7 @@ class Landing extends Component {
         <Subtitle>
           {subtitle}
         </Subtitle>
-        <UnflexButton primary to={FORM_ROUTE}>
+        <UnflexButton primary to={CREATE_CAMPAIGN_ROUTE}>
           <span>{buttonText}</span>
         </UnflexButton>
       </Container>
@@ -36,6 +36,7 @@ const mobileMargin = '1rem';
 const Container = styled.div`
   width: 100%;
   align-self: center;
+  margin-bottom: ${margin};
 `;
 
 const Title = styled.div`

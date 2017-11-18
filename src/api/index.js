@@ -3,13 +3,20 @@ import * as apiUrl from '../constants/apiUrl';
 
 export const request = defaults();
 
-export function loadAuthorizationToken() {
-  const token = localStorage.getItem('authenticationToken');
-  if (!token) {
-    request.set('Authentication', token);
-  }
+export function setAuthorizationToken(token) {
+  request.set('Authorization', `JWT ${token}`);
 }
 
-export async function login(email, password) {
+export async function login({ email, password }) {
   return request.post(apiUrl.auth()).send({ email, password });
+}
+
+export async function postCampaign({ captions, name, image, url }) {
+  return request
+    .post(apiUrl.campaigns())
+    .field('campaign_url', url)
+    .field('name', name)
+    .field('twibbon_img', image)
+    .field('captions', captions)
+  ;
 }

@@ -5,6 +5,12 @@ import plus from '../../../static/assets/icon/plus.svg';
 
 class FileUploader extends React.Component {
   static propTypes = {
+    // Parent's state
+    isImageLoaded: PropTypes.bool.isRequired,
+    image: PropTypes.object.isRequired,
+    imageDataUrl: PropTypes.string.isRequired,
+
+    // Methods
     setState: PropTypes.func.isRequired,
   };
 
@@ -50,15 +56,15 @@ class FileUploader extends React.Component {
 
 
     this.props.setState({ isImageLoaded: false });
-    console.log(this.props);
-    reader.onload = async () => {
-      await this.props.setState({
-        image: reader.result,
+
+    reader.onload = () => {
+      console.log(file);
+      this.props.setState({
+        image: file,
+        imageDataUrl: reader.result,
         isImageLoaded: true,
       });
-      console.log(this.props);
     };
-
     reader.readAsDataURL(file);
   }
 
@@ -71,12 +77,11 @@ class FileUploader extends React.Component {
   }
 
   render() {
-
     const { isDragging } = this.state;
-    const { isImageLoaded, image } = this.props;
+    const { isImageLoaded, imageDataUrl } = this.props;
     const labelClass = `${isDragging && 'hover'}`;
     if (isImageLoaded) {
-      return <img src={image} className={labelClass} alt="img" />;
+      return <img src={imageDataUrl} className={labelClass} alt="img" />;
     }
     return (
       <Label
@@ -86,7 +91,7 @@ class FileUploader extends React.Component {
         onDragOver={this.onDragOver}
         onDrop={this.onDrop}
       >
-        <img src={image || plus} className={labelClass} alt="upload-icon" />
+        <img src={plus} className={labelClass} alt="upload-icon" />
         <input
           type="file"
           accept="image/*"

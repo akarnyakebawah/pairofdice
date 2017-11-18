@@ -1,6 +1,6 @@
 const config = {
   production: {
-    API_URL: 'https://api.twiggsy.com/',
+    API_URL: 'http://api.twiggsy.com/api/v1/',
   },
   development: {
     API_URL: 'http://twiggsy-api.herokuapp.com/api/v1/',

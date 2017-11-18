@@ -1,84 +1,120 @@
-import { login } from '../../../api';
+import * as api from '../../../api';
+import * as localStorageKey from '../../../constants/localStorage';
 
-const REHYDRATE = 'persist/REHYDRATE';
+const ERROR_CLEAR = 'auth/error_clear';
+const ERROR_SET = 'auth/error_set';
+const LOADED = 'auth/loaded';
+const LOADING = 'auth/loading';
+const LOADING_COMPLETE = 'auth/loading_complete';
 const LOGIN = 'auth/login';
-const LOGIN_SUCCESS = 'auth/login_success';
-const LOGIN_ERROR = 'auth/login_error';
-
 const LOGOUT = 'auth/logout';
+const TOKEN_SET = 'auth/token_set';
+const REHYDRATE = 'persist/REHYDRATE';
 
 const INITIAL_STATE = {
-  loading: false,
+  loading: true,
   loaded: false,
   error: null,
-  user: null,
-  token: null,
+  user: {},
+  token: '',
 };
 
-export default function reducer(state = INITIAL_STATE, action = {}) {
+export default function reducer(state = Object.assign({}, INITIAL_STATE), action = {}) {
   switch (action.type) {
-    case REHYDRATE:
-      if (!action.payload.auth) return state;
-      return {
-        ...action.payload.auth,
-        loading: false,
-      };
+    case ERROR_SET:
+      return { ...state, error: action.payload };
+    case ERROR_CLEAR:
+      return { ...state, error: null };
+    case LOADED:
+      return { ...state, loaded: true };
+    case LOADING:
+      return { ...state, loading: true };
+    case LOADING_COMPLETE:
+      return { ...state, loading: false };
     case LOGIN:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case LOGIN_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        error: null,
-        loaded: false,
-        user: { ...action.payload.user },
-        token: action.payload.token,
-      };
-    case LOGIN_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-      };
+      return { ...state, user: { ...action.payload.user }, token: action.payload.token };
     case LOGOUT:
-      return {
-        ...INITIAL_STATE,
-      };
+      return { ...state, error: {}, user: {}, token: '' };
+    case REHYDRATE:
+      if (!action.payload || !action.payload.auth) return state;
+      return { ...action.payload.auth, loading: false, loaded: true };
+    case TOKEN_SET:
+      return { ...state, loaded: true, token: action.payload };
     default:
       return state;
   }
 }
 
 // Action Creator
-export function successLogin(payload) {
-  return { type: LOGIN_SUCCESS, payload };
+export function completeLoading() {
+  return { type: LOADING_COMPLETE };
 }
 
-export function errorLogin(error) {
-  return { type: LOGIN_ERROR, error };
+export function clearError() {
+  return { type: ERROR_CLEAR };
+}
+
+export function loaded() {
+  return { type: LOADED };
+}
+
+export function loading() {
+  return { type: LOADING };
+}
+
+export function onLogin(payload) {
+  return { type: LOGIN, payload };
+}
+
+export function onLogout() {
+  return { type: LOGOUT };
+}
+
+export function setError(payload) {
+  return { type: ERROR_SET, payload, error: true };
+}
+
+export function setToken(payload) {
+  return { type: TOKEN_SET, payload };
 }
 
 // Thunk
-export function authLogin(username, password) {
+
+export function reload() {
   return async (dispatch) => {
-    dispatch({ type: LOGIN });
-    try {
-      const { body: result } = await login(username, password);
-      localStorage.setItem('authenticationToken', result.token);
-      dispatch(successLogin(result));
-    } catch (error) {
-      dispatch(errorLogin(error));
+    dispatch(loading());
+    const token = localStorage.getItem(localStorageKey.TOKEN);
+    if (token) {
+      api.setAuthorizationToken(token);
+      dispatch(setToken(token));
     }
+    dispatch(loaded());
+    dispatch(completeLoading());
   };
 }
 
-export function authLogout() {
+export function login({ email, password }) {
   return async (dispatch) => {
-    localStorage.removeItem('authenticationToken');
-    return dispatch({ type: LOGOUT });
+    dispatch(loading());
+    try {
+      const { body: result } = await api.login({ email, password });
+      localStorage.setItem(localStorageKey.TOKEN, result.token);
+      api.setAuthorizationToken(result.token);
+      dispatch(onLogin(result));
+      dispatch(clearError());
+    } catch (error) {
+      dispatch(setError(error));
+    }
+    dispatch(completeLoading());
+  };
+}
+
+export function logout() {
+  return async (dispatch) => {
+    dispatch(loading());
+    localStorage.removeItem(localStorageKey.TOKEN);
+    api.setAuthorizationToken(null);
+    dispatch(onLogout());
+    dispatch(completeLoading());
   };
 }

@@ -1,25 +1,36 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import { createCampaign } from '../../redux/modules/createCampaign';
 
 import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
 
-class Form extends Component {
+@connect(
+  state => ({ createCampaign: state.createCampaign }),
+  { createCampaign },
+)
+class CreateCampaign extends Component {
+  static propTypes = {
+    createCampaign: PropTypes.func.isRequired,
+  };
+
   constructor() {
     super();
     this.onChangeState = this.onChangeState.bind(this);
   }
 
   state = {
-    campaignName: '',
-    campaignUrl: '',
+    name: '',
+    url: '',
     captions: '',
-    filters: {},
 
     // Image upload
     isImageLoaded: false,
-    image: ''
+    image: {},
+    imageDataUrl: '',
   };
 
   onChangeState(e) {
@@ -27,13 +38,20 @@ class Form extends Component {
     this.setState({ [name]: value });
   }
 
+  async createCampaign(e) {
+    e.preventDefault();
+    const { name, url, captions, image } = this.state;
+    await this.props.createCampaign({ name, url, captions, image });
+  }
+
   render() {
     const {
-      campaignName,
-      campaignUrl,
+      name,
+      url,
       captions,
       isImageLoaded,
       image,
+      imageDataUrl
     } = this.state;
     return (
       <Container>
@@ -41,21 +59,22 @@ class Form extends Component {
         <FileUploader
           setState={e => this.setState(e)}
           image={image}
+          imageDataUrl={imageDataUrl}
           isImageLoaded={isImageLoaded}
         />
         <FormTitle>Campaign Name</FormTitle>
         <NameForm
-          name="campaignName"
-          value={campaignName}
+          name="name"
+          value={name}
           onChange={e => this.onChangeState(e)}
         />
         <FormTitle>Campaign URL</FormTitle>
         <UrlFormContainer>
           <div>twiggsy.com/</div>
           <UrlForm
-            name="campaignUrl"
+            name="url"
             onChange={e => this.onChangeState(e)}
-            value={campaignUrl}
+            value={url}
           />
         </UrlFormContainer>
         <FormTitle>
@@ -66,7 +85,7 @@ class Form extends Component {
           value={captions}
           onChange={e => this.onChangeState(e)}
         />
-        <Button primary>
+        <Button primary onClick={e => this.createCampaign(e)}>
           <span>Create</span>
         </Button>
       </Container>
@@ -78,12 +97,13 @@ const Container = styled.div`
   align-self: center;
   width: 80%;
   color: ${props => props.theme.color.white};
+  margin-bottom: 2rem;
 `;
 
 const FormTitle = styled.div`
   font-size: ${props => props.theme.fontSize.large};
   font-weight: bolder;
-  margin: 1rem 0;
+  margin-top: 2rem;
 `;
 
 const UrlFormContainer = styled.div`
@@ -117,18 +137,15 @@ const CaptionsForm = styled.textarea`
   border: none;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
-  padding: 1rem;
   margin: 1rem 0;
   min-height: 10rem;
+  padding: 1rem;
+  resize: none;
   width: 100%;
 
   &:focus {
     outline: none;
   }
-`;
-
-const HiddenFileForm = styled.input`
-  display: flex;
 `;
 
 const NameForm = styled(Input)`
@@ -154,4 +171,4 @@ const UrlForm = styled(Input)`
   }
 `;
 
-export default Form;
+export default CreateCampaign;

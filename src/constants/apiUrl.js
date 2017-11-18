@@ -16,3 +16,5 @@ import config from '../config';
 export const base = uri => config.API_URL + uri;
 
 export const auth = () => base('auth/');
+
+export const campaigns = () => base('campaigns/');
