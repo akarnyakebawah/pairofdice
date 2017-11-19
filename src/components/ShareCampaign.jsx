@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { ToastMessage } from "react-toastr";
 import { connect } from 'react-redux';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import { createCampaign } from '../redux/modules/createCampaign';
 
 import { Button, ButtonLink } from '../components/Button';
 
 import config from '../config';
-import { ToastContainer } from 'react-toastr/lib/components/ToastContainer';
 
 class ShareCampaign extends Component {
   static propTypes = {
@@ -23,6 +24,13 @@ class ShareCampaign extends Component {
   state = {
     isCopied: false,
   };
+
+  toastId = null;
+  notify(message) {
+    if (!toast.isActive(this.toastId)) {
+      this.toastId = toast(message);
+    }
+  }
 
   render() {
     const campaignUrl = config.WEB_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
@@ -39,12 +47,18 @@ class ShareCampaign extends Component {
           />
         </UrlFormContainer>
         <ToastContainer
-            ref={ref => toastContainer = ref}
-            toastType="info"
-            className="toast-top-right"
+          position="bottom-left"
+          type="info"
+          autoClose={2000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
         />
-        <CopyToClipboard text={campaignUrl}
-          onCopy={() => toastContainer.success('Copied')}>
+        <CopyToClipboard 
+          text={campaignUrl}
+          onCopy={() => {this.notify("Copied")}}
+        >
           <Button><span>Copy to clipboard with button</span></Button>
         </CopyToClipboard>
         <Button secondary>
