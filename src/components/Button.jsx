@@ -33,7 +33,6 @@ const ButtonCss = css`
   }
   &:hover,
   &:focus {
-    background: ${props => props.theme.color.white};
     outline: none;
   }
 

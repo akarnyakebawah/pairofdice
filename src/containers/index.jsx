@@ -22,6 +22,7 @@ import Landing from './Landing';
 import Login from './Login';
 import Register from './Register';
 import ShareCampaign from './ShareCampaign';
+import Campaign from './Campaign';
 
 @withRouter
 @connect(state => ({ ...state }), { logout, reloadAuth })
@@ -38,32 +39,10 @@ class Home extends Component {
     logout: PropTypes.func.isRequired,
   };
 
-  static AUTHENTICATED_ROUTE = [
-    {
-      component: CreateCampaign,
-      exact: true,
-      path: routes.CREATE_CAMPAIGN_ROUTE,
-    },
-    {
-      component: ShareCampaign,
-      exact: true,
-      path: routes.SHARE_CAMPAIGN_ROUTE,
-    },
-  ];
-
   async componentDidMount() {
     await this.props.reloadAuth();
     ReactGA.initialize('UA-109827623-1');
     ReactGA.pageview(window.location.href);
-  }
-
-  // eslint-disable-next-line
-  checkAuthorization(Component) {
-    const { token } = this.props.auth;
-    if (!token) {
-      return <Redirect to={routes.LOGIN_ROUTE} />;
-    }
-    return <Component />;
   }
 
   render() {
@@ -75,44 +54,31 @@ class Home extends Component {
         </Container>
       );
     }
+
     return (
       <Container>
         <Navbar>
           <Logo />
-          <Switch>
-            {Home.AUTHENTICATED_ROUTE.map(route => token && (
-              <Route
-                exact={route.exact}
-                path={route.path}
-                key={route.path}
-                component={() => (
-                  <LogoutButton onClick={() => this.props.logout()}>
-                    <span>Logout</span>
-                  </LogoutButton>)}
-              />)
-            )}
-          </Switch>
+          {
+            token &&
+            <LogoutButton onClick={() => this.props.logout()}>
+              <span>Logout</span>
+            </LogoutButton>
+          }
         </Navbar>
         <Switch>
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
           <Route path={routes.REGISTER_ROUTE} component={Register} />
-          {!token && <Redirect to={routes.LOGIN_ROUTE} />}
-          {Home.AUTHENTICATED_ROUTE.map(route => token && <Route {...route} key={route.path} component={route.component} />)}
+          <Route path={routes.CREATE_CAMPAIGN_ROUTE} component={CreateCampaign} />
+          <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
         </Switch>
-        <Switch>
-          {Home.AUTHENTICATED_ROUTE.map(route => token && (
-            <Route
-              path={route.path}
-              exact={route.exact}
-              key={route.path}
-              component={() => (
-                <MobileLogoutButton onClick={() => this.props.logout()}>
-                  <span>Logout</span>
-                </MobileLogoutButton>)}
-            />)
-          )}
-        </Switch>
+        {
+          token &&
+          <MobileLogoutButton onClick={() => this.props.logout()}>
+            <span>Logout</span>
+          </MobileLogoutButton>
+        }
         <Footer />
       </Container>
     );

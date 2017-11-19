@@ -20,3 +20,5 @@ export const auth = () => base('auth/');
 export const user = () => base('users/');
 
 export const campaigns = () => base('campaigns/');
+
+export const campaign = campaignUrl => campaigns() + campaignUrl;

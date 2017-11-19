@@ -8,6 +8,10 @@ import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
 import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
+
+import { dataUrlToFile } from '../../helpers/utils';
+import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+
 @connect(
   state => ({ campaign: state.createCampaign }),
   { createCampaign },
@@ -15,10 +19,12 @@ import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
 class CreateCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
+      error: PropTypes.object.isRequired,
       loading: PropTypes.bool.isRequired,
       campaign: PropTypes.object.isRequired,
     }).isRequired,
     createCampaign: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
   };
 
   constructor() {
@@ -33,9 +39,12 @@ class CreateCampaign extends Component {
 
     // Image upload
     isImageLoaded: false,
-    image: {},
-    imageDataUrl: '',
+    image: {}, // Image in dataUrl, parse to File to be sent to server
   };
+
+  componentDidMount() {
+
+  }
 
   onChangeState(e) {
     const { name, value } = e.target;
@@ -44,9 +53,11 @@ class CreateCampaign extends Component {
 
   async createCampaign(e) {
     e.preventDefault();
-    const { name, url, captions, image } = this.state;
+    const { name, url, captions } = this.state;
+    let { image } = this.state;
+    image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
-    if (!!this.props.campaign.campaign) {
+    if (!!this.props.campaign.campaign && !this.props.campaign.error) {
       this.props.history.push(SHARE_CAMPAIGN_ROUTE);
     }
   }
@@ -58,7 +69,6 @@ class CreateCampaign extends Component {
       captions,
       isImageLoaded,
       image,
-      imageDataUrl,
     } = this.state;
     const { loading } = this.props.campaign;
     return (
@@ -67,7 +77,6 @@ class CreateCampaign extends Component {
         <FileUploader
           setState={e => this.setState(e)}
           image={image}
-          imageDataUrl={imageDataUrl}
           isImageLoaded={isImageLoaded}
         />
         <FormTitle>Campaign Name</FormTitle>
@@ -94,7 +103,7 @@ class CreateCampaign extends Component {
           onChange={e => this.onChangeState(e)}
         />
         <Button primary onClick={e => this.createCampaign(e)}>
-          {loading && <span>Loading...</span>}
+          {loading && <LoadingButtonIndicator />}
           {!loading && <span>Create</span>}
         </Button>
       </Container>
