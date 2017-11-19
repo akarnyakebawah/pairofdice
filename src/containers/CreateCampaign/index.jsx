@@ -6,11 +6,12 @@ import { connect } from 'react-redux';
 import { createCampaign } from '../../redux/modules/createCampaign';
 import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
-import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
+import { SHARE_CAMPAIGN_ROUTE, BASE_ROUTE } from '../../constants/routes';
 
 import { dataUrlToFile } from '../../helpers/utils';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
-import { Redirect } from '../../../../../../.cache/typescript/2.6/node_modules/@types/react-router';
+
+import * as routes from '../../constants/routes';
 
 @connect(
   state => ({ campaign: state.createCampaign, auth: state.auth }),
@@ -43,8 +44,9 @@ class CreateCampaign extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.auth.auth.token) {
-      this.props.location.push('test');
+    console.log(this.props);
+    if (!this.props.auth.token) {
+      this.props.history.replace(routes.LOGIN_ROUTE);
     }
   }
 
@@ -60,7 +62,7 @@ class CreateCampaign extends Component {
     image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
     if (!!this.props.campaign.campaign && !this.props.campaign.error) {
-      this.props.history.push(SHARE_CAMPAIGN_ROUTE);
+      this.props.history.push(`${BASE_ROUTE}${url}/share`);
     }
   }
 
