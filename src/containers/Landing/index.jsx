@@ -7,8 +7,8 @@ import { Button, ButtonLink } from '../../components/Button';
 import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes.js';
 
 const title = 'Build a better campaign.';
-const subtitle = "When your event, your causes, or your friend's birthday needs to kick off a cool-ass campaign, Twiggsy is here to save your day.";
-const buttonText = 'Create Campaign.';
+const subtitle = "Easily share your campaign filter with friends and family.";
+const buttonText = 'CREATE CAMPAIGN';
 
 class Landing extends Component {
   state = { sesuatu: 'wow' }
@@ -34,9 +34,16 @@ const margin = '2rem';
 const mobileMargin = '1rem';
 
 const Container = styled.div`
-  width: 100%;
   align-self: center;
-  margin-bottom: ${margin};
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  color: ${props => props.theme.color.white};
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    
+  }
+  width: 100%; 
+  margin: ${margin};
 `;
 
 const Title = styled.div`
@@ -44,7 +51,8 @@ const Title = styled.div`
   font-size: ${props => props.theme.fontSize.huge};
   font-weight: bolder;
   margin: 0 ${margin};
-  width: 50%;
+  width: 100%;
+  text-align: center;
   line-height: 1;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     font-size: ${props => props.theme.fontSize.jumbo};
@@ -58,29 +66,35 @@ const Title = styled.div`
 
 const Subtitle = styled.div`
   color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.large};
+  font-size: ${props => props.theme.fontSize.jumbo};
+  text-align: center;
   line-height: 1;
   margin: ${margin};
-  width: 60%;
+  width: 100%;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     margin: ${mobileMargin};
-    font-size: ${props => props.theme.fontSize.small};
+    font-size: ${props => props.theme.fontSize.large};
     width: auto;
   }
   @media screen and (min-width: ${props => props.theme.breakpoint.largeDesktop}) {
-    font-size: ${props => props.theme.fontSize.large};
+    font-size: ${props => props.theme.fontSize.jumbo};
   }
 `;
 
 const UnflexButton = styled(ButtonLink)`
-  margin-left: ${margin};
-  font-size: ${props => props.theme.fontSize.medium};
-  font-weight: bold;
+  align-self: center;
+  display: flex;
   width: 20rem;
+  > * {
+    font-size: ${props => props.theme.fontSize.medium};
+    font-weight: 900px;
+  }
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    > * {
+      font-size: ${props => props.theme.fontSize.medium};
+    }
     margin: 0 ${mobileMargin};
-    font-size: ${props => props.theme.fontSize.tiny};
-    width: 3rem;
+    width: 50%;
   }
 `;
 

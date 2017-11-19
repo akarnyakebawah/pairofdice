@@ -6,6 +6,8 @@
   - Declare all font-family names into const here and export it
 */
 
+export const Apercu = 'Apercu';
+export const ApercuLight = 'ApercuLight';
 export const SFProDisplay = 'SFProDisplay';
 
 const breakpoint = {
@@ -16,8 +18,8 @@ const breakpoint = {
 };
 
 const button = {
-  medium: '10rem',
-  large: '20rem',
+  medium: '5rem',
+  large: '10rem',
 };
 
 const color = {
@@ -31,15 +33,14 @@ const color = {
 };
 
 const font = {
-  SFProDisplay,
+  Apercu,
 };
 
 const fontSize = {
-  tiny: '0.75rem',
-  small: '1rem',
-  medium: '1.5rem',
-  large: '2rem',
-  jumbo: '3.5rem',
+  small: '0.75rem',
+  medium: '1rem',
+  large: '1.5rem',
+  jumbo: '2rem',
   huge: '5rem',
 };
 

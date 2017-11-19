@@ -125,7 +125,7 @@ const Container = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
-  font-family: ${props => props.theme.font.SFProDisplay};
+  font-family: ${props => props.theme.font.Apercu};
   min-height: 100vh;
   width: 100%;
 `;

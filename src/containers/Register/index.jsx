@@ -57,14 +57,12 @@ class Register extends Component {
     const { loading, error } = this.props.auth;
     return (
       <Form>
-        <FormTitle>Name</FormTitle>
         <Input
           name="name"
           onChange={e => this.onChangeState(e)}
           placeholder="Name"
           value={name}
         />
-        <FormTitle>Birth date</FormTitle>
         <Input
           name="birthDate"
           onChange={e => this.onChangeState(e)}
@@ -72,7 +70,6 @@ class Register extends Component {
           type="date"
           value={birthDate}
         />
-        <FormTitle>Email</FormTitle>
         <Input
           name="email"
           onChange={e => this.onChangeState(e)}
@@ -80,7 +77,6 @@ class Register extends Component {
           type="email"
           value={email}
         />
-        <FormTitle>Password</FormTitle>
         <Input
           name="password"
           onChange={e => this.onChangeState(e)}
@@ -111,17 +107,16 @@ const RegisterButton = styled(Button)`margin-top: 1rem;`;
 
 const Input = styled.input`
   border: none;
+  width: 100%;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
-  padding: 1rem;
+  padding: 1rem 0rem 0.5rem 0rem;
   border: none;
-  border-bottom: 1px ${props => props.theme.color.white} solid;
+  border-bottom: 3px rgba(255,255,255,0.75) solid;
   background-color: transparent;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
   margin: 1rem 0;
-  width: 100%;
-  max-width: 30rem;
 
   &:focus {
     outline: none;
@@ -131,23 +126,19 @@ const Input = styled.input`
   }
 
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.small};
-    padding: 0.5rem;
-    margin: 0.5rem 0;
+    font-size: ${props => props.theme.fontSize.medium};
   }
 `;
 
 const Form = styled.form`
   align-self: center;
-  width: 100%;
-  max-width: 30rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    
   }
 `;
 
@@ -156,7 +147,7 @@ const FormTitle = styled.div`
   font-weight: bolder;
   margin: 1rem 0;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.medium};
+    font-size: ${props => props.theme.fontSize.large};
   }
 `;
 

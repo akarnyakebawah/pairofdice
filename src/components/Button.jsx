@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 import { Link as RouterLink } from 'react-router-dom';
 
 const ButtonCss = css`
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
   background: ${props => props.theme.color.white};
   border-radius: 3rem;
   border: 2px ${props => props.theme.color.white} solid;
@@ -12,21 +14,22 @@ const ButtonCss = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: ${props => props.theme.fontSize.medium};
   min-width: 10rem;
-  padding: 1rem 2rem;
-  transition: 1s;
+  padding: 0.5rem 1rem;
+  // transition: 1s;
   text-align: center;
   text-decoration: none;
   position: relative;
   ${props => props.secondary && 'background: transparent;'}
   ${props => props.caps && 'text-transform: uppercase;'};
   > * {
+    font-size: ${props => props.theme.fontSize.small};
+    font-weight: 900;    
     background: ${props => props.theme.linearGradient.main};
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    transition: 2s;
+    // transition: 2s;
   }
   &:hover,
   &:focus {
