@@ -25,6 +25,7 @@ const color = {
   gray: '#F0F0F0',
   grayTransparent: opacity => `rgba(240, 240, 240, ${opacity})`,
   mediumPink: '#f54ea2',
+  red: 'red',
   salmon: '#ff7676',
   white: '#FFF',
 };

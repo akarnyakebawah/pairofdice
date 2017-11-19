@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { Link as RouterLink } from 'react-router-dom';
 
 const ButtonCss = css`
-  background: ${props => props.theme.color.grayTransparent(0.95)};
+  background: ${props => props.theme.color.white};
   border-radius: 3rem;
   border: 2px ${props => props.theme.color.white} solid;
   box-shadow: 0 2px 9px 0 rgba(54, 54, 54, 0.6);
@@ -19,7 +19,7 @@ const ButtonCss = css`
   text-align: center;
   text-decoration: none;
   position: relative;
-  ${props => props.outline && 'background: transparent;'};
+  ${props => props.secondary && 'background: transparent;'}
   ${props => props.caps && 'text-transform: uppercase;'};
   > * {
     background: ${props => props.theme.linearGradient.main};

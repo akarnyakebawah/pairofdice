@@ -1,5 +1,4 @@
 import * as api from '../../../api';
-import * as localStorageKey from '../../../constants/localStorage';
 
 const CAMPAIGN_CREATED = 'create_campaign/campaign_created';
 const ERROR_CLEAR = 'create_campaign/error_clear';
@@ -34,8 +33,8 @@ export default function reducer(
     case LOADING_COMPLETE:
       return { ...state, loading: false };
     case REHYDRATE:
-      if (!action.payload) return state;
-      return { ...action.payload.create, loading: false, loaded: true };
+      if (!action.payload || !action.payload.campaign) return state;
+      return { ...action.payload.campaign, loading: false, loaded: true };
     default:
       return state;
   }
@@ -72,6 +71,7 @@ export function createCampaign({ captions, name, image, url }) {
     dispatch(loading());
     try {
       const { body: campaign } = await api.postCampaign({ captions, name, image, url });
+      dispatch(clearError());
       dispatch(createdCampaign(campaign));
     } catch (error) {
       dispatch(setError(error));

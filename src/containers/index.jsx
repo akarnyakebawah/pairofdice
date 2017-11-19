@@ -21,6 +21,7 @@ import CreateCampaign from './CreateCampaign';
 import Landing from './Landing';
 import Login from './Login';
 import Register from './Register';
+import ShareCampaign from './ShareCampaign';
 
 @withRouter
 @connect(state => ({ ...state }), { logout, reloadAuth })
@@ -40,8 +41,13 @@ class Home extends Component {
   static AUTHENTICATED_ROUTE = [
     {
       component: CreateCampaign,
-      exact: false,
+      exact: true,
       path: routes.CREATE_CAMPAIGN_ROUTE,
+    },
+    {
+      component: ShareCampaign,
+      exact: true,
+      path: routes.SHARE_CAMPAIGN_ROUTE,
     },
   ];
 
@@ -73,18 +79,39 @@ class Home extends Component {
       <Container>
         <Navbar>
           <Logo />
-          {token && window.location.pathname !== routes.BASE_ROUTE &&
-            <LogoutButton onClick={() => this.props.logout()}>
-              <span>Logout</span>
-            </LogoutButton>}
+          <Switch>
+            {Home.AUTHENTICATED_ROUTE.map(route => token && (
+              <Route
+                exact={route.exact}
+                to={route.path}
+                key={route.path}
+                component={() => (
+                  <LogoutButton onClick={() => this.props.logout()}>
+                    <span>Logout</span>
+                  </LogoutButton>)}
+              />)
+            )}
+          </Switch>
         </Navbar>
         <Switch>
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
           <Route path={routes.REGISTER_ROUTE} component={Register} />
           {!token && <Redirect to={routes.LOGIN_ROUTE} />}
-          {Home.AUTHENTICATED_ROUTE.map(route => token &&
-            <Route {...route} key={route.path} component={route.component} />)}
+          {Home.AUTHENTICATED_ROUTE.map(route => token && <Route {...route} key={route.path} component={route.component} />)}
+        </Switch>
+        <Switch>
+          {Home.AUTHENTICATED_ROUTE.map(route => token && (
+            <Route
+              to={route.path}
+              exact={route.exact}
+              key={route.path}
+              component={() => (
+                <MobileLogoutButton onClick={() => this.props.logout()}>
+                  <span>Logout</span>
+                </MobileLogoutButton>)}
+            />)
+          )}
         </Switch>
         <Footer />
       </Container>
@@ -103,13 +130,27 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const LogoutButton = styled(Button)`
-  height: 3rem;
+const LogoutButton = styled.button`
+  text-decoration: underline;
+  color: white;
+  border: none;
   font-size: ${props => props.theme.fontSize.small};
-  margin-right: 1rem;
+  margin-right: 3rem;
+  font-size: ${props => props.theme.fontSize.medium};
+  border: none;
+  background: transparent;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    height: auto;
+    display: none;
   }
+`;
+
+const MobileLogoutButton = styled(LogoutButton)`
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    display: block;
+  }
+  margin: auto;
+  font-size: ${props => props.theme.fontSize.small};
 `;
 
 const Navbar = styled.div`
@@ -119,6 +160,8 @@ const Navbar = styled.div`
   align-items: center;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 `;
 

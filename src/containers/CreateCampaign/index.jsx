@@ -3,17 +3,20 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { createCampaign } from '../../redux/modules/createCampaign';
-
+import { createCampaign } from '../../redux/modules/campaign';
 import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
+import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 @connect(
-  state => ({ createCampaign: state.createCampaign }),
+  state => ({ campaign: state.campaign }),
   { createCampaign },
 )
 class CreateCampaign extends Component {
   static propTypes = {
+    campaign: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+    }).isRequired,
     createCampaign: PropTypes.func.isRequired,
   };
 
@@ -42,6 +45,9 @@ class CreateCampaign extends Component {
     e.preventDefault();
     const { name, url, captions, image } = this.state;
     await this.props.createCampaign({ name, url, captions, image });
+    if (!!this.props.campaign.campaign) {
+      this.props.history.push(SHARE_CAMPAIGN_ROUTE);
+    }
   }
 
   render() {
@@ -51,8 +57,9 @@ class CreateCampaign extends Component {
       captions,
       isImageLoaded,
       image,
-      imageDataUrl
+      imageDataUrl,
     } = this.state;
+    const { loading } = this.props.campaign;
     return (
       <Container>
         <FormTitle>Filters</FormTitle>
@@ -86,7 +93,8 @@ class CreateCampaign extends Component {
           onChange={e => this.onChangeState(e)}
         />
         <Button primary onClick={e => this.createCampaign(e)}>
-          <span>Create</span>
+          {loading && <span>Loading...</span>}
+          {!loading && <span>Create</span>}
         </Button>
       </Container>
     );

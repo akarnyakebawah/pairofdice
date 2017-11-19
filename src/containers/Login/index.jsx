@@ -9,6 +9,8 @@ import { login } from '../../redux/modules/auth';
 
 // Components
 import { Button } from '../../components/Button';
+import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+
 import { CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
 
 @connect(
@@ -65,9 +67,10 @@ class Login extends Component {
           type="password"
           value={password}
         />
+        {error && error.status === 400 && <ErrorHelper>Unable to login with provided credentials</ErrorHelper>}
         <LoginButton onClick={e => this.login(e)} disabled={loading} style={{display: "flex"}}>
           {!loading && <span>Login</span>}
-          {loading && <span>Loading...</span>}
+          {loading && <LoadingButtonIndicator />}
         </LoginButton>
         <RedirectToRegister>
           Doesn't have account yet? <Link to={REGISTER_ROUTE}>Register</Link>
@@ -76,6 +79,14 @@ class Login extends Component {
     );
   }
 }
+
+const ErrorHelper = styled.div`
+  color: ${props => props.theme.color.white};
+  // font-style: italic;
+  font-weight: bold;
+  font-size: ${props => props.theme.fontSize.medium};
+  text-decoration: underline;
+`;
 
 const margin = '1rem';
 

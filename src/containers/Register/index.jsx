@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+// Constants
+import { LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 // Redux
 import { login } from '../../redux/modules/auth';
 
 // Components
 import { Button } from '../../components/Button';
-import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
+import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+
 
 @connect(
   state => ({
@@ -85,9 +89,12 @@ class Register extends Component {
           disabled={loading}
           style={{ display: 'flex' }}
         >
-          {!loading && <span>Login</span>}
-          {loading && <span>Loading...</span>}
+          {!loading && <span>Register</span>}
+          {loading && <LoadingButtonIndicator />}
         </LoginButton>
+        <RedirectToRegister>
+          Already have an account? <Link to={LOGIN_ROUTE}>Login</Link>
+        </RedirectToRegister>
       </Form>
     );
   }
@@ -108,6 +115,8 @@ const Input = styled.input`
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
   margin: 1rem 0;
+  width: 100%;
+  max-width: 30rem;
 
   &:focus {
     outline: none;
@@ -125,7 +134,7 @@ const Input = styled.input`
 
 const Form = styled.form`
   align-self: center;
-  width: 80%;
+  width: 100%;
   max-width: 30rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
@@ -143,6 +152,14 @@ const FormTitle = styled.div`
   margin: 1rem 0;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     font-size: ${props => props.theme.fontSize.medium};
+  }
+`;
+
+const RedirectToRegister = styled.div`
+  margin-top: 1rem;
+  a {
+    font-weight: bold;
+    color: ${props => props.theme.color.white};
   }
 `;
 
