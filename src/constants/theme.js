@@ -42,6 +42,7 @@ const fontSize = {
   large: '1.5rem',
   jumbo: '2rem',
   huge: '5rem',
+  superHuge: '8rem',
 };
 
 const image = {
