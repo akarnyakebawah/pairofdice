@@ -97,6 +97,10 @@ class PhotoEditor extends Component {
           0, 0, exportSize, exportSize,
         );
 
+        if (!this.props.overlayImage) {
+          resolve(this.canvas.toDataURL());
+          return;
+        }
         const twibbon = new Image();
         twibbon.src = this.props.overlayImage;
         twibbon.onload = () => {
@@ -148,7 +152,7 @@ class PhotoEditor extends Component {
           onScroll={() => this.scroll}
           size={editorSize}
         >
-          { overlayImage &&
+          {overlayImage &&
             <Overlay
               src={overlayImage}
               size={editorSize}

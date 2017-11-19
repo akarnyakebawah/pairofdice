@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Ionicons from 'react-ionicons'
 import plus from '../../../static/assets/icon/plus.svg';
 import PhotoEditor from '../../components/PhotoEditor';
-import Button from '../../components/Button';
 
 class FileUploader extends React.Component {
   static propTypes = {
@@ -75,21 +75,31 @@ class FileUploader extends React.Component {
     const { isImageLoaded, image } = this.props;
     const labelClass = `${(isDragging && 'hover') || null}`;
     if (isImageLoaded) {
-      return (
-        <div>
-          <BorderedPhotoEditor
-            image={image}
-            editorSize={this.state.editorSize}
-            exportSize={this.state.imageSize}
-          />
-          <Button
-            secondary
-            onClick={() => this.props.setState({ isImageLoaded: false })}
-          >
+      return <div>
+          <BorderedPhotoEditor image={image} editorSize={this.state.editorSize} exportSize={this.state.imageSize} innerRef={elem => {
+              this.editor = elem;
+            }} />
+          <Ionicons icon="ion-edit" fontSize="1rem" color="white" />
+          <Button secondary onClick={() => this.props.setState({
+                isImageLoaded: false
+              })}>
             Cancel
           </Button>
-        </div>
-      );
+          <Button
+            onClick={() => {
+              console.log('click')
+              this.editor
+                .getImage()
+                .then(image => {
+                  this.props.setState({ image });
+                  console.log(image);
+                });
+            }
+            }
+          >
+            Fix
+          </Button>
+        </div>;
     }
     return (
       <Label
@@ -145,4 +155,8 @@ const Label = styled.label`
 const BorderedPhotoEditor = styled(PhotoEditor)`
   border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
   border-radius: 0.5rem;
+`;
+
+const Button = styled.button`
+
 `;
