@@ -42,6 +42,10 @@ class CreateCampaign extends Component {
     image: {}, // Image in dataUrl, parse to File to be sent to server
   };
 
+  componentDidMount() {
+
+  }
+
   onChangeState(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });

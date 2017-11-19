@@ -29,3 +29,7 @@ export async function postCampaign({ captions, name, image, url }) {
     .field('captions', captions)
   ;
 }
+
+export async function getCampaign(campaignUrl) {
+  return request.get(apiUrl.campaign(campaignUrl));
+}
