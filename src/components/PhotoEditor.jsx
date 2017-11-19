@@ -33,7 +33,7 @@ class PhotoEditor extends Component {
     image: PropTypes.string,
     overlayImage: PropTypes.string,
 
-    zoom: PropTypes.number,
+    // zoom: PropTypes.number,
     disabled: PropTypes.bool,
     // saved image size
     editorSize: PropTypes.number.isRequired,
@@ -43,7 +43,7 @@ class PhotoEditor extends Component {
   static defaultProps = {
     className: null,
     overlayImage: '',
-    zoom: 1,
+    // zoom: 1,
     disabled: false,
     image: '',
   };
@@ -54,7 +54,9 @@ class PhotoEditor extends Component {
     this.state = {
       x: 0,
       y: 0,
-      showOverlay: true
+      showOverlay: true,
+      dragging: false,
+      zoom: 1,
     };
   }
 
@@ -85,7 +87,7 @@ class PhotoEditor extends Component {
           scaledHeight = editorSize;
         }
 
-        const zoom = this.props.zoom / 10 + 1;
+        const zoom = this.state.zoom / 10 + 1;
 
         const transX = this.state.x - scaledWidth / 2 * (zoom - 1);
         const transY = this.state.y - scaledHeight / 2 * (zoom - 1);
@@ -133,9 +135,11 @@ class PhotoEditor extends Component {
   captureSelect(e) {
     if (this.props.disabled)
     return;
+
     e.preventDefault();
     e.stopPropagation();
 
+    this.setState({dragging: true});
     this.dragging = true;
     this.startingX = e.screenX;
     this.startingY = e.screenY;
@@ -154,9 +158,16 @@ class PhotoEditor extends Component {
   }
 
   captureRelease() {
+    this.setState({dragging: false });
+
     this.dragging = false;
   }
 
+  changeZoom(dir) {
+    this.setState({
+      zoom: this.state.zoom + 0.25 * (dir ? 1 : -1),
+    });
+  }
   render() {
     const { image, overlayImage, editorSize, exportSize } = this.props;
 
@@ -168,16 +179,16 @@ class PhotoEditor extends Component {
           onMouseMove={e => this.captureOnMove(e)}
           onMouseUp={() => this.captureRelease()}
           onMouseLeave={() => this.captureRelease()}
-          onScroll={() => this.scroll}
+          onWheel={(e) => { e.preventDefault(); this.changeZoom(e.deltaY < 0)}}
           size={editorSize}
         >
-          {overlayImage && <Overlay src={overlayImage} size={editorSize} />}
+          {overlayImage && <Overlay src={overlayImage} size={editorSize} transparent={this.state.dragging}/>}
           <PictureBox
             src={image}
             size={editorSize}
             translateX={this.state.x}
             translateY={this.state.y}
-            zoom={this.props.zoom}
+            zoom={this.state.zoom}
           />
         </Container>
         <canvas
@@ -224,6 +235,7 @@ const Overlay = styled.img`
   bottom: 0px;
   width: ${props => props.size}px;
   height: ${props => props.size}px;
+  opacity: ${props => (props.transparent ? '0.7' : '1')};
 `;
 
 export default PhotoEditor;

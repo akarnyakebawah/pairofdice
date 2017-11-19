@@ -37,3 +37,10 @@ export async function getCampaign(campaignUrl) {
 export async function getImage(imageUrl) {
   return request.get(imageUrl).withCredentials();
 }
+
+export async function postTwibbon({ campaignUrl, image, caption }) {
+  return request
+    .post(apiUrl.twibbon(campaignUrl))
+    .field('caption', caption)
+    .field('img', image);
+}

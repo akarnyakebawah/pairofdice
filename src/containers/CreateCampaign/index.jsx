@@ -8,12 +8,12 @@ import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
 import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
-
 import { dataUrlToFile } from '../../helpers/utils';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+import { Redirect } from '../../../../../../.cache/typescript/2.6/node_modules/@types/react-router';
 
 @connect(
-  state => ({ campaign: state.createCampaign }),
+  state => ({ campaign: state.createCampaign, auth: state.auth }),
   { createCampaign },
 )
 class CreateCampaign extends Component {
@@ -43,7 +43,9 @@ class CreateCampaign extends Component {
   };
 
   componentDidMount() {
-
+    if (!this.props.auth.auth.token) {
+      this.props.location.push('test');
+    }
   }
 
   onChangeState(e) {
