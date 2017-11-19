@@ -73,7 +73,7 @@ class FileUploader extends React.Component {
   render() {
     const { isDragging } = this.state;
     const { isImageLoaded, image } = this.props;
-    const labelClass = `${isDragging && 'hover'}`;
+    const labelClass = `${(isDragging && 'hover') || null}`;
     if (isImageLoaded) {
       return (
         <div>

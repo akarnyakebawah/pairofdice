@@ -176,7 +176,7 @@ const Container = styled.div`
   position: relative;
   width: ${props => props.size}px;
   height: ${props => props.size}px;
-  cursor: 'grabbing';
+  cursor: grabbing;
   overflow: hidden;
   z-index: 3;
   user-select: none;
