@@ -12,6 +12,7 @@ import { Button } from '../../components/Button';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
 
 import { CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
+import * as routes from '../../constants/routes';
 
 @connect(
   state => ({
@@ -32,11 +33,17 @@ class Login extends Component {
     password: ''
   };
 
+
   onChangeState(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }
 
+  componentDidMount() {
+    if (this.props.auth.token) {
+      this.props.history.replace(routes.BASE_ROUTE);
+    }
+  }
   async login(event) {
     event.preventDefault();
     const { email, password } = this.state;
@@ -127,7 +134,7 @@ const Form = styled.form`
   max-width: 40rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    
+
   }
 `;
 
