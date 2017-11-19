@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Ionicons from 'react-ionicons'
 import plus from '../../../static/assets/icon/plus.svg';
 import PhotoEditor from '../../components/PhotoEditor';
+import emptyImage from '../../../static/assets/empty-image.png';
 
 class FileUploader extends React.Component {
   static propTypes = {
@@ -18,6 +19,7 @@ class FileUploader extends React.Component {
   state = {
     isDragging: false,
     imageSize: 0,
+    isFixed: false,
     editorSize: 300,
   };
 
@@ -62,7 +64,7 @@ class FileUploader extends React.Component {
       image.onload = () => {
         this.setState({
           imageSize: Math.min(image.width, image.height),
-          editorSize: Math.min(Math.min(image.width, image.height), this.state.editorSize),
+          editorSize: Math.min(Math.min(image.width, image.height), 300),
         });
       };
       image.src = reader.result;
@@ -70,36 +72,51 @@ class FileUploader extends React.Component {
     reader.readAsDataURL(file);
   }
 
+  getCroppedImageThenSetToProps() {
+    this.editor.getImage().then((image) => {
+      this.props.setState({ image });
+    });
+  }
+
   render() {
-    const { isDragging } = this.state;
+    const { isDragging, isFixed } = this.state;
     const { isImageLoaded, image } = this.props;
     const labelClass = `${(isDragging && 'hover') || null}`;
-    if (isImageLoaded) {
-      return <div>
-          <BorderedPhotoEditor image={image} editorSize={this.state.editorSize} exportSize={this.state.imageSize} innerRef={elem => {
-              this.editor = elem;
-            }} />
-          <Ionicons icon="ion-edit" fontSize="1rem" color="white" />
-          <Button secondary onClick={() => this.props.setState({
-                isImageLoaded: false
-              })}>
-            Cancel
-          </Button>
-          <Button
+    if (isImageLoaded && !isFixed) {
+      return (
+        <Relative>
+          <EmptyImage src={emptyImage} alt="placeholder" width={this.state.editorSize} />
+          <BorderedPhotoEditor
+            image={image}
+            editorSize={this.state.editorSize}
+            exportSize={this.state.imageSize}
+            innerRef={elem => { this.editor = elem; }}
+          />
+          <button onClick={() => this.setState({ isFixed: true })}>
+            <Ionicons icon="md-create" fontSize="2rem" />
+          </button>
+          <button
+            secondary
             onClick={() => {
-              console.log('click')
+              this.props.setState({ isImageLoaded: false })
+            }}
+          >
+            <Ionicons icon="md-close" fontSize="2rem" />
+          </button>
+          <button
+            onClick={() => {
               this.editor
                 .getImage()
                 .then(image => {
                   this.props.setState({ image });
-                  console.log(image);
                 });
             }
             }
           >
-            Fix
-          </Button>
-        </div>;
+            <Ionicons icon="md-checkmark" fontSize="2rem" />
+          </button>
+        </Relative>
+      );
     }
     return (
       <Label
@@ -159,4 +176,16 @@ const BorderedPhotoEditor = styled(PhotoEditor)`
 
 const Button = styled.button`
 
+`;
+
+const Relative = styled.div`
+  position: relative;
+`;
+
+const EmptyImage = styled.img`
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: ${props => props.width};
+  object-fit: scale-down;
 `;
