@@ -2,28 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import plus from '../../../static/assets/icon/plus.svg';
+import PhotoEditor from '../../components/PhotoEditor';
+import Button from '../../components/Button';
 
 class FileUploader extends React.Component {
   static propTypes = {
     // Parent's state
     isImageLoaded: PropTypes.bool.isRequired,
-    image: PropTypes.object.isRequired,
-    imageDataUrl: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
 
     // Methods
-    setState: PropTypes.func.isRequired,
+    setState: PropTypes.func.isRequired
   };
 
-  constructor() {
-    super();
-    this.state = {
-      isDragging: false,
-    };
-    this.onDragEnter = this.onDragEnter.bind(this);
-    this.onDragLeave = this.onDragLeave.bind(this);
-    this.onDrop = this.onDrop.bind(this);
-    this.onFileChange = this.onFileChange.bind(this);
-  }
+  state = {
+    isDragging: false,
+    imageSize: 0,
+    editorSize: 300,
+  };
 
   // eslint-disable-next-line
   onDragOver(e) {
@@ -54,49 +50,63 @@ class FileUploader extends React.Component {
       return;
     }
 
-
     this.props.setState({ isImageLoaded: false });
 
     reader.onload = () => {
-      console.log(file);
       this.props.setState({
-        image: file,
-        imageDataUrl: reader.result,
-        isImageLoaded: true,
+        image: reader.result,
+        isImageLoaded: true
       });
+
+      const image = new Image();
+      image.onload = () => {
+        this.setState({
+          imageSize: Math.min(image.width, image.height),
+          editorSize: Math.min(Math.min(image.width, image.height), this.state.editorSize),
+        });
+      };
+      image.src = reader.result;
     };
     reader.readAsDataURL(file);
   }
 
-  getFileObject() {
-    return this.file.files[0];
-  }
-
-  getFileString() {
-    return this.props.image;
-  }
-
   render() {
     const { isDragging } = this.state;
-    const { isImageLoaded, imageDataUrl } = this.props;
+    const { isImageLoaded, image } = this.props;
     const labelClass = `${isDragging && 'hover'}`;
     if (isImageLoaded) {
-      return <Image src={imageDataUrl} className={labelClass} alt="img" />;
+      return (
+        <div>
+          <BorderedPhotoEditor
+            image={image}
+            editorSize={this.state.editorSize}
+            exportSize={this.state.imageSize}
+          />
+          <Button
+            secondary
+            onClick={() => this.props.setState({ isImageLoaded: false })}
+          >
+            Cancel
+          </Button>
+        </div>
+      );
     }
     return (
       <Label
         className={labelClass}
-        onDragEnter={this.onDragEnter}
-        onDragLeave={this.onDragLeave}
-        onDragOver={this.onDragOver}
-        onDrop={this.onDrop}
+        onDragEnter={e => this.onDragEnter(e)}
+        onDragLeave={e => this.onDragLeave(e)}
+        onDragOver={e => this.onDragOver(e)}
+        onDrop={e => this.onDrop(e)}
       >
-        <Image src={plus} className={labelClass} alt="upload-icon" />
+        <img src={plus} className={labelClass} alt="upload-icon" />
         <input
           type="file"
           accept="image/*"
-          onChange={this.onFileChange}
-          ref={(ref) => { this.file = ref; }}
+          onChange={(e, f) => this.onFileChange(e, f)}
+          ref={ref => {
+            this.file = ref;
+          }}
         />
       </Label>
     );
@@ -132,6 +142,7 @@ const Label = styled.label`
   }
 `;
 
-const Image = styled.img`
-  max-width: 100%;
+const BorderedPhotoEditor = styled(PhotoEditor)`
+  border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
+  border-radius: 0.5rem;
 `;

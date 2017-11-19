@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 // Constants
 import { LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
@@ -12,7 +13,6 @@ import { register } from '../../redux/modules/auth';
 // Components
 import { Button } from '../../components/Button';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
-
 
 @connect(
   state => ({

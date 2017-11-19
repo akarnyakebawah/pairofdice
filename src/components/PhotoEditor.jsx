@@ -26,6 +26,9 @@ import PropTypes from 'prop-types';
 
 class PhotoEditor extends Component {
   static propTypes = {
+    // Styled Components props
+    className: PropTypes.string,
+
     // both of images are in base64 encoded image
     image: PropTypes.string,
     overlayImage: PropTypes.string,
@@ -38,6 +41,7 @@ class PhotoEditor extends Component {
   };
 
   static defaultProps = {
+    className: null,
     overlayImage: '',
     zoom: 1,
     image: '',
@@ -136,6 +140,7 @@ class PhotoEditor extends Component {
     return (
       <div>
         <Container
+          className={this.props.className}
           onMouseDown={e => this.captureSelect(e)}
           onMouseMove={e => this.captureOnMove(e)}
           onMouseUp={() => this.captureRelease()}
@@ -143,10 +148,11 @@ class PhotoEditor extends Component {
           onScroll={() => this.scroll}
           size={editorSize}
         >
-          <Overlay
-            src={overlayImage}
-            size={editorSize}
-          />
+          { overlayImage &&
+            <Overlay
+              src={overlayImage}
+              size={editorSize}
+            />}
           <PictureBox
             src={image}
             size={editorSize}
@@ -174,6 +180,9 @@ const Container = styled.div`
   overflow: hidden;
   z-index: 3;
   user-select: none;
+  canvas {
+    display: none;
+  }
 `;
 
 const PictureBox = styled.img`

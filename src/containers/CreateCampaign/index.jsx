@@ -33,8 +33,7 @@ class CreateCampaign extends Component {
 
     // Image upload
     isImageLoaded: false,
-    image: {},
-    imageDataUrl: '',
+    image: {}, // Image in dataUrl, parse to File to be sent to server
   };
 
   onChangeState(e) {
@@ -46,7 +45,7 @@ class CreateCampaign extends Component {
     e.preventDefault();
     const { name, url, captions, image } = this.state;
     await this.props.createCampaign({ name, url, captions, image });
-    if (!!this.props.campaign.campaign) {
+    if (!!this.props.campaign.campaign && !this.props.campaign.error) {
       this.props.history.push(SHARE_CAMPAIGN_ROUTE);
     }
   }
@@ -58,7 +57,6 @@ class CreateCampaign extends Component {
       captions,
       isImageLoaded,
       image,
-      imageDataUrl,
     } = this.state;
     const { loading } = this.props.campaign;
     return (
@@ -67,7 +65,6 @@ class CreateCampaign extends Component {
         <FileUploader
           setState={e => this.setState(e)}
           image={image}
-          imageDataUrl={imageDataUrl}
           isImageLoaded={isImageLoaded}
         />
         <FormTitle>Campaign Name</FormTitle>
