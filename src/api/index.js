@@ -11,6 +11,15 @@ export async function login({ email, password }) {
   return request.post(apiUrl.auth()).send({ email, password });
 }
 
+export async function register({ name, birthDate, email, password }) {
+  return request.post(apiUrl.user()).send({
+    name,
+    birth_date: birthDate,
+    email,
+    password,
+  });
+}
+
 export async function postCampaign({ captions, name, image, url }) {
   return request
     .post(apiUrl.campaigns())

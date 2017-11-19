@@ -3,19 +3,20 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { createCampaign } from '../../redux/modules/campaign';
+import { createCampaign } from '../../redux/modules/createCampaign';
 import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
 import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 @connect(
-  state => ({ campaign: state.campaign }),
+  state => ({ campaign: state.createCampaign }),
   { createCampaign },
 )
 class CreateCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
+      campaign: PropTypes.object.isRequired,
     }).isRequired,
     createCampaign: PropTypes.func.isRequired,
   };

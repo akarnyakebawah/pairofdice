@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 // Redux
-import { login } from '../../redux/modules/auth';
+import { register } from '../../redux/modules/auth';
 
 // Components
 import { Button } from '../../components/Button';
@@ -18,14 +18,18 @@ import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
   state => ({
     auth: state.auth
   }),
-  { login }
+  { register }
 )
 class Register extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
+      token: PropTypes.string.isRequired,
     }).isRequired,
-    login: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    register: PropTypes.func.isRequired,
   };
 
   state = {
@@ -40,9 +44,9 @@ class Register extends Component {
     this.setState({ [name]: value });
   }
 
-  async login(event) {
+  async register(event) {
     event.preventDefault();
-    await this.props.login(this.state);
+    await this.props.register(this.state);
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
     }
@@ -84,14 +88,15 @@ class Register extends Component {
           type="password"
           value={password}
         />
-        <LoginButton
-          onClick={e => this.login(e)}
+        {error && error.status === 400 && <div>Error</div>}
+        <RegisterButton
+          onClick={e => this.register(e)}
           disabled={loading}
           style={{ display: 'flex' }}
         >
           {!loading && <span>Register</span>}
           {loading && <LoadingButtonIndicator />}
-        </LoginButton>
+        </RegisterButton>
         <RedirectToRegister>
           Already have an account? <Link to={LOGIN_ROUTE}>Login</Link>
         </RedirectToRegister>
@@ -102,7 +107,7 @@ class Register extends Component {
 
 const margin = '1rem';
 
-const LoginButton = styled(Button)`margin-top: 1rem;`;
+const RegisterButton = styled(Button)`margin-top: 1rem;`;
 
 const Input = styled.input`
   border: none;

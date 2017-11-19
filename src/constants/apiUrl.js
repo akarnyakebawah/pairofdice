@@ -17,4 +17,6 @@ export const base = uri => config.API_URL + uri;
 
 export const auth = () => base('auth/');
 
+export const user = () => base('users/');
+
 export const campaigns = () => base('campaigns/');

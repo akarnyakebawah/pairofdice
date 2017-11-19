@@ -37,7 +37,7 @@ export default function reducer(state = Object.assign({}, INITIAL_STATE), action
       return { ...state, error: {}, user: {}, token: '' };
     case REHYDRATE:
       if (!action.payload || !action.payload.auth) return state;
-      return { ...action.payload.auth, loading: false, loaded: true };
+      return { ...action.payload.auth, loading: false, loaded: true, error: null };
     case TOKEN_SET:
       return { ...state, loaded: true, token: action.payload };
     default:
@@ -93,11 +93,11 @@ export function reload() {
   };
 }
 
-export function login({ email, password }) {
+export function login(credentials) {
   return async (dispatch) => {
     dispatch(loading());
     try {
-      const { body: result } = await api.login({ email, password });
+      const { body: result } = await api.login(credentials);
       localStorage.setItem(localStorageKey.TOKEN, result.token);
       api.setAuthorizationToken(result.token);
       dispatch(onLogin(result));
@@ -115,6 +115,21 @@ export function logout() {
     localStorage.removeItem(localStorageKey.TOKEN);
     api.setAuthorizationToken(null);
     dispatch(onLogout());
+    dispatch(completeLoading());
+  };
+}
+
+export function register(credentials) {
+  return async (dispatch) => {
+    dispatch(loading());
+    let user;
+    try {
+      const { body: user } = await api.register(credentials);
+      await dispatch(login(credentials));
+    } catch (error) {
+      console.log(user);
+      dispatch(setError(error));
+    }
     dispatch(completeLoading());
   };
 }

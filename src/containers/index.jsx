@@ -83,7 +83,7 @@ class Home extends Component {
             {Home.AUTHENTICATED_ROUTE.map(route => token && (
               <Route
                 exact={route.exact}
-                to={route.path}
+                path={route.path}
                 key={route.path}
                 component={() => (
                   <LogoutButton onClick={() => this.props.logout()}>
@@ -103,7 +103,7 @@ class Home extends Component {
         <Switch>
           {Home.AUTHENTICATED_ROUTE.map(route => token && (
             <Route
-              to={route.path}
+              path={route.path}
               exact={route.exact}
               key={route.path}
               component={() => (
@@ -134,6 +134,7 @@ const LogoutButton = styled.button`
   text-decoration: underline;
   color: white;
   border: none;
+  cursor: pointer;
   font-size: ${props => props.theme.fontSize.small};
   margin-right: 3rem;
   font-size: ${props => props.theme.fontSize.medium};

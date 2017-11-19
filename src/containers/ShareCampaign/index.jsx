@@ -3,19 +3,20 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { createCampaign } from '../../redux/modules/campaign';
+import { createCampaign } from '../../redux/modules/createCampaign';
 
 import { Button, ButtonLink } from '../../components/Button';
 
 import config from '../../config';
 
-@connect(state => ({ campaign: state.campaign }), { createCampaign })
+@connect(state => ({ campaign: state.createCampaign }), { createCampaign })
 class CreateCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
-      loading: PropTypes.bool.isRequired
+      campaign: PropTypes.object.isRequired,
+      loading: PropTypes.bool.isRequired,
     }).isRequired,
-    createCampaign: PropTypes.func.isRequired
+    createCampaign: PropTypes.func.isRequired,
   };
 
   constructor() {

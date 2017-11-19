@@ -1,9 +1,9 @@
 import { routerReducer } from 'react-router-redux';
 import auth from './auth';
-import campaign from './campaign';
+import createCampaign from './createCampaign';
 
 export default {
   auth,
-  campaign,
+  createCampaign,
   router: routerReducer,
 };

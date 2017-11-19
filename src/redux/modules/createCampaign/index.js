@@ -34,7 +34,7 @@ export default function reducer(
       return { ...state, loading: false };
     case REHYDRATE:
       if (!action.payload || !action.payload.campaign) return state;
-      return { ...action.payload.campaign, loading: false, loaded: true };
+      return { ...action.payload.campaign, loading: false, loaded: true, error: null };
     default:
       return state;
   }
