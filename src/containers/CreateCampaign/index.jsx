@@ -54,7 +54,7 @@ class CreateCampaign extends Component {
   async createCampaign(e) {
     e.preventDefault();
     const { name, url, captions } = this.state;
-    let { image } = this.state;
+    let image = await this.fileUploader.getCroppedImage();
     image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
     if (!!this.props.campaign.campaign && !this.props.campaign.error) {
@@ -78,6 +78,7 @@ class CreateCampaign extends Component {
           setState={e => this.setState(e)}
           image={image}
           isImageLoaded={isImageLoaded}
+          ref={(elem) => { this.fileUploader = elem; }}
         />
         <FormTitle>Campaign Name</FormTitle>
         <NameForm

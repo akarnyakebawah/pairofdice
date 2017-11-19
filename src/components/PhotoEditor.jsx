@@ -34,18 +34,19 @@ class PhotoEditor extends Component {
     overlayImage: PropTypes.string,
 
     zoom: PropTypes.number,
-
+    disabled: PropTypes.bool,
     // saved image size
     editorSize: PropTypes.number.isRequired,
-    exportSize: PropTypes.number.isRequired,
+    exportSize: PropTypes.number.isRequired
   };
 
   static defaultProps = {
     className: null,
     overlayImage: '',
     zoom: 1,
+    disabled: false,
     image: '',
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -53,12 +54,13 @@ class PhotoEditor extends Component {
     this.state = {
       x: 0,
       y: 0,
-      showOverlay: true,
+      showOverlay: true
     };
   }
 
   getImage() {
     return new Promise((resolve) => {
+      console.log(this);
       const context = this.canvas.getContext('2d');
       const img = new Image();
       img.src = this.props.image;
@@ -83,31 +85,45 @@ class PhotoEditor extends Component {
           scaledHeight = editorSize;
         }
 
-        const zoom = ((this.props.zoom) / 10) + 1;
+        const zoom = this.props.zoom / 10 + 1;
 
-        const transX = this.state.x - ((scaledWidth / 2) * (zoom - 1));
-        const transY = this.state.y - ((scaledHeight / 2) * (zoom - 1));
+        const transX = this.state.x - scaledWidth / 2 * (zoom - 1);
+        const transY = this.state.y - scaledHeight / 2 * (zoom - 1);
 
         const ratio = imageSize / editorSize;
-        const imageTransX = (transX * ratio) / zoom;
-        const imageTransY = (transY * ratio) / zoom;
+        const imageTransX = transX * ratio / zoom;
+        const imageTransY = transY * ratio / zoom;
 
-        context.drawImage(img,
-          -imageTransX, -imageTransY, imageSize / zoom, imageSize / zoom,
-          0, 0, exportSize, exportSize,
+        context.drawImage(
+          img,
+          -imageTransX,
+          -imageTransY,
+          imageSize / zoom,
+          imageSize / zoom,
+          0,
+          0,
+          exportSize,
+          exportSize
         );
 
         if (!this.props.overlayImage) {
-          console.log(this.canvas.toDataUrl());
           resolve(this.canvas.toDataURL());
           return;
         }
         const twibbon = new Image();
         twibbon.src = this.props.overlayImage;
         twibbon.onload = () => {
-          context.drawImage(twibbon,
-            0, 0, twibbon.width, twibbon.height,
-            0, 0, exportSize, exportSize);
+          context.drawImage(
+            twibbon,
+            0,
+            0,
+            twibbon.width,
+            twibbon.height,
+            0,
+            0,
+            exportSize,
+            exportSize
+          );
           resolve(this.canvas.toDataURL());
         };
       };
@@ -115,6 +131,8 @@ class PhotoEditor extends Component {
   }
 
   captureSelect(e) {
+    if (this.props.disabled)
+    return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -131,7 +149,7 @@ class PhotoEditor extends Component {
 
     this.setState({
       x: this.originX + (e.screenX - this.startingX),
-      y: this.originY + (e.screenY - this.startingY),
+      y: this.originY + (e.screenY - this.startingY)
     });
   }
 
@@ -143,7 +161,7 @@ class PhotoEditor extends Component {
     const { image, overlayImage, editorSize, exportSize } = this.props;
 
     return (
-      <div>
+      <div hidden={this.props.hidden}>
         <Container
           className={this.props.className}
           onMouseDown={e => this.captureSelect(e)}
@@ -153,11 +171,7 @@ class PhotoEditor extends Component {
           onScroll={() => this.scroll}
           size={editorSize}
         >
-          {overlayImage &&
-            <Overlay
-              src={overlayImage}
-              size={editorSize}
-            />}
+          {overlayImage && <Overlay src={overlayImage} size={editorSize} />}
           <PictureBox
             src={image}
             size={editorSize}
@@ -167,7 +181,11 @@ class PhotoEditor extends Component {
           />
         </Container>
         <canvas
-          ref={(elem) => { this.canvas = elem; }}
+          ref={(elem) => {
+            if (!!elem) {
+              this.canvas = elem;
+            }
+          }}
           height={exportSize}
           width={exportSize}
           hidden
@@ -191,7 +209,9 @@ const PictureBox = styled.img`
   z-index: 1;
   max-width: ${props => props.size}px;
   max-height: ${props => props.size}px;
-  transform: translateX(${props => props.translateX}px) translateY(${props => props.translateY}px) scale(${props => (props.zoom + 10) / 10});
+  transform: translateX(${props => props.translateX}px)
+  translateY(${props => props.translateY}px)
+  scale(${props => (props.zoom + 10) / 10});
 `;
 
 const Overlay = styled.img`

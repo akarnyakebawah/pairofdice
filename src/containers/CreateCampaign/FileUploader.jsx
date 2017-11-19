@@ -58,7 +58,6 @@ class FileUploader extends React.Component {
       this.props.setState({
         image: reader.result,
         isImageLoaded: true,
-        isFixed: false,
       });
 
       const image = new Image();
@@ -73,46 +72,42 @@ class FileUploader extends React.Component {
     reader.readAsDataURL(file);
   }
 
-  getCroppedImageThenSetToProps() {
-    this.setState({ isFixed: true });
-    console.log(this.editor);
-    this.editor.getImage().then((image) => {
-      console.log('cuy coba dah');
-      console.log(image);
-      this.props.setState({ image });
-    });
+  async getCroppedImage() {
+    let croppedImage;
+    await this.editor.getImage().then((image) => { croppedImage = image; });
+    console.log(croppedImage);
+    return croppedImage;
+  }
+
+  resetImage() {
+    this.setState({ isFixed: false });
+    this.props.setState({ isImageLoaded: false });
   }
 
   render() {
     const { isDragging, isFixed } = this.state;
     const { isImageLoaded, image } = this.props;
     const labelClass = `${(isDragging && 'hover') || null}`;
-    if (isImageLoaded && !isFixed) {
+    if (isImageLoaded ) {
       return (
         <Relative>
           <EmptyImage src={emptyImage} alt="placeholder" width={this.state.editorSize} />
-          <PhotoEditor
+          <BorderedPhotoEditor
             image={image}
             editorSize={this.state.editorSize}
             exportSize={this.state.imageSize}
-            innerRef={elem => { this.editor = elem; }}
+            innerRef={(elem) => { this.editor = elem; }}
+            disabled={isFixed}
           />
-          <button onClick={() => this.getCroppedImageThenSetToProps()}>
-            <Ionicons icon="md-checkmark" fontSize="2rem" />
-          </button>
-          <button onClick={() => { this.props.setState({ isImageLoaded: false })}}>
-            <Ionicons icon="md-close" fontSize="2rem" />
-          </button>
-        </Relative>
-      );
-    }
-    if (isImageLoaded && isFixed) {
-      return (
-        <Relative>
-          <img src={image} alt="" />
-          <button onClick={() => this.setState({ isFixed: false })}>
-            <Ionicons icon="md-create" fontSize="2rem" />
-          </button>
+          {!isFixed &&
+            <button onClick={() => this.setState({ isFixed: true })}>
+              <Ionicons icon="md-checkmark" fontSize="2rem" />
+            </button>}
+          {isFixed &&
+            <button onClick={() => this.setState({ isFixed: false })}>
+              <Ionicons icon="md-create" fontSize="2rem" />
+            </button>
+          }
           <button onClick={() => { this.props.setState({ isImageLoaded: false })}}>
             <Ionicons icon="md-close" fontSize="2rem" />
           </button>
@@ -189,4 +184,12 @@ const EmptyImage = styled.img`
   left: 0.5rem;
   width: ${props => props.width};
   object-fit: scale-down;
+  ${props => props.noBorder && 'top: 0; left: 0;'};
+  z-index: 0;
+`;
+
+const SizedImage = styled.img`
+  width: ${props => props.width};
+  z-index: 3;
+  position: relative;
 `;
