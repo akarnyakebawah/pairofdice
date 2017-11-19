@@ -98,6 +98,7 @@ class PhotoEditor extends Component {
         );
 
         if (!this.props.overlayImage) {
+          console.log(this.canvas.toDataUrl());
           resolve(this.canvas.toDataURL());
           return;
         }
@@ -184,9 +185,6 @@ const Container = styled.div`
   overflow: hidden;
   z-index: 3;
   user-select: none;
-  canvas {
-    display: none;
-  }
 `;
 
 const PictureBox = styled.img`

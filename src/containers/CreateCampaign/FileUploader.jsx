@@ -57,7 +57,8 @@ class FileUploader extends React.Component {
     reader.onload = () => {
       this.props.setState({
         image: reader.result,
-        isImageLoaded: true
+        isImageLoaded: true,
+        isFixed: false,
       });
 
       const image = new Image();
@@ -73,7 +74,11 @@ class FileUploader extends React.Component {
   }
 
   getCroppedImageThenSetToProps() {
+    this.setState({ isFixed: true });
+    console.log(this.editor);
     this.editor.getImage().then((image) => {
+      console.log('cuy coba dah');
+      console.log(image);
       this.props.setState({ image });
     });
   }
@@ -86,34 +91,30 @@ class FileUploader extends React.Component {
       return (
         <Relative>
           <EmptyImage src={emptyImage} alt="placeholder" width={this.state.editorSize} />
-          <BorderedPhotoEditor
+          <PhotoEditor
             image={image}
             editorSize={this.state.editorSize}
             exportSize={this.state.imageSize}
             innerRef={elem => { this.editor = elem; }}
           />
-          <button onClick={() => this.setState({ isFixed: true })}>
-            <Ionicons icon="md-create" fontSize="2rem" />
+          <button onClick={() => this.getCroppedImageThenSetToProps()}>
+            <Ionicons icon="md-checkmark" fontSize="2rem" />
           </button>
-          <button
-            secondary
-            onClick={() => {
-              this.props.setState({ isImageLoaded: false })
-            }}
-          >
+          <button onClick={() => { this.props.setState({ isImageLoaded: false })}}>
             <Ionicons icon="md-close" fontSize="2rem" />
           </button>
-          <button
-            onClick={() => {
-              this.editor
-                .getImage()
-                .then(image => {
-                  this.props.setState({ image });
-                });
-            }
-            }
-          >
-            <Ionicons icon="md-checkmark" fontSize="2rem" />
+        </Relative>
+      );
+    }
+    if (isImageLoaded && isFixed) {
+      return (
+        <Relative>
+          <img src={image} alt="" />
+          <button onClick={() => this.setState({ isFixed: false })}>
+            <Ionicons icon="md-create" fontSize="2rem" />
+          </button>
+          <button onClick={() => { this.props.setState({ isImageLoaded: false })}}>
+            <Ionicons icon="md-close" fontSize="2rem" />
           </button>
         </Relative>
       );
