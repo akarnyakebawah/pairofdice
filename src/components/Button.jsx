@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link as RouterLink } from 'react-router-dom';
 
-const ButtonCss = css`
+export const ButtonCss = css`
   letter-spacing: 0.1rem;
   text-transform: uppercase;
   background: ${props => props.theme.color.white};
@@ -24,7 +24,7 @@ const ButtonCss = css`
   ${props => props.caps && 'text-transform: uppercase;'};
   > * {
     font-size: ${props => props.theme.fontSize.small};
-    font-weight: 900;    
+    font-weight: 900;
     background: ${props => props.theme.linearGradient.main};
     background-clip: text;
     -webkit-background-clip: text;

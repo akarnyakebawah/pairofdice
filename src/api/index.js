@@ -33,3 +33,7 @@ export async function postCampaign({ captions, name, image, url }) {
 export async function getCampaign(campaignUrl) {
   return request.get(apiUrl.campaign(campaignUrl));
 }
+
+export async function getImage(imageUrl) {
+  return request.get(imageUrl).withCredentials();
+}
