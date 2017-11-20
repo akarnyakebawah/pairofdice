@@ -5,51 +5,60 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // Redux
-import { login } from '../../redux/modules/auth';
+import { clearError, login } from '../../redux/modules/auth';
 
 // Components
 import { Button } from '../../components/Button';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
 
-import { CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
-import * as routes from '../../constants/routes';
+import { BASE_ROUTE, CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
 
 @connect(
   state => ({
-    auth: state.auth,
+    auth: state.auth
   }),
-  { login },
+  { clearError, login }
 )
 class Login extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
+      token: PropTypes.string.isRequired,
     }).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+
+    clearError: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired,
   };
 
   state = {
     email: '',
-    password: ''
+    password: '',
   };
 
+  componentDidMount() {
+    if (this.props.auth.token) {
+      this.props.history.replace(BASE_ROUTE);
+      this.props.clearError();
+    }
+  }
 
   onChangeState(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }
 
-  componentDidMount() {
-    if (this.props.auth.token) {
-      this.props.history.replace(routes.BASE_ROUTE);
-    }
-  }
   async login(event) {
     event.preventDefault();
     const { email, password } = this.state;
     await this.props.login({ email, password });
+    // eslint-disable-next-line
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
+      this.props.clearError();
     }
   }
 
@@ -72,8 +81,15 @@ class Login extends Component {
           type="password"
           value={password}
         />
-        {error && error.status === 400 && <ErrorHelper>Unable to login with provided credentials</ErrorHelper>}
-        <LoginButton onClick={e => this.login(e)} disabled={loading} style={{display: "flex"}}>
+        {error &&
+          error.status === 400 && (
+            <ErrorHelper>Unable to login with provided credentials</ErrorHelper>
+          )}
+        <LoginButton
+          onClick={e => this.login(e)}
+          disabled={loading}
+          style={{ display: 'flex' }}
+        >
           {!loading && <span>Login</span>}
           {loading && <LoadingButtonIndicator />}
         </LoginButton>

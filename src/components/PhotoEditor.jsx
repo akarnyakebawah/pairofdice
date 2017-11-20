@@ -186,7 +186,7 @@ class PhotoEditor extends Component {
 
   changeZoom(dir) {
     this.setState({
-      zoom: this.state.zoom + 0.25 * (dir ? 1 : -1)
+      zoom: this.state.zoom + 0.25 * (dir ? 1 : -1),
     });
   }
 

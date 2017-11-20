@@ -2,27 +2,24 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { connect } from 'react-redux';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-import { createCampaign } from '../redux/modules/createCampaign';
+import { Button, ButtonCss } from '../../components/Button';
 
-import { Button, ButtonCss } from '../components/Button';
-
-import config from '../config';
+import config from '../../config';
 
 class ShareCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
       campaign: PropTypes.object.isRequired,
-      loading: PropTypes.bool.isRequired,
-    }).isRequired,
+      loading: PropTypes.bool.isRequired
+    }).isRequired
   };
 
   state = {
-    isCopied: false,
+    isCopied: false
   };
 
   toastId = null;
@@ -33,9 +30,12 @@ class ShareCampaign extends Component {
   }
 
   render() {
-    const campaignUrl = config.WEB_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
+    const campaignUrl =
+      config.WEB_URL +
+      (this.props.campaign.campaign
+        ? this.props.campaign.campaign.campaign_url
+        : '');
     let toastContainer;
-    console.log(this.props.history);
     return (
       <Container>
         <h1>Share your campaign</h1>
@@ -44,7 +44,10 @@ class ShareCampaign extends Component {
           <UrlForm
             disabled
             name="url"
-            value={this.props.campaign.campaign && this.props.campaign.campaign.campaign_url}
+            value={
+              this.props.campaign.campaign &&
+              this.props.campaign.campaign.campaign_url
+            }
           />
         </UrlFormContainer>
         <ToastContainer
@@ -58,9 +61,13 @@ class ShareCampaign extends Component {
         />
         <CopyToClipboard
           text={campaignUrl}
-          onCopy={() => {this.notify("Copied")}}
+          onCopy={() => {
+            this.notify('Copied');
+          }}
         >
-          <Button><span>Copy to clipboard with button</span></Button>
+          <Button>
+            <span>Copy to clipboard with button</span>
+          </Button>
         </CopyToClipboard>
         <Link secondary href={campaignUrl}>
           Preview
@@ -133,8 +140,6 @@ const UrlForm = styled(Input)`
   }
 `;
 
-const Link = styled.a`
-  ${ButtonCss}
-`;
+const Link = styled.a`${ButtonCss};`;
 
 export default ShareCampaign;

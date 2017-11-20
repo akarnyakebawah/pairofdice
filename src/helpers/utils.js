@@ -33,3 +33,22 @@ export function dataUrlToFile(dataUrl) {
   const file = new File([blob], `randomName.${extension}`);
   return file;
 }
+
+export function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function toDataURL(url, callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.onload = () => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      callback(reader.result);
+    };
+    reader.readAsDataURL(xhr.response);
+  };
+  xhr.withCredentials = true;
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+  xhr.send();
+}

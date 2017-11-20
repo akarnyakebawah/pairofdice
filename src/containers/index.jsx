@@ -37,6 +37,10 @@ class Home extends Component {
     history: PropTypes.object.isRequired,
     reloadAuth: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
+
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   async componentDidMount() {
@@ -60,7 +64,7 @@ class Home extends Component {
         <Navbar>
           <Logo />
           {
-            token &&
+            token && this.props.history.location.pathname !== routes.BASE_ROUTE &&
             <LogoutButton onClick={() => this.props.logout()}>
               <span>Logout</span>
             </LogoutButton>
@@ -74,7 +78,7 @@ class Home extends Component {
           <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
         </Switch>
         {
-          token &&
+          token && this.props.location.pathname !== routes.BASE_ROUTE &&
           <MobileLogoutButton onClick={() => this.props.logout()}>
             <span>Logout</span>
           </MobileLogoutButton>

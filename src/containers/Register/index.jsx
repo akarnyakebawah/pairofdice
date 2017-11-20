@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // Constants
-import { LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
+import { BASE_ROUTE, LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 // Redux
 import { register } from '../../redux/modules/auth';
@@ -13,22 +13,24 @@ import { register } from '../../redux/modules/auth';
 // Components
 import { Button } from '../../components/Button';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
-import * as routes from '../../constants/routes';
+import ErrorIndicator from '../../components/ErrorIndicator';
 
 @connect(
   state => ({
-    auth: state.auth
+    auth: state.auth,
   }),
-  { register }
+  { register },
 )
 class Register extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       token: PropTypes.string.isRequired,
+      error: PropTypes.object.isRequired,
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
+      replace: PropTypes.func.isRequired,
     }).isRequired,
     register: PropTypes.func.isRequired,
   };
@@ -41,7 +43,7 @@ class Register extends Component {
   };
   componentDidMount() {
     if (this.props.auth.token) {
-      this.props.history.replace(routes.BASE_ROUTE);
+      this.props.history.replace(BASE_ROUTE);
     }
   }
   onChangeState(event) {
@@ -52,6 +54,7 @@ class Register extends Component {
   async register(event) {
     event.preventDefault();
     await this.props.register(this.state);
+    // eslint-disable-next-line
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
     }
@@ -60,6 +63,16 @@ class Register extends Component {
   render() {
     const { name, birthDate, email, password } = this.state;
     const { loading, error } = this.props.auth;
+    let nameError = '';
+    let dateError = '';
+    let emailError = '';
+    let passwordError = '';
+    if (error && error.status === 400) {
+      nameError = error.response.body.name && error.response.body.name[0];
+      dateError = error.response.body.date && error.response.body.date[0];
+      emailError = error.response.body.email && error.response.body.email[0];
+      passwordError = error.response.body.password && error.response.body.password[0];
+    }
     return (
       <Form>
         <Input
@@ -68,6 +81,7 @@ class Register extends Component {
           placeholder="Name"
           value={name}
         />
+        {nameError && <ErrorIndicator>{nameError}</ErrorIndicator>}
         <Input
           name="birthDate"
           onChange={e => this.onChangeState(e)}
@@ -75,6 +89,7 @@ class Register extends Component {
           type="date"
           value={birthDate}
         />
+        {dateError && <ErrorIndicator>{dateError}</ErrorIndicator>}
         <Input
           name="email"
           onChange={e => this.onChangeState(e)}
@@ -82,6 +97,7 @@ class Register extends Component {
           type="email"
           value={email}
         />
+        {emailError && <ErrorIndicator>{emailError}</ErrorIndicator>}
         <Input
           name="password"
           onChange={e => this.onChangeState(e)}
@@ -89,7 +105,7 @@ class Register extends Component {
           type="password"
           value={password}
         />
-        {error && error.status === 400 && <div>Error</div>}
+        {passwordError && <ErrorIndicator>{passwordError}</ErrorIndicator>}
         <RegisterButton
           onClick={e => this.register(e)}
           disabled={loading}

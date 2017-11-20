@@ -50,10 +50,6 @@ export function completeLoading() {
   return { type: LOADING_COMPLETE };
 }
 
-export function clearError() {
-  return { type: ERROR_CLEAR };
-}
-
 export function loaded() {
   return { type: LOADED };
 }
@@ -78,8 +74,12 @@ export function setToken(payload) {
   return { type: TOKEN_SET, payload };
 }
 
-// Thunk
 
+export function clearError() {
+  return dispatch => dispatch({ type: ERROR_CLEAR });
+}
+
+// Thunk
 export function reload() {
   return async (dispatch) => {
     dispatch(loading());

@@ -8,8 +8,9 @@ import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from '../../components/FileUploader';
 import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
 
-import { dataUrlToFile } from '../../helpers/utils';
+import { dataUrlToFile, capitalize } from '../../helpers/utils';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+import ErrorIndicator from '../../components/ErrorIndicator';
 
 
 @connect(
@@ -29,6 +30,7 @@ class CreateCampaign extends Component {
     createCampaign: PropTypes.func.isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -87,9 +89,11 @@ class CreateCampaign extends Component {
     } = this.state;
     const { loading, error } = this.props.campaign;
     /* eslint-disable */
+    let nameError = '';
     let urlError = '';
     let imageError = '';
     if (error && error.status === 400) {
+      nameError = error.response.body.name && error.response.body.name[0];
       urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
       imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
     }
@@ -107,6 +111,7 @@ class CreateCampaign extends Component {
           value={name}
           onChange={e => this.onChangeState(e)}
         />
+        {!!nameError && <ErrorIndicator>{capitalize(nameError)}</ErrorIndicator>}
         <FormTitle>Campaign URL</FormTitle>
         <UrlFormContainer>
           <div>twiggsy.com/</div>
@@ -116,8 +121,8 @@ class CreateCampaign extends Component {
             value={url}
           />
         </UrlFormContainer>
-        <ErrorIndicator>{urlError}</ErrorIndicator>
-        {/* <FormTitle>
+        {!!urlError && <ErrorIndicator>{capitalize(urlError)}</ErrorIndicator>}
+        <FormTitle>
           Captions <i>(optional)</i>
         </FormTitle> */}
         <CaptionsForm
@@ -133,14 +138,6 @@ class CreateCampaign extends Component {
     );
   }
 }
-
-const ErrorIndicator = styled.div`
-  font-weight: bold;
-  font-size: ${props => props.theme.fontSize.medium};
-  color: ${props => props.theme.color.white};
-  font-style: italic;
-  text-transform: capitalize;
-`;
 
 const Container = styled.div`
   align-self: center;
@@ -192,7 +189,7 @@ const Input = styled.input`
 const CaptionsForm = styled.textarea`
   //HIDE IT FOR NOW BECAUSE BELOM DIPAKE
   display: none;
-  
+
   background-color: ${props => props.theme.color.grayTransparent(0.2)};
   border-radius: 0.5rem;
   border: none;

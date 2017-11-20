@@ -1,46 +1,39 @@
+import 'cropperjs/dist/cropper.css';
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { ButtonCss, Button, ButtonLink } from '../../components/Button';
-import PhotoEditor from '../../components/PhotoEditor';
+import PropTypes from 'prop-types';
 import Cropper from 'react-cropper';
-import 'cropperjs/dist/cropper.css';
+import { ButtonCss, Button } from '../../components/Button';
+import PhotoEditor from '../../components/PhotoEditor';
 import LoadingIndicator from '../../components/LoadingIndicator';
-import { getImage } from '../../api';
-import { dataUrlToFile } from '../../helpers/utils';
+import { toDataURL, dataUrlToFile } from '../../helpers/utils';
 
 import EmptyImage from '../../../static/assets/empty-image.png';
-import { campaign } from '../../constants/apiUrl';
 
 class Campaign extends Component {
+  static propTypes = {
+    campaign: PropTypes.shape({
+      campaign: PropTypes.shape({
+        twibbon_img: PropTypes.string,
+      }).isRequired,
+    }).isRequired,
+    createTwibbon: PropTypes.func.isRequired,
+  };
+
+
   constructor(props) {
     super(props);
 
     this.state = {
       image: '',
-      twibbon:  '',
+      twibbon: '',
       uploaded: false,
-    }
-  }
-
-  toDataURL(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        callback(reader.result);
-      }
-      reader.readAsDataURL(xhr.response);
     };
-    xhr.withCredentials = true;
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
   }
 
   componentDidMount() {
-    this.toDataURL(this.props.campaign.campaign.twibbon_img, (dataUrl) => {
-      this.setState({twibbon: dataUrl});
-      // console.log('RESULT:', dataUrl)
+    toDataURL(this.props.campaign.campaign.twibbon_img, (dataUrl) => {
+      this.setState({ twibbon: dataUrl });
     });
   }
 
@@ -60,24 +53,10 @@ class Campaign extends Component {
     reader.readAsDataURL(file);
   }
 
-  _crop() {
-    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-  }  
+  // eslint-disable
 
-  renderEditor() {
-    return (
-      <EditorContainer>
-        <Background src={EmptyImage} width={500}/>
-        <PhotoEditor
-          ref={(elem) => { if (elem) this.editor = elem; }}
-          image={this.state.image}
-          overlayImage={this.state.twibbon}
-
-          editorSize={500}
-          exportSize={750}
-        />
-      </EditorContainer>
-    )
+  crop() {
+    console.log(this.cropper.getCroppedCanvas().toDataURL());
   }
 
   async actionUploadTwibbon(e) {
@@ -105,7 +84,7 @@ class Campaign extends Component {
     await this.props.createTwibbon({
       campaignUrl: campaign.campaign_url,
       caption: 'hello',
-      image
+      image,
     });
 
     this.setState({
@@ -113,79 +92,112 @@ class Campaign extends Component {
     });
   }
 
+  renderEditor() {
+    return (
+      <EditorContainer>
+        <Background src={EmptyImage} width={500} />
+        <PhotoEditor
+          ref={(elem) => {
+            if (elem) this.editor = elem;
+          }}
+          image={this.state.image}
+          overlayImage={this.state.twibbon}
+          editorSize={500}
+          exportSize={750}
+        />
+      </EditorContainer>
+    );
+  }
+
   renderUploadForm() {
     const { campaign } = this.props.campaign;
 
     return (
       <Container>
-        <canvas ref={(elem) => { if (elem) this.canvas = elem; }} hidden />
+        <canvas
+          ref={(elem) => {
+            if (elem) this.canvas = elem;
+          }}
+          hidden
+        />
         <Title>{campaign.name}</Title>
         {
           <Container>
-            { this.state.image !== '' &&
+            {this.state.image !== '' && (
               <Cropper
-              ref={(elem) => { this.cropper = elem; }}
-              overlayImage={this.state.twibbon}
-              style={{height: 400, width: 400}}
-              src={this.state.image}
-              cropBoxMovable={false}
-              cropBoxResizable={false}
-              dragMode='move'
-              toggleDragModeOnDblclick={false}
-              viewMode={3}
-              autoCropArea={1}
-              // Cropper.js options
-              aspectRatio={1}
-              modal={false}
-              center={false}
-              guides={false}
-              crop={this._crop.bind(this)}>
-              </Cropper>
-            }
-            {
-              this.state.image !== '' && <Overlay style={{backgroundImage: `url(${this.state.twibbon})`}} />
-            }
+                ref={(elem) => {
+                  this.cropper = elem;
+                }}
+                overlayImage={this.state.twibbon}
+                style={{ height: 400, width: 400 }}
+                src={this.state.image}
+                cropBoxMovable={false}
+                cropBoxResizable={false}
+                dragMode="move"
+                toggleDragModeOnDblclick={false}
+                viewMode={3}
+                autoCropArea={1}
+                // Cropper.js options
+                aspectRatio={1}
+                modal={false}
+                center={false}
+                guides={false}
+                crop={() => this.crop()}
+              />
+            )}
+            {this.state.image !== '' && (
+              <Overlay
+                style={{ backgroundImage: `url(${this.state.twibbon})` }}
+              />
+            )}
           </Container>
         }
+<<<<<<< ab9a8f1f83e26f3ca9b4a9ae9f5a5bfec94331ec:src/components/CampaignPage/index.js
           {
           !this.state.image &&
+=======
+        {/* { console.log(this.refs.cropper) } */}
+        {!this.state.image && (
+>>>>>>> Refactor a lot and fix consistency:src/components/CampaignPage/index.jsx
           <Label>
-            <ButtonDiv><span>Select Image</span></ButtonDiv>
+            <ButtonDiv>
+              <span>Select Image</span>
+            </ButtonDiv>
             <input
               type="file"
               accept="image/*"
               onChange={(e, f) => this.onFileChange(e, f)}
-              ref={elem => { this.file = elem; }}
+              ref={(elem) => {
+                this.file = elem;
+              }}
             />
           </Label>
-        }
-        {
-          this.state.image &&
+        )}
+        {this.state.image && (
           <Button onClick={e => this.actionUploadTwibbon(e)}>
             <span>Upload</span>
           </Button>
-        }
+        )}
       </Container>
-    )
+    );
   }
 
   renderAfterUpload() {
     const { result } = this.props.uploadTwibbon;
     return (
       <Container>
-          <Title>Your twibbon is ready!</Title>
-          <Twibbon src={result.img} />
-          <a href={result.img} download="twibbon.png">Download</a>
+        <Title>Your twibbon is ready!</Title>
+        <Twibbon src={result.img} />
+        <a href={result.img} download="twibbon.png">
+          Download
+        </a>
       </Container>
     );
   }
 
   render() {
-
     if (this.state.twibbon === '' || this.props.uploadTwibbon.loading) {
-      return (
-        <LoadingIndicator />
-      );
+      return <LoadingIndicator />;
     }
 
     if (!this.state.uploaded) {
