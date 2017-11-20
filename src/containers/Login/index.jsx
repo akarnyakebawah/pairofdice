@@ -127,11 +127,12 @@ const Input = styled.input`
 `;
 
 const Form = styled.form`
+  min-width: 15rem;
+  max-width: 40rem;
   align-self: center;
   align-items: center;
   display: flex;
   flex-direction: column;
-  max-width: 40rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
 

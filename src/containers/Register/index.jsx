@@ -108,7 +108,11 @@ class Register extends Component {
 
 const margin = '1rem';
 
-const RegisterButton = styled(Button)`margin-top: 1rem;`;
+const RegisterButton = styled(Button)`
+  self-align: center;
+  width: 30%;
+  margin-top: 1rem;
+`;
 
 const Input = styled.input`
   border: none;
@@ -136,11 +140,12 @@ const Input = styled.input`
 `;
 
 const Form = styled.form`
+  min-width: 15rem;
+  max-width: 40rem;
   align-self: center;
   align-items: center;
   display: flex;
   flex-direction: column;
-  max-width: 40rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
 
