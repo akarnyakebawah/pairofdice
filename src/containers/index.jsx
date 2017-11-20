@@ -118,6 +118,7 @@ const MobileLogoutButton = styled(LogoutButton)`
   }
   margin: auto;
   font-size: ${props => props.theme.fontSize.small};
+  margin-bottom: 2rem;
 `;
 
 const Navbar = styled.div`
