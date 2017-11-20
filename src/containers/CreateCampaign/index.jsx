@@ -70,7 +70,6 @@ class CreateCampaign extends Component {
     e.preventDefault();
     const { name, url, captions } = this.state;
     let image = await this.fileUploader.getCroppedImage();
-    console.log(image);
     image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
 

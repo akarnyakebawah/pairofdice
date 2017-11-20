@@ -56,40 +56,38 @@ class Campaign extends Component {
   // eslint-disable
 
   crop() {
-    console.log(this.cropper.getCroppedCanvas().toDataURL());
+    // console.log('crop');
+    // console.log(this.cropper.getCroppedCanvas().toDataURL());
   }
 
   async actionUploadTwibbon(e) {
     e.preventDefault();
-    console.log(this.cropper)
     const { campaign } = this.props.campaign;
 
     // Get base image
-    const cropBoxData = this.cropper.getCropBoxData();
-    const w = cropBoxData.width;
-    const h = cropBoxData.height;
+    // const cropBoxData = this.cropper.getCropBoxData();
     let image = await this.cropper.getCroppedCanvas();
-
+    const w = image.width;
+    const h = image.height;
     // Overlay with Twibbon
-    var campaignImg = new Image();
-    campaignImg.src = this.state.overlayImage;
-    console.log(campaignImg);
+    const campaignImg = new Image();
 
-    const ctx = image.getContext('2d');
+    campaignImg.onload = () => {
 
-    console.log(ctx);
-    ctx.drawImage(campaignImg, 0, 0, w, h);
-    image = dataUrlToFile(image.toDataURL("image/png"));
+      const ctx = image.getContext('2d');
 
-    await this.props.createTwibbon({
-      campaignUrl: campaign.campaign_url,
-      caption: 'hello',
-      image,
-    });
-
-    this.setState({
-      uploaded: true,
-    });
+      ctx.drawImage(campaignImg, 0, 0, w, h);
+      const copy = image.toDataURL('image/png');
+      image = dataUrlToFile(copy);
+      this.props.createTwibbon({
+        campaignUrl: campaign.campaign_url,
+        caption: 'hello',
+        image,
+      }).then(() => {
+        this.setState({ uploaded: true });
+      });
+    };
+    campaignImg.src = this.state.twibbon;
   }
 
   renderEditor() {
