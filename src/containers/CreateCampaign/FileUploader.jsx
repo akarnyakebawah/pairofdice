@@ -16,12 +16,27 @@ class FileUploader extends React.Component {
     setState: PropTypes.func.isRequired
   };
 
+  constructor() {
+    super();
+    console.log(window);
+    console.log(window.innerWidth);
+  }
+
   state = {
     isDragging: false,
     imageSize: 0,
     isFixed: false,
-    editorSize: 300,
+    editorSize: Math.min(300, 0.8 * window.innerWidth)
   };
+
+  componentDidMount() {
+    window.addEventListener('resize', () => this.updateEditorSize());
+    this.updateEditorSize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize');
+  }
 
   // eslint-disable-next-line
   onDragOver(e) {
@@ -64,7 +79,7 @@ class FileUploader extends React.Component {
       image.onload = () => {
         this.setState({
           imageSize: Math.min(image.width, image.height),
-          editorSize: Math.min(Math.min(image.width, image.height), 300),
+          editorSize: Math.min(Math.min(image.width, image.height), this.state.editorSize)
         });
       };
       image.src = reader.result;
@@ -74,9 +89,18 @@ class FileUploader extends React.Component {
 
   async getCroppedImage() {
     let croppedImage;
-    await this.editor.getImage().then((image) => { croppedImage = image; });
-    console.log(croppedImage);
+    await this.editor.getImage().then((image) => {
+      croppedImage = image;
+    });
     return croppedImage;
+  }
+
+  updateEditorSize() {
+    console.log('updating editor size...');
+    console.log('window: ', window.innerWidth);
+    console.log('editorSize:', this.state.editorSize);
+    console.log(Math.min(this.state.editorSize, 0.8 * window.innerWidth));
+    this.setState({ editorSize: Math.min(this.state.editorSize, 0.8 * window.innerWidth) });
   }
 
   resetImage() {
@@ -88,10 +112,14 @@ class FileUploader extends React.Component {
     const { isDragging, isFixed } = this.state;
     const { isImageLoaded, image } = this.props;
     const labelClass = `${(isDragging && 'hover') || null}`;
-    if (isImageLoaded ) {
+    if (isImageLoaded) {
       return (
         <Relative>
-          <EmptyImage src={emptyImage} alt="placeholder" width={this.state.editorSize} />
+          <EmptyImage
+            src={emptyImage}
+            alt="placeholder"
+            width={this.state.editorSize}
+          />
           <BorderedPhotoEditor
             image={image}
             editorSize={this.state.editorSize}
@@ -99,16 +127,21 @@ class FileUploader extends React.Component {
             innerRef={(elem) => { this.editor = elem; }}
             disabled={isFixed}
           />
-          {!isFixed &&
+          {!isFixed && (
             <button onClick={() => this.setState({ isFixed: true })}>
               <Ionicons icon="md-checkmark" fontSize="2rem" />
-            </button>}
-          {isFixed &&
+            </button>
+          )}
+          {isFixed && (
             <button onClick={() => this.setState({ isFixed: false })}>
               <Ionicons icon="md-create" fontSize="2rem" />
             </button>
-          }
-          <button onClick={() => { this.props.setState({ isImageLoaded: false })}}>
+          )}
+          <button
+            onClick={() => {
+              this.props.setState({ isImageLoaded: false });
+            }}
+          >
             <Ionicons icon="md-close" fontSize="2rem" />
           </button>
         </Relative>
