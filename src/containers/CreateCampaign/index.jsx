@@ -6,25 +6,30 @@ import { connect } from 'react-redux';
 import { createCampaign } from '../../redux/modules/createCampaign';
 import { Button, ButtonLink } from '../../components/Button';
 import FileUploader from './FileUploader';
-import { SHARE_CAMPAIGN_ROUTE } from '../../constants/routes';
-
+import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
 
 import { dataUrlToFile } from '../../helpers/utils';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
 
+
 @connect(
-  state => ({ campaign: state.createCampaign }),
+  state => ({ campaign: state.createCampaign, auth: state.auth }),
   { createCampaign },
 )
 class CreateCampaign extends Component {
   static propTypes = {
+    auth: PropTypes.shape({
+      token: PropTypes.string.isRequired,
+    }).isRequired,
     campaign: PropTypes.shape({
       error: PropTypes.object.isRequired,
       loading: PropTypes.bool.isRequired,
       campaign: PropTypes.object.isRequired,
     }).isRequired,
     createCampaign: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor() {
@@ -43,7 +48,15 @@ class CreateCampaign extends Component {
   };
 
   componentDidMount() {
+    if (!this.props.auth.token) {
+      this.props.history.replace(LOGIN_ROUTE);
+    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.auth.token !== nextProps.auth.token && !nextProps.auth.token) {
+      this.props.history.replace(LOGIN_ROUTE);
+    }
   }
 
   onChangeState(e) {
@@ -57,8 +70,10 @@ class CreateCampaign extends Component {
     let image = await this.fileUploader.getCroppedImage();
     image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
+
+    // If the campaign is created and no error, redirect to share page
     if (!!this.props.campaign.campaign && !this.props.campaign.error) {
-      this.props.history.push(SHARE_CAMPAIGN_ROUTE);
+      this.props.history.push(`${BASE_ROUTE}${url}/share`);
     }
   }
 

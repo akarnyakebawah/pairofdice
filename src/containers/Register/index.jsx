@@ -13,6 +13,7 @@ import { register } from '../../redux/modules/auth';
 // Components
 import { Button } from '../../components/Button';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+import * as routes from '../../constants/routes';
 
 @connect(
   state => ({
@@ -38,7 +39,11 @@ class Register extends Component {
     email: '',
     password: '',
   };
-
+  componentDidMount() {
+    if (this.props.auth.token) {
+      this.props.history.replace(routes.BASE_ROUTE);
+    }
+  }
   onChangeState(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -138,7 +143,7 @@ const Form = styled.form`
   max-width: 40rem;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    
+
   }
 `;
 

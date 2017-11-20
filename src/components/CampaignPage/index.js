@@ -6,16 +6,19 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { getImage } from '../../api';
+import { dataUrlToFile } from '../../helpers/utils';
+
+import EmptyImage from '../../../static/assets/empty-image.png';
+import { campaign } from '../../constants/apiUrl';
 
 class Campaign extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      picture: '',
-      clicked: '',
       image: '',
       twibbon:  '',
-      url: '',
+      uploaded: false,
     }
   }
 
@@ -52,9 +55,7 @@ class Campaign extends Component {
     }
 
     reader.onload = () => {
-      this.setState({
-        image: reader.result,
-      });
+      this.setState({ image: reader.result });
     };
     reader.readAsDataURL(file);
   }
@@ -63,28 +64,51 @@ class Campaign extends Component {
     console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
   }  
 
-  render() {
-    const { campaign } = this.props.campaign;
+  renderEditor() {
+    return (
+      <EditorContainer>
+        <Background src={EmptyImage} width={500}/>
+        <PhotoEditor
+          ref={(elem) => { if (elem) this.editor = elem; }}
+          image={this.state.image}
+          overlayImage={this.state.twibbon}
 
-    // console.log(this.state.twibbon === '');
-    if (this.state.twibbon === '') {
-      return (
-        <LoadingIndicator />
-      );
-    }
+          editorSize={500}
+          exportSize={750}
+        />
+      </EditorContainer>
+    )
+  }
+
+  async actionUploadTwibbon(e) {
+    e.preventDefault();
+    const { campaign } = this.cropper;
+    let image = await this.editor.getImage();
+    image = dataUrlToFile(image);
+
+    await this.props.createTwibbon({
+      campaignUrl: campaign.campaign_url,
+      caption: 'hello',
+      image
+    });
+
+    this.setState({
+      uploaded: true,
+    });
+  }
+
+  renderUploadForm() {
+    const { campaign } = this.props.campaign;
 
     return (
       <Container>
         <canvas ref={(elem) => { if (elem) this.canvas = elem; }} hidden />
         <Title>{campaign.name}</Title>
-        {/* {
-          this.state.image !== '' && <PhotoEditor image={this.state.image} overlayImage={this.state.twibbon} editorSize={500} exportSize={750} />
-        } */}
         {
           <Container>
             { this.state.image !== '' &&
               <Cropper
-              ref='cropper'
+              ref={(elem) => { this.cropper = elem; }}
               overlayImage={this.state.twibbon}
               style={{height: 400, width: 400}}
               src={this.state.image}
@@ -107,18 +131,53 @@ class Campaign extends Component {
             }
           </Container>
         }
-        { console.log(this.refs.cropper) }
-        <Label>
-          <ButtonDiv><span>lol</span></ButtonDiv>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e, f) => this.onFileChange(e, f)}
-            ref={elem => { this.file = elem; }}
-          />
-        </Label>
+        {/* { console.log(this.refs.cropper) } */}
+        {
+          !this.state.image &&
+          <Label>
+            <ButtonDiv><span>Select Image</span></ButtonDiv>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e, f) => this.onFileChange(e, f)}
+              ref={elem => { this.file = elem; }}
+            />
+          </Label>
+        }
+        {
+          this.state.image &&
+          <Button onClick={e => this.actionUploadTwibbon(e)}>
+            <span>Upload</span>
+          </Button>
+        }
       </Container>
     )
+  }
+
+  renderAfterUpload() {
+    const { result } = this.props.uploadTwibbon;
+    return (
+      <Container>
+          <Title>Your twibbon is ready!</Title>
+          <Twibbon src={result.img} />
+          <a href={result.img} download="twibbon.png">Download</a>
+      </Container>
+    );
+  }
+
+  render() {
+
+    if (this.state.twibbon === '' || this.props.uploadTwibbon.loading) {
+      return (
+        <LoadingIndicator />
+      );
+    }
+
+    if (!this.state.uploaded) {
+      return this.renderUploadForm();
+    }
+
+    return this.renderAfterUpload();
   }
 }
 
@@ -138,9 +197,9 @@ const Overlay = styled.div`
 
 const Container = styled.div`
   margin: 0;
-  /* margin-top: -150px; */
   align-self: center;
   display: flex;
+  align-items: center;
   flex-direction: column;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     margin-top: 0;
@@ -148,11 +207,13 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
+  margin: 0;
+  margin-bottom: 30px;
   color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.superHuge};
+  font-size: 3rem;
   display: block;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.jumbo};
+    font-size: 3rem;
   }
 `;
 
@@ -184,4 +245,23 @@ img {
     max-width: 100%;
   }
 }
+`;
+
+const EditorContainer = styled.div`
+  position: relative;
+  margin-bottom: 30px;
+`;
+
+const Background = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: ${props => props.width};
+  object-fit: scale-down;
+  z-index: 0;
+`;
+
+const Twibbon = styled.img`
+  width: 500px;
+  height: 500px;
 `;

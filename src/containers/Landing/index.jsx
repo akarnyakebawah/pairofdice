@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 
-import Logo from '../../components/Logo';
-import { Button, ButtonLink } from '../../components/Button';
-import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes.js';
+import { ButtonLink } from '../../components/Button';
+import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
 
 const title = 'Build a better campaign.';
-const subtitle = "Easily share your campaign filter with friends and family.";
+const subtitle = 'Easily share your campaign filter with friends and family.';
 const buttonText = 'CREATE CAMPAIGN';
 
 class Landing extends Component {
@@ -40,9 +38,9 @@ const Container = styled.div`
   flex-direction: column;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    
+
   }
-  width: 100%; 
+  width: 95%;
   margin: ${margin};
 `;
 

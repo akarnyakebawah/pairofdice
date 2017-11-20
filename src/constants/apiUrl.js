@@ -21,4 +21,6 @@ export const user = () => base('users/');
 
 export const campaigns = () => base('campaigns/');
 
-export const campaign = campaignUrl => campaigns() + campaignUrl;
+export const campaign = campaignUrl => `${campaigns() + campaignUrl}/`;
+
+export const twibbon = campaignUrl => `${campaign(campaignUrl)}/twibbons/`;
