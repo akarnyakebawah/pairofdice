@@ -82,9 +82,25 @@ class Campaign extends Component {
 
   async actionUploadTwibbon(e) {
     e.preventDefault();
-    const { campaign } = this.cropper;
-    let image = await this.editor.getImage();
-    image = dataUrlToFile(image);
+    console.log(this.cropper)
+    const { campaign } = this.props.campaign;  
+
+    // Get base image
+    const cropBoxData = this.cropper.getCropBoxData();
+    const w = cropBoxData.width;
+    const h = cropBoxData.height;
+    let image = await this.cropper.getCroppedCanvas();
+    
+    // Overlay with Twibbon
+    var campaignImg = new Image();
+    campaignImg.src = this.state.overlayImage;
+    console.log(campaignImg);
+
+    const ctx = image.getContext('2d');
+
+    console.log(ctx);
+    ctx.drawImage(campaignImg, 0, 0, w, h);
+    image = dataUrlToFile(image.toDataURL("image/png"));
 
     await this.props.createTwibbon({
       campaignUrl: campaign.campaign_url,
@@ -131,8 +147,7 @@ class Campaign extends Component {
             }
           </Container>
         }
-        {/* { console.log(this.refs.cropper) } */}
-        {
+          {
           !this.state.image &&
           <Label>
             <ButtonDiv><span>Select Image</span></ButtonDiv>
