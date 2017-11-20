@@ -124,7 +124,7 @@ class CreateCampaign extends Component {
         {!!urlError && <ErrorIndicator>{capitalize(urlError)}</ErrorIndicator>}
         <FormTitle>
           Captions <i>(optional)</i>
-        </FormTitle> */}
+        </FormTitle>
         <CaptionsForm
           name="captions"
           value={captions}
