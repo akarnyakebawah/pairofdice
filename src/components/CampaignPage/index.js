@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { ButtonCss, Button, ButtonLink } from '../../components/Button';
 import PhotoEditor from '../../components/PhotoEditor';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { getImage } from '../../api';
 
@@ -13,6 +15,7 @@ class Campaign extends Component {
       clicked: '',
       image: '',
       twibbon:  '',
+      url: '',
     }
   }
 
@@ -56,6 +59,10 @@ class Campaign extends Component {
     reader.readAsDataURL(file);
   }
 
+  _crop() {
+    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+  }  
+
   render() {
     const { campaign } = this.props.campaign;
 
@@ -66,15 +73,41 @@ class Campaign extends Component {
       );
     }
 
-    console.log
     return (
       <Container>
-        <img ref={(elem) => { if (elem) this.canvas = elem; }} src={"https://maniakucing.com/wp-content/uploads/2016/10/gambar-kucing-stres-1.jpg"} crossOrigin="Anonymous" hidden />
         <canvas ref={(elem) => { if (elem) this.canvas = elem; }} hidden />
         <Title>{campaign.name}</Title>
-        {
+        {/* {
           this.state.image !== '' && <PhotoEditor image={this.state.image} overlayImage={this.state.twibbon} editorSize={500} exportSize={750} />
+        } */}
+        {
+          <Container>
+            { this.state.image !== '' &&
+              <Cropper
+              ref='cropper'
+              overlayImage={this.state.twibbon}
+              style={{height: 400, width: 400}}
+              src={this.state.image}
+              cropBoxMovable={false}
+              cropBoxResizable={false}
+              dragMode='move'
+              toggleDragModeOnDblclick={false}
+              viewMode={3}
+              autoCropArea={1}
+              // Cropper.js options
+              aspectRatio={1}
+              modal={false}
+              center={false}
+              guides={false}
+              crop={this._crop.bind(this)}>
+              </Cropper>
+            }
+            {
+              this.state.image !== '' && <Overlay style={{backgroundImage: `url(${this.state.twibbon})`}} />
+            }
+          </Container>
         }
+        { console.log(this.refs.cropper) }
         <Label>
           <ButtonDiv><span>lol</span></ButtonDiv>
           <input
@@ -90,6 +123,18 @@ class Campaign extends Component {
 }
 
 export default Campaign;
+
+const Overlay = styled.div`
+  position: absolute;
+  pointer-events: none;
+  width: 400px;
+  height: 400px;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
+  background-size: cover;
+`
 
 const Container = styled.div`
   margin: 0;
