@@ -4,7 +4,7 @@ import * as apiUrl from '../constants/apiUrl';
 export const request = defaults();
 
 export function setAuthorizationToken(token) {
-  request.set('Authorization', `JWT ${token}`);
+  request.set('Authorization', token);
 }
 
 export async function login({ email, password }) {

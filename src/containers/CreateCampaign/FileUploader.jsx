@@ -35,7 +35,7 @@ class FileUploader extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize');
+    window.removeEventListener('resize', () => this.updateEditorSize());
   }
 
   // eslint-disable-next-line

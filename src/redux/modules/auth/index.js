@@ -85,7 +85,7 @@ export function reload() {
     dispatch(loading());
     const token = localStorage.getItem(localStorageKey.TOKEN);
     if (token) {
-      api.setAuthorizationToken(token);
+      api.setAuthorizationToken(`JWT ${token}`);
       dispatch(setToken(token));
     }
     dispatch(loaded());
@@ -122,12 +122,10 @@ export function logout() {
 export function register(credentials) {
   return async (dispatch) => {
     dispatch(loading());
-    let user;
     try {
-      const { body: user } = await api.register(credentials);
+      await api.register(credentials);
       await dispatch(login(credentials));
     } catch (error) {
-      console.log(user);
       dispatch(setError(error));
     }
     dispatch(completeLoading());
