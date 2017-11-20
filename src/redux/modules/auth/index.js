@@ -99,7 +99,7 @@ export function login(credentials) {
     try {
       const { body: result } = await api.login(credentials);
       localStorage.setItem(localStorageKey.TOKEN, result.token);
-      api.setAuthorizationToken(result.token);
+      api.setAuthorizationToken(`JWT ${result.token}`);
       dispatch(onLogin(result));
       dispatch(clearError());
     } catch (error) {

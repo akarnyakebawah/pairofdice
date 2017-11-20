@@ -33,7 +33,7 @@ class ShareCampaign extends Component {
   }
 
   render() {
-    const campaignUrl = config.WEB_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
+    const campaignUrl = config.API_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
     let toastContainer;
     return (
       <Container>
@@ -55,7 +55,7 @@ class ShareCampaign extends Component {
           closeOnClick
           pauseOnHover
         />
-        <CopyToClipboard 
+        <CopyToClipboard
           text={campaignUrl}
           onCopy={() => {this.notify("Copied")}}
         >
