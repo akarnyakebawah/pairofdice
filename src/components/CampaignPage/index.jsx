@@ -62,14 +62,14 @@ class Campaign extends Component {
   async actionUploadTwibbon(e) {
     e.preventDefault();
     console.log(this.cropper)
-    const { campaign } = this.props.campaign;  
+    const { campaign } = this.props.campaign;
 
     // Get base image
     const cropBoxData = this.cropper.getCropBoxData();
     const w = cropBoxData.width;
     const h = cropBoxData.height;
     let image = await this.cropper.getCroppedCanvas();
-    
+
     // Overlay with Twibbon
     var campaignImg = new Image();
     campaignImg.src = this.state.overlayImage;
@@ -152,13 +152,8 @@ class Campaign extends Component {
             )}
           </Container>
         }
-<<<<<<< ab9a8f1f83e26f3ca9b4a9ae9f5a5bfec94331ec:src/components/CampaignPage/index.js
-          {
-          !this.state.image &&
-=======
         {/* { console.log(this.refs.cropper) } */}
         {!this.state.image && (
->>>>>>> Refactor a lot and fix consistency:src/components/CampaignPage/index.jsx
           <Label>
             <ButtonDiv>
               <span>Select Image</span>

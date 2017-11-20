@@ -12,41 +12,38 @@ class SetStateExample extends Component {
     error: null,
   };
 
-  getCroppedImage() {
-    return this.state.result;
-  }
-
-  onChange = value => {
+  onChange = (value) => {
     this.setState(value);
-    console.log(this.state);
   };
+
+  getCroppedImage= () => this.state.result;
 
   render() {
-    return <DropNCrop
-      onChange={this.onChange}
-      canvasWidth={300}
-      canvasHeight={300}
-      maxFileSize={8389000}
-      allowedFileTypes={['image/png']}
-      value={this.state}
-      cropperOptions={
-        {
+    return (
+      <DropNCrop
+        onChange={this.onChange}
+        canvasWidth={Math.min(300, 0.8 * window.innerWidth)}
+        canvasHeight={Math.min(300, 0.8 * window.innerWidth)}
+        maxFileSize={8389000}
+        allowedFileTypes={['image/png']}
+        value={this.state}
+        cropperOptions={{
           autoCropArea: 1,
-          cropBoxMovable:false,
-          cropBoxResizable:false,
-          dragMode:'move',
-          toggleDragModeOnDblclick:false,
-          viewMode:3,
+          cropBoxMovable: false,
+          cropBoxResizable: false,
+          dragMode: 'move',
+          toggleDragModeOnDblclick: false,
+          viewMode: 3,
           // Cropper.js options
-          restore:false,
-          aspectRatio:1,
-          modal:true,
-          center:true,
-          guides:true,
-        }
-      }
-    />
-  };
+          restore: false,
+          aspectRatio: 1,
+          modal: true,
+          center: true,
+          guides: true,
+        }}
+      />
+    );
+  }
 }
 
 export default SetStateExample;

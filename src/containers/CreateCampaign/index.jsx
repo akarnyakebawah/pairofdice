@@ -70,6 +70,7 @@ class CreateCampaign extends Component {
     e.preventDefault();
     const { name, url, captions } = this.state;
     let image = await this.fileUploader.getCroppedImage();
+    console.log(image);
     image = dataUrlToFile(image);
     await this.props.createCampaign({ name, url, captions, image });
 
@@ -122,14 +123,6 @@ class CreateCampaign extends Component {
           />
         </UrlFormContainer>
         {!!urlError && <ErrorIndicator>{capitalize(urlError)}</ErrorIndicator>}
-        <FormTitle>
-          Captions <i>(optional)</i>
-        </FormTitle>
-        <CaptionsForm
-          name="captions"
-          value={captions}
-          onChange={e => this.onChangeState(e)}
-        />
         <Button primary onClick={e => this.createCampaign(e)}>
           {loading && <LoadingButtonIndicator />}
           {!loading && <span>Create</span>}
