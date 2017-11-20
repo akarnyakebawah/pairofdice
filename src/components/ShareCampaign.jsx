@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 import { createCampaign } from '../redux/modules/createCampaign';
 
-import { Button, ButtonLink } from '../components/Button';
+import { Button, ButtonCss } from '../components/Button';
 
 import config from '../config';
 
@@ -33,8 +33,9 @@ class ShareCampaign extends Component {
   }
 
   render() {
-    const campaignUrl = config.API_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
+    const campaignUrl = config.WEB_URL + (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
     let toastContainer;
+    console.log(this.props.history);
     return (
       <Container>
         <h1>Share your campaign</h1>
@@ -61,9 +62,9 @@ class ShareCampaign extends Component {
         >
           <Button><span>Copy to clipboard with button</span></Button>
         </CopyToClipboard>
-        <Button secondary>
+        <Link secondary href={campaignUrl}>
           Preview
-        </Button>
+        </Link>
       </Container>
     );
   }
@@ -130,6 +131,10 @@ const UrlForm = styled(Input)`
     width: 100%;
     padding: 1rem 0.25rem;
   }
+`;
+
+const Link = styled.a`
+  ${ButtonCss}
 `;
 
 export default ShareCampaign;
