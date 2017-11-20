@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { createCampaign } from '../../redux/modules/createCampaign';
 import { Button, ButtonLink } from '../../components/Button';
-import FileUploader from './FileUploader';
+import FileUploader from '../../components/FileUploader';
 import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
 
 import { dataUrlToFile } from '../../helpers/utils';
@@ -99,8 +99,6 @@ class CreateCampaign extends Component {
         <FormTitle>Filters</FormTitle>
         <FileUploader
           setState={e => this.setState(e)}
-          image={image}
-          isImageLoaded={isImageLoaded}
           ref={(elem) => { this.fileUploader = elem; }}
         />
         <FormTitle>Campaign Name</FormTitle>
@@ -119,9 +117,9 @@ class CreateCampaign extends Component {
           />
         </UrlFormContainer>
         <ErrorIndicator>{urlError}</ErrorIndicator>
-        <FormTitle>
+        {/* <FormTitle>
           Captions <i>(optional)</i>
-        </FormTitle>
+        </FormTitle> */}
         <CaptionsForm
           name="captions"
           value={captions}
@@ -192,6 +190,9 @@ const Input = styled.input`
 `;
 
 const CaptionsForm = styled.textarea`
+  //HIDE IT FOR NOW BECAUSE BELOM DIPAKE
+  display: none;
+  
   background-color: ${props => props.theme.color.grayTransparent(0.2)};
   border-radius: 0.5rem;
   border: none;

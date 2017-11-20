@@ -111,7 +111,6 @@ const margin = '1rem';
 const RegisterButton = styled(Button)`
   self-align: center;
   width: 30%;
-  margin-top: 1rem;
 `;
 
 const Input = styled.input`

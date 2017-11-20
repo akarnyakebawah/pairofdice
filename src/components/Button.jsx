@@ -15,6 +15,7 @@ export const ButtonCss = css`
   align-items: center;
   justify-content: center;
   min-width: 10rem;
+  margin-top: 1rem;
   padding: 0.5rem 1rem;
   // transition: 1s;
   text-align: center;
