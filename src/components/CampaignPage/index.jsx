@@ -66,45 +66,34 @@ class Campaign extends Component {
 
     // Get base image
     // const cropBoxData = this.cropper.getCropBoxData();
-    let image = await this.cropper.getCroppedCanvas();
-    const w = image.width;
-    const h = image.height;
+
     // Overlay with Twibbon
     const campaignImg = new Image();
 
     campaignImg.onload = () => {
-
+      const width = campaignImg.width;
+      const height = campaignImg.height;
+      let image = this.cropper.getCroppedCanvas({
+        width,
+        height,
+      });
       const ctx = image.getContext('2d');
 
-      ctx.drawImage(campaignImg, 0, 0, w, h);
+      ctx.drawImage(campaignImg, 0, 0, width, height);
       const copy = image.toDataURL('image/png');
       image = dataUrlToFile(copy);
-      this.props.createTwibbon({
-        campaignUrl: campaign.campaign_url,
-        caption: 'hello',
-        image,
-      }).then(() => {
-        this.setState({ uploaded: true });
-      });
+
+      this.props
+        .createTwibbon({
+          campaignUrl: campaign.campaign_url,
+          caption: 'hello',
+          image,
+        })
+        .then(() => {
+          this.setState({ uploaded: true });
+        });
     };
     campaignImg.src = this.state.twibbon;
-  }
-
-  renderEditor() {
-    return (
-      <EditorContainer>
-        <Background src={EmptyImage} width={500} />
-        <PhotoEditor
-          ref={(elem) => {
-            if (elem) this.editor = elem;
-          }}
-          image={this.state.image}
-          overlayImage={this.state.twibbon}
-          editorSize={500}
-          exportSize={750}
-        />
-      </EditorContainer>
-    );
   }
 
   renderUploadForm() {
@@ -127,7 +116,10 @@ class Campaign extends Component {
                   this.cropper = elem;
                 }}
                 overlayImage={this.state.twibbon}
-                style={{ height: 400, width: 400 }}
+                style={{
+                  height: Math.min(400, 0.8 * window.innerWidth),
+                  width: Math.min(400, 0.8 * window.innerWidth),
+                }}
                 src={this.state.image}
                 cropBoxMovable={false}
                 cropBoxResizable={false}
