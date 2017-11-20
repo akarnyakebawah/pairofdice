@@ -16,12 +16,6 @@ class FileUploader extends React.Component {
     setState: PropTypes.func.isRequired
   };
 
-  constructor() {
-    super();
-    console.log(window);
-    console.log(window.innerWidth);
-  }
-
   state = {
     isDragging: false,
     imageSize: 0,
@@ -96,10 +90,6 @@ class FileUploader extends React.Component {
   }
 
   updateEditorSize() {
-    console.log('updating editor size...');
-    console.log('window: ', window.innerWidth);
-    console.log('editorSize:', this.state.editorSize);
-    console.log(Math.min(this.state.editorSize, 0.8 * window.innerWidth));
     this.setState({ editorSize: Math.min(this.state.editorSize, 0.8 * window.innerWidth) });
   }
 

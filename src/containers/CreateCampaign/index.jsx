@@ -85,7 +85,15 @@ class CreateCampaign extends Component {
       isImageLoaded,
       image,
     } = this.state;
-    const { loading } = this.props.campaign;
+    const { loading, error } = this.props.campaign;
+    /* eslint-disable */
+    let urlError = '';
+    let imageError = '';
+    if (error && error.status === 400) {
+      urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
+      imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
+    }
+    /* eslint-enable */
     return (
       <Container>
         <FormTitle>Filters</FormTitle>
@@ -110,6 +118,7 @@ class CreateCampaign extends Component {
             value={url}
           />
         </UrlFormContainer>
+        <ErrorIndicator>{urlError}</ErrorIndicator>
         <FormTitle>
           Captions <i>(optional)</i>
         </FormTitle>
@@ -126,6 +135,14 @@ class CreateCampaign extends Component {
     );
   }
 }
+
+const ErrorIndicator = styled.div`
+  font-weight: bold;
+  font-size: ${props => props.theme.fontSize.medium};
+  color: ${props => props.theme.color.white};
+  font-style: italic;
+  text-transform: capitalize;
+`;
 
 const Container = styled.div`
   align-self: center;
