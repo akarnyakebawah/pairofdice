@@ -175,7 +175,7 @@ class Campaign extends Component {
     const { result } = this.props.uploadTwibbon;
     return (
       <Container>
-        <Title>Your twibbon is ready!</Title>
+        <Title>Your image is ready!</Title>
         <Twibbon src={result.img} />
         <a href={result.img} download="twibbon.png">
           Download
