@@ -137,7 +137,11 @@ class Campaign extends Component {
             )}
             {this.state.image !== '' && (
               <Overlay
-                style={{ backgroundImage: `url(${this.state.twibbon})` }}
+                style={{
+                  backgroundImage: `url(${this.state.twibbon})`,
+                  width: Math.min(400, 0.8 * window.innerWidth),
+                  height: Math.min(400, 0.8 * window.innerWidth),
+                }}
               />
             )}
           </Container>
