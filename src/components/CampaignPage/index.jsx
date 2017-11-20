@@ -280,4 +280,8 @@ const Background = styled.img`
 const Twibbon = styled.img`
   width: 500px;
   height: 500px;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    width: 80%;
+    height: 80%;
+  }
 `;
