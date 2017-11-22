@@ -6,6 +6,7 @@ const ERROR_SET = 'create_twibbon/error_set';
 const LOADED = 'create_twibbon/loaded';
 const LOADING = 'create_twibbon/loading';
 const LOADING_COMPLETE = 'create_twibbon/loading_complete';
+const REHYDRATE = 'persist/REHYDRATE';
 
 const INITIAL_STATE = {
   result: {},
@@ -31,6 +32,9 @@ export default function reducer(
       return { ...state, loading: true };
     case LOADING_COMPLETE:
       return { ...state, loading: false };
+    case REHYDRATE:
+      if (!action.payload || !action.payload.createTwibbon) return state;
+      return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
     default:
       return state;
   }

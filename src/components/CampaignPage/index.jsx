@@ -127,6 +127,7 @@ class Campaign extends Component {
                 }}
                 overlayImage={this.state.twibbon}
                 style={{
+                  position: 'relative',
                   height: Math.min(400, 0.8 * window.innerWidth),
                   width: Math.min(400, 0.8 * window.innerWidth),
                 }}
@@ -219,6 +220,7 @@ class Campaign extends Component {
   }
 
   render() {
+    console.log(this.props.uploadTwibbon);
     if (this.props.uploadTwibbon.loading) {
       return <LoadingIndicator />;
     }
@@ -238,12 +240,10 @@ const Overlay = styled.div`
   pointer-events: none;
   width: 400px;
   height: 400px;
-  top: inherit;
-  right: inherit;
-  bottom: inherit;
-  left: inherit;
+  top: 0;
+  left: 0;
   background-size: cover;
-  z-index: 1;
+  z-index: 4;
 `;
 
 const ButtonLink = styled.a`
@@ -257,6 +257,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     margin-top: 0;
   }
