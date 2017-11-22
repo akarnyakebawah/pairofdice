@@ -12,6 +12,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import { toDataURL, dataUrlToFile } from '../../helpers/utils';
 
 import EmptyImage from '../../../static/assets/empty-image.png';
+import * as apiUrl from '../../constants/apiUrl';
 
 class Campaign extends Component {
   static propTypes = {
@@ -40,7 +41,7 @@ class Campaign extends Component {
     });
   }
 
-  onFileChange(e, f) {
+  async onFileChange(e, f) {
     const file = f || e.target.files[0];
     const pattern = /image-*/;
     const reader = new FileReader();
@@ -50,10 +51,16 @@ class Campaign extends Component {
       return;
     }
 
+    await this.props.resizeImage({ image: file });
+    let { relativeImage } = this.props.uploadTwibbon;
+    relativeImage = apiUrl.resizeImageQuery(relativeImage);
+    /*
     reader.onload = () => {
       this.setState({ image: reader.result });
     };
     reader.readAsDataURL(file);
+    */
+    this.setState({ image: relativeImage });
   }
 
   // eslint-disable
@@ -187,7 +194,7 @@ class Campaign extends Component {
     console.log(result);
     return (
       <Container>
-        <Title>Your twibbon is ready!</Title>
+        <Title>Your image is ready!</Title>
         <Twibbon src={result.img} />
         <ButtonLink href={result.img} download="twibbon.png">
           <span>Download</span>
@@ -277,32 +284,33 @@ const Title = styled.h1`
 
 const ButtonDiv = styled.div`
   ${ButtonCss}
-`
+`;
+
 const Label = styled.label`
-position: relative;
-input {
-  display: none;
-}
-img {
-  background-color: ${props => props.theme.color.grayTransparent(0.1)};
-  border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  width: 10rem;
-  margin: 1rem 0;
-  object-fit: scale-down;
-  padding: 1rem;
-  &.hover {
-    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
-  }
-  .loaded {
+  position: relative;
+  input {
     display: none;
   }
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    width: auto;
-    max-width: 100%;
+  img {
+    background-color: ${props => props.theme.color.grayTransparent(0.1)};
+    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 10rem;
+    margin: 1rem 0;
+    object-fit: scale-down;
+    padding: 1rem;
+    &.hover {
+      border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
+    }
+    .loaded {
+      display: none;
+    }
+    @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+      width: auto;
+      max-width: 100%;
+    }
   }
-}
 `;
 
 const EditorContainer = styled.div`

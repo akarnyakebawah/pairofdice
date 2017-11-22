@@ -7,12 +7,14 @@ const LOADED = 'create_twibbon/loaded';
 const LOADING = 'create_twibbon/loading';
 const LOADING_COMPLETE = 'create_twibbon/loading_complete';
 const REHYDRATE = 'persist/REHYDRATE';
+const IMAGE_RESIZED = 'create_twibbon/image_resized';
 
 const INITIAL_STATE = {
   result: {},
   loading: false,
   loaded: false,
   error: null,
+  relativeImage: '',
 };
 
 export default function reducer(
@@ -32,6 +34,8 @@ export default function reducer(
       return { ...state, loading: true };
     case LOADING_COMPLETE:
       return { ...state, loading: false };
+    case IMAGE_RESIZED:
+      return { ...state, relativeImage: action.payload.relative_img };
     case REHYDRATE:
       if (!action.payload || !action.payload.createTwibbon) return state;
       return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
@@ -43,6 +47,10 @@ export default function reducer(
 // Action Creator
 export function createdTwibbon(payload) {
   return { type: TWIBBON_CREATED, payload };
+}
+
+export function resizedImage(payload) {
+  return { type: IMAGE_RESIZED, payload };
 }
 
 export function completeLoading() {
@@ -70,10 +78,23 @@ export function createTwibbon({ campaignUrl, caption, image }) {
   return async (dispatch) => {
     dispatch(loading());
     try {
-      const {body: result} = await api.postTwibbon({ campaignUrl, caption, image });
+      const { body: result } = await api.postTwibbon({ campaignUrl, caption, image });
       dispatch(createdTwibbon(result));
       dispatch(clearError());
       dispatch(loaded());
+    } catch (error) {
+      dispatch(setError(error));
+    }
+    dispatch(completeLoading());
+  };
+}
+
+export function resizeImage({ image }) {
+  return async (dispatch) => {
+    dispatch(loading());
+    try {
+      const { body: result } = await api.resizeImage({ image });
+      dispatch(resizedImage(result));
     } catch (error) {
       dispatch(setError(error));
     }

@@ -44,3 +44,9 @@ export async function postTwibbon({ campaignUrl, image, caption }) {
     .field('caption', caption)
     .field('img', image);
 }
+
+export async function resizeImage({ image }) {
+  return request
+    .post(apiUrl.imageResizer())
+    .field('img', image);
+}
