@@ -10,7 +10,7 @@ const REHYDRATE = 'persist/REHYDRATE';
 
 const INITIAL_STATE = {
   campaign: {},
-  loading: true,
+  loading: false,
   loaded: false,
   error: null,
 };
