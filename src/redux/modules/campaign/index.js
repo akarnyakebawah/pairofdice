@@ -6,7 +6,7 @@ const ERROR_SET = 'campaign/error_set';
 const LOADED = 'campaign/loaded';
 const LOADING = 'campaign/loading';
 const LOADING_COMPLETE = 'campaign/loading_complete';
-// const REHYDRATE = 'persist/REHYDRATE';
+const REHYDRATE = 'persist/REHYDRATE';
 
 const INITIAL_STATE = {
   campaign: {},
@@ -32,6 +32,11 @@ export default function reducer(
       return { ...state, loading: true };
     case LOADING_COMPLETE:
       return { ...state, loading: false };
+    case REHYDRATE:
+      if (!action.payload || !action.payload.campaign || !action.payload.campaign.campaign) {
+        return state;
+      }
+      return { ...action.payload.campaign, loading: false, loaded: true, error: null };
     default:
       return state;
   }

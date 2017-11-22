@@ -6,17 +6,18 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import NotFound from '../../components/NotFound';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { loadCampaign } from '../../redux/modules/campaign';
-import { createTwibbon } from '../../redux/modules/createTwibbon';
+import { createTwibbon, resizeImage } from '../../redux/modules/createTwibbon';
 
 import CampaignPage from '../../components/CampaignPage';
 import ShareCampaign from '../../components/ShareCampaign';
+import * as apiUrl from '../../constants/apiUrl';
 
 @connect(
   state => ({
     campaign: state.campaign,
     uploadTwibbon: state.createTwibbon,
   }),
-  { loadCampaign, createTwibbon },
+  { loadCampaign, createTwibbon, resizeImage },
 )
 class Campaign extends Component {
   componentDidMount() {
@@ -25,7 +26,7 @@ class Campaign extends Component {
   }
 
   render() {
-    const { match, campaign, createTwibbon, uploadTwibbon } = this.props;
+    const { match, campaign, createTwibbon, uploadTwibbon, resizeImage } = this.props;
 
     if (campaign.loading) {
       return (
@@ -49,6 +50,7 @@ class Campaign extends Component {
               uploadTwibbon={uploadTwibbon}
               campaign={campaign}
               createTwibbon={createTwibbon}
+              resizeImage={resizeImage}
             />)
           }
         />

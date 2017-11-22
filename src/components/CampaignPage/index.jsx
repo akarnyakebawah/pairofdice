@@ -12,6 +12,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import { toDataURL, dataUrlToFile } from '../../helpers/utils';
 
 import EmptyImage from '../../../static/assets/empty-image.png';
+import * as apiUrl from '../../constants/apiUrl';
 
 class Campaign extends Component {
   static propTypes = {
@@ -40,7 +41,7 @@ class Campaign extends Component {
     });
   }
 
-  onFileChange(e, f) {
+  async onFileChange(e, f) {
     const file = f || e.target.files[0];
     const pattern = /image-*/;
     const reader = new FileReader();
@@ -50,10 +51,16 @@ class Campaign extends Component {
       return;
     }
 
+    await this.props.resizeImage({ image: file });
+    let { relativeImage } = this.props.uploadTwibbon;
+    relativeImage = apiUrl.resizeImageQuery(relativeImage);
+    /*
     reader.onload = () => {
       this.setState({ image: reader.result });
     };
     reader.readAsDataURL(file);
+    */
+    this.setState({ image: relativeImage });
   }
 
   // eslint-disable
@@ -127,6 +134,7 @@ class Campaign extends Component {
                 }}
                 overlayImage={this.state.twibbon}
                 style={{
+                  position: 'relative',
                   height: Math.min(400, 0.8 * window.innerWidth),
                   width: Math.min(400, 0.8 * window.innerWidth),
                 }}
@@ -219,6 +227,7 @@ class Campaign extends Component {
   }
 
   render() {
+    console.log(this.props.uploadTwibbon);
     if (this.props.uploadTwibbon.loading) {
       return <LoadingIndicator />;
     }
@@ -238,12 +247,10 @@ const Overlay = styled.div`
   pointer-events: none;
   width: 400px;
   height: 400px;
-  top: inherit;
-  right: inherit;
-  bottom: inherit;
-  left: inherit;
+  top: 0;
+  left: 0;
   background-size: cover;
-  z-index: 1;
+  z-index: 4;
 `;
 
 const ButtonLink = styled.a`
@@ -257,6 +264,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     margin-top: 0;
   }
@@ -276,32 +284,33 @@ const Title = styled.h1`
 
 const ButtonDiv = styled.div`
   ${ButtonCss}
-`
+`;
+
 const Label = styled.label`
-position: relative;
-input {
-  display: none;
-}
-img {
-  background-color: ${props => props.theme.color.grayTransparent(0.1)};
-  border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  width: 10rem;
-  margin: 1rem 0;
-  object-fit: scale-down;
-  padding: 1rem;
-  &.hover {
-    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
-  }
-  .loaded {
+  position: relative;
+  input {
     display: none;
   }
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    width: auto;
-    max-width: 100%;
+  img {
+    background-color: ${props => props.theme.color.grayTransparent(0.1)};
+    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 10rem;
+    margin: 1rem 0;
+    object-fit: scale-down;
+    padding: 1rem;
+    &.hover {
+      border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
+    }
+    .loaded {
+      display: none;
+    }
+    @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+      width: auto;
+      max-width: 100%;
+    }
   }
-}
 `;
 
 const EditorContainer = styled.div`
