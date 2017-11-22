@@ -7,7 +7,7 @@ module.exports = (options, req) => ({
     // `pkg` indicates the data in `package.json`
     title: 'Twiggsy',
   },
-  port: 3220,
+  port: 3440,
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },

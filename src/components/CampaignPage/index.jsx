@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Cropper from 'react-cropper';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ToastContainer, toast } from 'react-toastify';
+import Spinner from 'react-spinkit';
 import { ButtonCss, Button } from '../../components/Button';
 import PhotoEditor from '../../components/PhotoEditor';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -13,6 +14,7 @@ import { toDataURL, dataUrlToFile } from '../../helpers/utils';
 
 import EmptyImage from '../../../static/assets/empty-image.png';
 import * as apiUrl from '../../constants/apiUrl';
+import theme from '../../constants/theme';
 
 class Campaign extends Component {
   static propTypes = {
@@ -52,6 +54,7 @@ class Campaign extends Component {
     }
 
     await this.props.resizeImage({ image: file });
+
     let { relativeImage } = this.props.uploadTwibbon;
     relativeImage = apiUrl.resizeImageQuery(relativeImage);
     /*
@@ -60,7 +63,20 @@ class Campaign extends Component {
     };
     reader.readAsDataURL(file);
     */
-    this.setState({ image: relativeImage });
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+
+      canvas.getContext('2d').drawImage(image, 0, 0);
+      const dataUrl = canvas.toDataURL('image/png');
+      this.setState({ image: dataUrl, loadingImage: false });
+    }
+    this.setState({ loadingImage: true });
+    image.src = relativeImage;
   }
 
   // eslint-disable
@@ -77,6 +93,11 @@ class Campaign extends Component {
     }
   }
 
+  imageIsLoaded() {
+    this.setState({ loadingImage: false });
+    this.cropper.reset();
+  }
+
   async actionUploadTwibbon(e) {
     e.preventDefault();
     const { campaign } = this.props.campaign;
@@ -89,8 +110,9 @@ class Campaign extends Component {
     campaignImg.crossOrigin = 'anonymous';
 
     campaignImg.onload = () => {
-      const width = campaignImg.width;
-      const height = campaignImg.height;
+      const imageData = this.cropper.getImageData();
+      const width = Math.min(imageData.naturalHeight, imageData.naturalWidth);
+      const height = width;
       let image = this.cropper.getCroppedCanvas({
         width,
         height,
@@ -126,6 +148,12 @@ class Campaign extends Component {
           hidden
         />
         <Title>{campaign.name}</Title>
+        {this.state.loadingImage &&
+          <LoadingImageIndicator>
+            <Spinner name="pacman" color={theme.color.white} fadeIn="none" />
+            <Subtitle>Creating your cropper...</Subtitle>
+          </LoadingImageIndicator>
+        }
         {
           <Container>
             {this.state.image !== '' && (
@@ -135,7 +163,6 @@ class Campaign extends Component {
                 }}
                 overlayImage={this.state.twibbon}
                 style={{
-                  position: 'relative',
                   height: Math.min(400, 0.8 * window.innerWidth),
                   width: Math.min(400, 0.8 * window.innerWidth),
                 }}
@@ -168,7 +195,7 @@ class Campaign extends Component {
         {/* { console.log(this.refs.cropper) } */}
         {!this.state.image && (
           <Label>
-            <ButtonDiv>
+            <ButtonDiv hidden={this.state.loadingImage}>
               <span>Select Image</span>
             </ButtonDiv>
             <input
@@ -182,7 +209,7 @@ class Campaign extends Component {
           </Label>
         )}
         {this.state.image && (
-          <Button onClick={e => this.actionUploadTwibbon(e)}>
+          <Button onClick={e => this.actionUploadTwibbon(e)} disable={this.state.loadingImage}>
             <span>Upload</span>
           </Button>
         )}
@@ -192,11 +219,10 @@ class Campaign extends Component {
 
   renderAfterUpload() {
     const { result } = this.props.uploadTwibbon;
-    console.log(result);
     return (
       <Container>
         <Title>Your image is ready!</Title>
-        <Twibbon src={result.img} />
+        <Twibbon src={result.img} onLoad={() => alert('image is loaded')}/>
         <ButtonLink href={result.img} download="twibbon.png">
           <span>Download</span>
         </ButtonLink>
@@ -228,9 +254,13 @@ class Campaign extends Component {
   }
 
   render() {
-    console.log(this.props.uploadTwibbon);
     if (this.props.uploadTwibbon.loading) {
-      return <LoadingIndicator />;
+      return (
+        <LoadingImageIndicator>
+          <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
+          <Subtitle>Uploading your image...</Subtitle>
+        </LoadingImageIndicator>
+      )
     }
 
     if (!this.state.uploaded) {
@@ -285,6 +315,7 @@ const Title = styled.h1`
 
 const ButtonDiv = styled.div`
   ${ButtonCss}
+  ${props => props.hidden && 'display: none'};
 `;
 
 const Label = styled.label`
@@ -354,4 +385,16 @@ const CaptionsForm = styled.textarea`
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     padding: 0.25rem;
   }
+`;
+
+const LoadingImageIndicator = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%:
+`;
+
+const Subtitle = styled(Title)`
+  font-size: ${props => props.theme.fontSize.medium};
 `;

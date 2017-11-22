@@ -29,6 +29,6 @@ export const imageResizer = () => base('helper/images/');
 
 export const resizeImageBasePath = () => 'https://twiggsy.imgix.net/';
 
-export const resizeImageQueryParams = () => '?fit=min&w=1024&h=1024';
+export const resizeImageQueryParams = () => '?fit=clip&h=1024&w=1024';
 
 export const resizeImageQuery = relativeImagePath => `${resizeImageBasePath()}${relativeImagePath}${resizeImageQueryParams()}`;
