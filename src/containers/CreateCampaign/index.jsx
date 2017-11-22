@@ -122,6 +122,12 @@ class CreateCampaign extends Component {
           />
         </UrlFormContainer>
         {!!urlError && <ErrorIndicator>{capitalize(urlError)}</ErrorIndicator>}
+        <FormTitle>Captions</FormTitle>
+        <CaptionsForm
+          name="captions"
+          onChange={e => this.onChangeState(e)}
+          value={captions}
+        />
         <Button primary onClick={e => this.createCampaign(e)}>
           {loading && <LoadingButtonIndicator />}
           {!loading && <span>Create</span>}
@@ -179,9 +185,6 @@ const Input = styled.input`
 `;
 
 const CaptionsForm = styled.textarea`
-  //HIDE IT FOR NOW BECAUSE BELOM DIPAKE
-  display: none;
-
   background-color: ${props => props.theme.color.grayTransparent(0.2)};
   border-radius: 0.5rem;
   border: none;

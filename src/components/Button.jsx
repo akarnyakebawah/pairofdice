@@ -15,7 +15,7 @@ export const ButtonCss = css`
   align-items: center;
   justify-content: center;
   min-width: 10rem;
-  margin-top: 1rem;
+  margin: 1rem 0;
   padding: 0.5rem 1rem;
   // transition: 1s;
   text-align: center;
@@ -42,6 +42,10 @@ export const ButtonCss = css`
   }
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     font-size: ${props => props.theme.fontSize.small};
+  }
+  @media screen and (max-width: 100px) {
+    min-width: auto;
+    max-width: 80%;
   }
 `;
 

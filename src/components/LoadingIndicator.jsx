@@ -17,6 +17,7 @@ const Container = styled.div`
   animation: fadein 1s;
   background: ${props => props.theme.color.grayTransparent(0.25)};
   @keyframes fadein {
+  overflow-y: hidden;
     from {
       opacity: 0;
     }

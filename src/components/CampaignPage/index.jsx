@@ -1,8 +1,11 @@
 import 'cropperjs/dist/cropper.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Cropper from 'react-cropper';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { ToastContainer, toast } from 'react-toastify';
 import { ButtonCss, Button } from '../../components/Button';
 import PhotoEditor from '../../components/PhotoEditor';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -58,6 +61,13 @@ class Campaign extends Component {
   crop() {
     // console.log('crop');
     // console.log(this.cropper.getCroppedCanvas().toDataURL());
+  }
+
+  toastId = null;
+  notify(message) {
+    if (!toast.isActive(this.toastId)) {
+      this.toastId = toast(message);
+    }
   }
 
   async actionUploadTwibbon(e) {
@@ -173,19 +183,43 @@ class Campaign extends Component {
 
   renderAfterUpload() {
     const { result } = this.props.uploadTwibbon;
+    console.log(result);
     return (
       <Container>
         <Title>Your twibbon is ready!</Title>
         <Twibbon src={result.img} />
-        <a href={result.img} download="twibbon.png">
-          Download
-        </a>
+        <ButtonLink href={result.img} download="twibbon.png">
+          <span>Download</span>
+        </ButtonLink>
+        <CaptionsForm
+          value={result.caption}
+          disabled
+        />
+        <ToastContainer
+          position="bottom-left"
+          type="info"
+          autoClose={2000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
+        />
+        <CopyToClipboard
+          text={result.caption}
+          onCopy={() => {
+            this.notify('Copied');
+          }}
+        >
+          <Button>
+            <span>Copy to clipboard with button</span>
+          </Button>
+        </CopyToClipboard>
       </Container>
     );
   }
 
   render() {
-    if (this.state.twibbon === '' || this.props.uploadTwibbon.loading) {
+    if (this.props.uploadTwibbon.loading) {
       return <LoadingIndicator />;
     }
 
@@ -209,7 +243,13 @@ const Overlay = styled.div`
   bottom: inherit;
   left: inherit;
   background-size: cover;
-`
+  z-index: 1;
+`;
+
+const ButtonLink = styled.a`
+  ${ButtonCss}
+  margin-bottom: 1rem;
+`;
 
 const Container = styled.div`
   margin: 0;
@@ -228,6 +268,7 @@ const Title = styled.h1`
   color: ${props => props.theme.color.white};
   font-size: 3rem;
   display: block;
+  text-align: center;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     font-size: 3rem;
   }
@@ -283,5 +324,24 @@ const Twibbon = styled.img`
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     width: 80%;
     height: 80%;
+  }
+`;
+
+const CaptionsForm = styled.textarea`
+  background-color: ${props => props.theme.color.grayTransparent(0.2)};
+  border-radius: 0.5rem;
+  border: none;
+  color: ${props => props.theme.color.white};
+  font-size: ${props => props.theme.fontSize.medium};
+  margin: 1rem 0;
+  min-height: 10rem;
+  padding: 1rem;
+  resize: none;
+  width: 80%;
+  &:focus {
+    outline: none;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    padding: 0.25rem;
   }
 `;

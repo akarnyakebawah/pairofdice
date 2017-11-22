@@ -51,6 +51,7 @@ class Home extends Component {
 
   render() {
     const { loaded, token } = this.props.auth;
+    const isLoading = Object.values(this.props).reduce((prev, current) => prev || ((current && current.loading) || false), false);
     if (!loaded) {
       return (
         <Container>
@@ -60,7 +61,7 @@ class Home extends Component {
     }
 
     return (
-      <Container>
+      <Container hideOverflow={isLoading}>
         <Navbar>
           <Logo />
           {
@@ -78,10 +79,10 @@ class Home extends Component {
           <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
         </Switch>
         {
-          token && this.props.location.pathname !== routes.BASE_ROUTE &&
-          <MobileLogoutButton onClick={() => this.props.logout()}>
-            <span>Logout</span>
-          </MobileLogoutButton>
+          !isLoading && token && this.props.location.pathname !== routes.BASE_ROUTE &&
+            <MobileLogoutButton onClick={() => this.props.logout()} disabled={isLoading}>
+              <span>Logout</span>
+            </MobileLogoutButton>
         }
         <Footer />
       </Container>
@@ -98,6 +99,25 @@ const Container = styled.div`
   font-family: ${props => props.theme.font.Apercu};
   min-height: 100vh;
   width: 100%;
+  ${props => props.hideOverflow && `
+    max-height: 100vh;
+    overflow-y: hidden;
+  `}
+`;
+
+const LoadingContainer = styled.div`
+  background: ${props => props.theme.linearGradient.main};
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-family: ${props => props.theme.font.Apercu};
+  min-height: 100vh;
+  width: 100%;
+  .hide-overflow {
+    height: 100vh;
+    overflow-y: hidden;
+  }
 `;
 
 const LogoutButton = styled.button`
