@@ -23,7 +23,7 @@ export const campaigns = () => base('campaigns/');
 
 export const campaign = campaignUrl => `${campaigns() + campaignUrl}/`;
 
-export const twibbon = campaignUrl => `${campaign(campaignUrl)}/twibbons/`;
+export const twibbon = campaignUrl => `${campaign(campaignUrl)}twibbons/`;
 
 export const imageResizer = () => base('helper/images/');
 
