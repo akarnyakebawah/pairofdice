@@ -86,6 +86,7 @@ class Campaign extends Component {
 
     // Overlay with Twibbon
     const campaignImg = new Image();
+    campaignImg.crossOrigin = 'anonymous';
 
     campaignImg.onload = () => {
       const width = campaignImg.width;
