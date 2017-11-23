@@ -34,6 +34,7 @@ class Campaign extends Component {
       image: '',
       twibbon: '',
       uploaded: false,
+      scale: 0,
     };
   }
 
@@ -53,16 +54,24 @@ class Campaign extends Component {
       return;
     }
 
-    await this.props.resizeImage({ image: file });
+    //Get original width of original file
+    reader.onload = function() {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        const originalWidth = img.naturalWidth;
+      }
 
+      img.src = fr.result;
+    }
+    fr.readAsDataURL(file);
+
+    //Nembak image resizeImage biar di resize, dpt url
+    await this.props.resizeImage({ image: file });
     let { relativeImage } = this.props.uploadTwibbon;
     relativeImage = apiUrl.resizeImageQuery(relativeImage);
-    /*
-    reader.onload = () => {
-      this.setState({ image: reader.result });
-    };
-    reader.readAsDataURL(file);
-    */
+
+    //Load dari url ke gambar trus ke canvas trus bisa di scropper deh
     const image = new Image();
     image.crossOrigin = 'anonymous';
 
@@ -73,7 +82,9 @@ class Campaign extends Component {
 
       canvas.getContext('2d').drawImage(image, 0, 0);
       const dataUrl = canvas.toDataURL('image/png');
-      this.setState({ image: dataUrl, loadingImage: false });
+      const scale = image.naturalWidth/originalWidth;
+      console.log(scale);
+      this.setState({ image: dataUrl, loadingImage: false, scale: scale });
     }
     this.setState({ loadingImage: true });
     image.src = relativeImage;
@@ -100,40 +111,45 @@ class Campaign extends Component {
 
   async actionUploadTwibbon(e) {
     e.preventDefault();
-    const { campaign } = this.props.campaign;
 
-    // Get base image
-    // const cropBoxData = this.cropper.getCropBoxData();
+    //Get url of original image and of campaign
+    let { relativeImage } = this.props.uploadTwibbon;
+    let { campaignUrl } = this.props.campaign.campaign.twibbon_img;
 
-    // Overlay with Twibbon
-    const campaignImg = new Image();
-    campaignImg.crossOrigin = 'anonymous';
+    //Calculate scaled & cropped dimensions before overlay
+    const cropperData = this.props.cropper.getData();
+    const x = cropperData.x * this.state.scale;
+    const y = cropperData.y * this.state.scale;
+    const width = cropperData.width * this.state.scale;
+    const height = cropperData.height * this.state.scale;
 
-    campaignImg.onload = () => {
-      const imageData = this.cropper.getImageData();
-      const width = Math.min(imageData.naturalHeight, imageData.naturalWidth);
-      const height = width;
-      let image = this.cropper.getCroppedCanvas({
-        width,
-        height,
-      });
-      const ctx = image.getContext('2d');
+    //Tembak ke imgix buat di overlay
+    relativeImage = apiUrl.overlayImageQuery(relativeImage, encodeURI(campaignUrl), x, y, width, height);
 
-      ctx.drawImage(campaignImg, 0, 0, width, height);
-      const copy = image.toDataURL('image/png');
-      image = dataUrlToFile(copy);
+    //Load overlayed image to imgix
+    const twibbon = new Image();
+    twibbon.crossOrigin = 'anonymous';
+
+    twibbon.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = twibbon.naturalWidth;
+      canvas.height = twibbon.naturalHeight;
+
+      canvas.getContext('2d').drawImage(twibbon, 0, 0);
+      const dataUrl = canvas.toDataURL('image/png');
 
       this.props
         .createTwibbon({
           campaignUrl: campaign.campaign_url,
-          caption: 'hello',
-          image,
+          caption: campaign.caption_template,
+          twibbon,
         })
         .then(() => {
           this.setState({ uploaded: true });
         });
     };
-    campaignImg.src = this.state.twibbon;
+
+    twibbon.src = relativeImage;
   }
 
   renderUploadForm() {
