@@ -34,6 +34,7 @@ class Campaign extends Component {
       image: '',
       twibbon: '',
       uploaded: false,
+      originalWidth: 0,
       scale: 0,
     };
   }
@@ -55,16 +56,16 @@ class Campaign extends Component {
     }
 
     //Get original width of original file
-    reader.onload = function() {
+    reader.onload = () => {
       var img = new Image();
       img.crossOrigin = 'anonymous';
-      img.onload = function() {
-        const originalWidth = img.naturalWidth;
+      img.onload = () => {
+        this.setState({ originalWidth: img.naturalWidth });
       }
 
-      img.src = fr.result;
+      img.src = reader.result;
     }
-    fr.readAsDataURL(file);
+    reader.readAsDataURL(file);
 
     //Nembak image resizeImage biar di resize, dpt url
     await this.props.resizeImage({ image: file });
@@ -76,13 +77,14 @@ class Campaign extends Component {
     image.crossOrigin = 'anonymous';
 
     image.onload = () => {
+      let scale = this.state.originalWidth/image.naturalWidth;
       const canvas = document.createElement('canvas');
+      
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
 
       canvas.getContext('2d').drawImage(image, 0, 0);
       const dataUrl = canvas.toDataURL('image/png');
-      const scale = image.naturalWidth/originalWidth;
       console.log(scale);
       this.setState({ image: dataUrl, loadingImage: false, scale: scale });
     }
@@ -114,41 +116,32 @@ class Campaign extends Component {
 
     //Get url of original image and of campaign
     let { relativeImage } = this.props.uploadTwibbon;
-    let { campaignUrl } = this.props.campaign.campaign.twibbon_img;
+    const { campaign } = this.props.campaign;    
 
     //Calculate scaled & cropped dimensions before overlay
-    const cropperData = this.props.cropper.getData();
-    const x = cropperData.x * this.state.scale;
-    const y = cropperData.y * this.state.scale;
-    const width = cropperData.width * this.state.scale;
-    const height = cropperData.height * this.state.scale;
+    const cropperData = this.cropper.getData();
+    const x = parseInt(cropperData.x * this.state.scale);
+    const y = parseInt(cropperData.y * this.state.scale);
+    const width = parseInt(cropperData.width * this.state.scale);
+    const height = parseInt(cropperData.height * this.state.scale);
 
     //Tembak ke imgix buat di overlay
+    console.log(campaign.twibbon_img)
+    let campaignUrl = campaign.twibbon_img;
+    if (campaignUrl.indexOf("?") !== -1) {
+      campaignUrl = campaignUrl.slice(0,campaignUrl.indexOf("?"));
+    }
+    console.log(encodeURI(campaign.twibbon_img))
     relativeImage = apiUrl.overlayImageQuery(relativeImage, encodeURI(campaignUrl), x, y, width, height);
-
+    
     //Load overlayed image to imgix
     const twibbon = new Image();
     twibbon.crossOrigin = 'anonymous';
 
     twibbon.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = twibbon.naturalWidth;
-      canvas.height = twibbon.naturalHeight;
-
-      canvas.getContext('2d').drawImage(twibbon, 0, 0);
-      const dataUrl = canvas.toDataURL('image/png');
-
-      this.props
-        .createTwibbon({
-          campaignUrl: campaign.campaign_url,
-          caption: campaign.caption_template,
-          twibbon,
-        })
-        .then(() => {
-          this.setState({ uploaded: true });
-        });
+      this.setState({ uploaded: true, image: relativeImage, uploadingImage: false, loadingImage: false });
     };
-
+    this.setState({ uploadingImage: true });
     twibbon.src = relativeImage;
   }
 
@@ -235,42 +228,47 @@ class Campaign extends Component {
 
   renderAfterUpload() {
     const { result } = this.props.uploadTwibbon;
+    const { campaign } = this.props.campaign;
     return (
       <Container>
         <Title>Your image is ready!</Title>
-        <Twibbon src={result.img} onLoad={() => alert('image is loaded')}/>
-        <ButtonLink href={result.img} download="twibbon.png">
+        <Twibbon src={this.state.image} />
+        <ButtonLink href={this.state.image} download="twibbon.png">
           <span>Download</span>
         </ButtonLink>
-        <CaptionsForm
-          value={result.caption}
-          disabled
-        />
-        <ToastContainer
-          position="bottom-left"
-          type="info"
-          autoClose={2000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnHover
-        />
-        <CopyToClipboard
-          text={result.caption}
-          onCopy={() => {
-            this.notify('Copied');
-          }}
-        >
-          <Button>
-            <span>Copy to clipboard with button</span>
-          </Button>
-        </CopyToClipboard>
+        {campaign && campaign.caption_template &&
+          <Container>
+            <CaptionsForm
+              value={campaign.caption_template}
+              disabled
+            />
+            <ToastContainer
+              position="bottom-left"
+              type="info"
+              autoClose={2000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+            />
+            <CopyToClipboard
+              text={campaign.caption_template}
+              onCopy={() => {
+                this.notify('Copied.');
+              }}
+            >
+              <Button>
+                <span>Copy to clipboard</span>
+              </Button>
+            </CopyToClipboard>
+          </Container>
+        }
       </Container>
     );
   }
 
   render() {
-    if (this.props.uploadTwibbon.loading) {
+    if (this.state.uploadingImage || this.props.uploadTwibbon.loading) {
       return (
         <LoadingImageIndicator>
           <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
