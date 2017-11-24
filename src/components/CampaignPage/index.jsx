@@ -188,7 +188,6 @@ class Campaign extends Component {
             <input
               type="file"
               accept="image/*"
-              capture
               onChange={(e, f) => this.onFileChange(e, f)}
               ref={(elem) => {
                 this.file = elem;
