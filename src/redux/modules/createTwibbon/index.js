@@ -15,6 +15,7 @@ const INITIAL_STATE = {
   loaded: false,
   error: null,
   relativeImage: '',
+  scale: 0,
 };
 
 export default function reducer(
@@ -35,7 +36,7 @@ export default function reducer(
     case LOADING_COMPLETE:
       return { ...state, loading: false };
     case IMAGE_RESIZED:
-      return { ...state, relativeImage: action.payload.relative_img };
+      return { ...state, relativeImage: action.payload.relative_img, scale: action.payload.scale };
     case REHYDRATE:
       if (!action.payload || !action.payload.createTwibbon) return state;
       return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };

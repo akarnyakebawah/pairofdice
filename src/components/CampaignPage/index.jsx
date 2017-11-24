@@ -69,7 +69,7 @@ class Campaign extends Component {
 
     //Nembak image resizeImage biar di resize, dpt url
     await this.props.resizeImage({ image: file });
-    let { relativeImage } = this.props.uploadTwibbon;
+    let { relativeImage, scale } = this.props.uploadTwibbon;
     relativeImage = apiUrl.resizeImageQuery(relativeImage);
 
     //Load dari url ke gambar trus ke canvas trus bisa di scropper deh
@@ -77,7 +77,6 @@ class Campaign extends Component {
     image.crossOrigin = 'anonymous';
 
     image.onload = () => {
-      let scale = this.state.originalWidth/image.naturalWidth;
       const canvas = document.createElement('canvas');
       
       canvas.width = image.naturalWidth;
@@ -85,7 +84,6 @@ class Campaign extends Component {
 
       canvas.getContext('2d').drawImage(image, 0, 0);
       const dataUrl = canvas.toDataURL('image/png');
-      console.log(scale);
       this.setState({ image: dataUrl, loadingImage: false, scale: scale });
     }
     this.setState({ loadingImage: true });
@@ -126,12 +124,10 @@ class Campaign extends Component {
     const height = parseInt(cropperData.height * this.state.scale);
 
     //Tembak ke imgix buat di overlay
-    console.log(campaign.twibbon_img)
     let campaignUrl = campaign.twibbon_img;
     if (campaignUrl.indexOf("?") !== -1) {
       campaignUrl = campaignUrl.slice(0,campaignUrl.indexOf("?"));
     }
-    console.log(encodeURI(campaign.twibbon_img))
     relativeImage = apiUrl.overlayImageQuery(relativeImage, encodeURI(campaignUrl), x, y, width, height);
     
     //Load overlayed image to imgix
@@ -374,8 +370,8 @@ const Background = styled.img`
 `;
 
 const Twibbon = styled.img`
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     width: 80%;
     height: 80%;
