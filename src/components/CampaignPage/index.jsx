@@ -169,7 +169,12 @@ class Campaign extends Component {
               />
             )}
             {this.state.image !== '' && (
-              <Overlay>
+              <Overlay
+                style={{
+                  height: Math.min(400, 0.8 * window.innerWidth),
+                  width: Math.min(400, 0.8 * window.innerWidth),
+                }}
+              >
                 <img src={this.state.twibbon}/>
               </Overlay>
             )}
@@ -265,8 +270,6 @@ export default Campaign;
 const Overlay = styled.div`
   position: absolute;
   pointer-events: none;
-  width: 100%;
-  height: 100%;
   object-fit: contain;
   top: 0;
   left: 0;
