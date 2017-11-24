@@ -49,6 +49,13 @@ class Home extends Component {
     ReactGA.pageview(window.location.href);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      ReactGA.pageview(window.location.href);
+    }
+  }
+
+
   render() {
     const { loaded, token } = this.props.auth;
     const isLoading = Object.values(this.props).reduce((prev, current) => prev || ((current && current.loading) || false), false);
