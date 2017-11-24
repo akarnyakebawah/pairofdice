@@ -7,6 +7,7 @@ import Cropper from 'react-cropper';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ToastContainer, toast } from 'react-toastify';
 import Spinner from 'react-spinkit';
+import ReactGA from 'react-ga';
 import { ButtonCss, Button } from '../../components/Button';
 import PhotoEditor from '../../components/PhotoEditor';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -15,7 +16,6 @@ import { toDataURL, dataUrlToFile } from '../../helpers/utils';
 import EmptyImage from '../../../static/assets/empty-image.png';
 import * as apiUrl from '../../constants/apiUrl';
 import theme from '../../constants/theme';
-
 class Campaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
@@ -79,7 +79,7 @@ class Campaign extends Component {
     image.onload = () => {
       let scale = this.state.originalWidth/image.naturalWidth;
       const canvas = document.createElement('canvas');
-      
+
       canvas.width = image.naturalWidth;
       canvas.height = image.naturalHeight;
 
@@ -116,7 +116,7 @@ class Campaign extends Component {
 
     //Get url of original image and of campaign
     let { relativeImage } = this.props.uploadTwibbon;
-    const { campaign } = this.props.campaign;    
+    const { campaign } = this.props.campaign;
 
     //Calculate scaled & cropped dimensions before overlay
     const cropperData = this.cropper.getData();
@@ -126,14 +126,12 @@ class Campaign extends Component {
     const height = parseInt(cropperData.height * this.state.scale);
 
     //Tembak ke imgix buat di overlay
-    console.log(campaign.twibbon_img)
     let campaignUrl = campaign.twibbon_img;
     if (campaignUrl.indexOf("?") !== -1) {
       campaignUrl = campaignUrl.slice(0,campaignUrl.indexOf("?"));
     }
-    console.log(encodeURI(campaign.twibbon_img))
     relativeImage = apiUrl.overlayImageQuery(relativeImage, encodeURI(campaignUrl), x, y, width, height);
-    
+
     //Load overlayed image to imgix
     const twibbon = new Image();
     twibbon.crossOrigin = 'anonymous';
@@ -204,7 +202,7 @@ class Campaign extends Component {
         {/* { console.log(this.refs.cropper) } */}
         {!this.state.image && (
           <Label>
-            <ButtonDiv hidden={this.state.loadingImage}>
+            <ButtonDiv hidden={this.state.loadingImage} onClick={() => ReactGA.modalview(`${campaign.campaign_url}/crop`)}>
               <span>Select Image</span>
             </ButtonDiv>
             <input
@@ -218,7 +216,13 @@ class Campaign extends Component {
           </Label>
         )}
         {this.state.image && (
-          <Button onClick={e => this.actionUploadTwibbon(e)} disable={this.state.loadingImage}>
+          <Button
+            onClick={(e) => {
+              this.actionUploadTwibbon(e);
+              ReactGA.modalview(`${campaign.campaign_url}/result`);
+            }}
+            disable={this.state.loadingImage}
+          >
             <span>Upload</span>
           </Button>
         )}

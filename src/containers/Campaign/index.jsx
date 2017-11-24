@@ -10,7 +10,6 @@ import { createTwibbon, resizeImage } from '../../redux/modules/createTwibbon';
 
 import CampaignPage from '../../components/CampaignPage';
 import ShareCampaign from '../../components/ShareCampaign';
-import * as apiUrl from '../../constants/apiUrl';
 
 @connect(
   state => ({
@@ -26,7 +25,7 @@ class Campaign extends Component {
   }
 
   render() {
-    const { match, campaign, createTwibbon, uploadTwibbon, resizeImage } = this.props;
+    const { match, campaign, createTwibbon, uploadTwibbon, resizeImage, history } = this.props;
 
     if (campaign.loading) {
       return (
@@ -51,6 +50,7 @@ class Campaign extends Component {
               campaign={campaign}
               createTwibbon={createTwibbon}
               resizeImage={resizeImage}
+              history={history}
             />)
           }
         />
