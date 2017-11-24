@@ -38,9 +38,9 @@ const Container = styled.div`
   flex-direction: column;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-
+    width: 100%;
   }
-  width: 95%;
+  width: 80%;
   margin: ${margin};
 `;
 

@@ -34,7 +34,6 @@ class Campaign extends Component {
       image: '',
       twibbon: '',
       uploaded: false,
-      originalWidth: 0,
       scale: 0,
     };
   }
@@ -54,18 +53,6 @@ class Campaign extends Component {
       alert('Invalid files to be uploaded');
       return;
     }
-
-    //Get original width of original file
-    reader.onload = () => {
-      var img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        this.setState({ originalWidth: img.naturalWidth });
-      }
-
-      img.src = reader.result;
-    }
-    reader.readAsDataURL(file);
 
     //Nembak image resizeImage biar di resize, dpt url
     await this.props.resizeImage({ image: file });
@@ -102,11 +89,6 @@ class Campaign extends Component {
     if (!toast.isActive(this.toastId)) {
       this.toastId = toast(message);
     }
-  }
-
-  imageIsLoaded() {
-    this.setState({ loadingImage: false });
-    this.cropper.reset();
   }
 
   async actionUploadTwibbon(e) {
@@ -187,13 +169,9 @@ class Campaign extends Component {
               />
             )}
             {this.state.image !== '' && (
-              <Overlay
-                style={{
-                  backgroundImage: `url(${this.state.twibbon})`,
-                  width: Math.min(400, 0.8 * window.innerWidth),
-                  height: Math.min(400, 0.8 * window.innerWidth),
-                }}
-              />
+              <Overlay>
+                <img src={this.state.twibbon}/>
+              </Overlay>
             )}
           </Container>
         }
@@ -206,6 +184,7 @@ class Campaign extends Component {
             <input
               type="file"
               accept="image/*"
+              capture
               onChange={(e, f) => this.onFileChange(e, f)}
               ref={(elem) => {
                 this.file = elem;
@@ -286,8 +265,9 @@ export default Campaign;
 const Overlay = styled.div`
   position: absolute;
   pointer-events: none;
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   top: 0;
   left: 0;
   background-size: cover;
@@ -297,6 +277,7 @@ const Overlay = styled.div`
 const ButtonLink = styled.a`
   ${ButtonCss}
   margin-bottom: 1rem;
+  position: relative;
 `;
 
 const Container = styled.div`
@@ -371,10 +352,10 @@ const Background = styled.img`
 
 const Twibbon = styled.img`
   width: 400px;
-  height: 400px;
+  object-fit: scale-down;
+  position: relative;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     width: 80%;
-    height: 80%;
   }
 `;
 
@@ -403,6 +384,7 @@ const LoadingImageIndicator = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%:
+  position: relative;
 `;
 
 const Subtitle = styled(Title)`
