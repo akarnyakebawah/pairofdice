@@ -16,7 +16,11 @@ class SetStateExample extends Component {
     this.setState(value);
   };
 
-  getCroppedImage= () => this.state.result;
+  getCroppedImage () {
+    return new Promise((resolve) => {
+      resolve(this.state.result);
+    });
+  };
 
   render() {
     return (
@@ -24,7 +28,7 @@ class SetStateExample extends Component {
         onChange={this.onChange}
         canvasWidth={Math.min(300, 0.8 * window.innerWidth)}
         canvasHeight={Math.min(300, 0.8 * window.innerWidth)}
-        maxFileSize={8389000}
+        maxFileSize={8000000}
         allowedFileTypes={['image/png']}
         value={this.state}
         cropperOptions={{

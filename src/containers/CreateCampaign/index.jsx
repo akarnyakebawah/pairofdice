@@ -69,8 +69,7 @@ class CreateCampaign extends Component {
   async createCampaign(e) {
     e.preventDefault();
     const { name, url, captions } = this.state;
-    let image = await this.fileUploader.getCroppedImage();
-    image = dataUrlToFile(image);
+    const image = dataUrlToFile(await this.fileUploader.getCroppedImage());
     await this.props.createCampaign({ name, url, captions, image });
 
     // If the campaign is created and no error, redirect to share page
