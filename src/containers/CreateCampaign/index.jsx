@@ -3,18 +3,17 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { createCampaign } from '../../redux/modules/createCampaign';
-import { Button, ButtonLink } from '../../components/Button';
+import { createCampaign } from '../../redux/modules/campaign';
+import { Button } from '../../components/Button';
 import FileUploader from '../../components/FileUploader';
-import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
-
-import { dataUrlToFile, capitalize } from '../../helpers/utils';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
 import ErrorIndicator from '../../components/ErrorIndicator';
+import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
+import { dataUrlToFile, capitalize } from '../../helpers/utils';
 
 
 @connect(
-  state => ({ campaign: state.createCampaign, auth: state.auth }),
+  state => ({ campaign: state.campaign, auth: state.auth }),
   { createCampaign },
 )
 class CreateCampaign extends Component {
@@ -33,11 +32,6 @@ class CreateCampaign extends Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
   };
-
-  constructor() {
-    super();
-    this.onChangeState = this.onChangeState.bind(this);
-  }
 
   state = {
     name: '',
@@ -61,7 +55,7 @@ class CreateCampaign extends Component {
     }
   }
 
-  onChangeState(e) {
+  onChangeState = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   }
@@ -83,8 +77,6 @@ class CreateCampaign extends Component {
       name,
       url,
       captions,
-      isImageLoaded,
-      image,
     } = this.state;
     const { loading, error } = this.props.campaign;
     /* eslint-disable */
@@ -95,6 +87,7 @@ class CreateCampaign extends Component {
       nameError = error.response.body.name && error.response.body.name[0];
       urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
       imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
+      if (imageError === 'image ratio must be 1:1') imageError += '. Try moving and using the cropper.';
     }
     /* eslint-enable */
     return (
@@ -104,6 +97,7 @@ class CreateCampaign extends Component {
           setState={e => this.setState(e)}
           ref={(elem) => { this.fileUploader = elem; }}
         />
+        {!!imageError && <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>}
         <FormTitle>Campaign Name</FormTitle>
         <NameForm
           name="name"

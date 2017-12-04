@@ -1,31 +1,40 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 
 import NotFound from '../../components/NotFound';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { loadCampaign } from '../../redux/modules/campaign';
-import { createTwibbon, resizeImage } from '../../redux/modules/createTwibbon';
 
-import CampaignPage from '../../components/CampaignPage';
-import ShareCampaign from '../../components/ShareCampaign';
+import CampaignPage from './CampaignPage';
+import ShareCampaign from './ShareCampaign';
 
 @connect(
   state => ({
     campaign: state.campaign,
-    uploadTwibbon: state.createTwibbon,
   }),
-  { loadCampaign, createTwibbon, resizeImage },
+  { loadCampaign },
 )
 class Campaign extends Component {
+  static propTypes = {
+    loadCampaign: PropTypes.func.isRequired,
+    // eslint-disable-next-line
+    campaign: PropTypes.object.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        campaignUrl: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }
+
   componentDidMount() {
-    const { loadCampaign, match } = this.props;
-    loadCampaign(match.params.campaignUrl);
+    this.props.loadCampaign(this.props.match.params.campaignUrl);
   }
 
   render() {
-    const { match, campaign, createTwibbon, uploadTwibbon, resizeImage, history } = this.props;
+    const { match, campaign } = this.props;
 
     if (campaign.loading) {
       return (
@@ -44,21 +53,11 @@ class Campaign extends Component {
         <Route
           exact
           path={`${match.url}/`}
-          render={
-            () => (<CampaignPage
-              uploadTwibbon={uploadTwibbon}
-              campaign={campaign}
-              createTwibbon={createTwibbon}
-              resizeImage={resizeImage}
-              history={history}
-            />)
-          }
+          render={() => <CampaignPage />}
         />
         <Route
           path={`${match.url}/share`}
-          render={
-            () => <ShareCampaign campaign={campaign} />
-          }
+          render={() => <ShareCampaign />}
         />
       </Switch>
     );

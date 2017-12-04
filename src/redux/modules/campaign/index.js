@@ -1,11 +1,12 @@
 import * as api from '../../../api';
 
-const CAMPAIGN_LOADED = 'campaign/campaign_loaded';
-const ERROR_CLEAR = 'campaign/error_clear';
-const ERROR_SET = 'campaign/error_set';
-const LOADED = 'campaign/loaded';
-const LOADING = 'campaign/loading';
-const LOADING_COMPLETE = 'campaign/loading_complete';
+const CAMPAIGN_CREATED = 'campaign/CAMPAIGN_CREATED';
+const CAMPAIGN_LOADED = 'campaign/CAMPAIGN_LOADED';
+const ERROR_CLEAR = 'campaign/ERROR_CLEAR';
+const ERROR_SET = 'campaign/ERROR_SET';
+const LOADED = 'campaign/LOADED';
+const LOADING = 'campaign/LOADING';
+const LOADING_COMPLETE = 'campaign/LOADING_COMPLETE';
 const REHYDRATE = 'persist/REHYDRATE';
 
 const INITIAL_STATE = {
@@ -15,11 +16,10 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export default function reducer(
-  state = INITIAL_STATE,
-  action = {},
-) {
+export default function reducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
+    case CAMPAIGN_CREATED:
+      return { ...state, campaign: action.payload };
     case CAMPAIGN_LOADED:
       return { ...state, campaign: action.payload };
     case ERROR_SET:
@@ -43,6 +43,10 @@ export default function reducer(
 }
 
 // Action Creators
+export function createdCampaign(payload) {
+  return { type: CAMPAIGN_CREATED, payload };
+}
+
 function loadedCampaign(payload) {
   return { type: CAMPAIGN_LOADED, payload };
 }
@@ -80,5 +84,21 @@ export function loadCampaign(campaignUrl) {
       dispatch(setError(error));
     }
     dispatch(completeLoading());
+  };
+}
+
+// Thunk
+export function createCampaign({ captions, name, image, url }) {
+  return async (dispatch) => {
+    dispatch(loading());
+    try {
+      const { body: campaign } = await api.postCampaign({ captions, name, image, url });
+      dispatch(clearError());
+      dispatch(createdCampaign(campaign));
+    } catch (error) {
+      dispatch(setError(error));
+    }
+    dispatch(loaded());
+    return dispatch(completeLoading());
   };
 }

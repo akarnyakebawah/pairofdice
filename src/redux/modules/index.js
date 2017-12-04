@@ -1,15 +1,13 @@
 import { routerReducer } from 'react-router-redux';
 import auth from './auth';
-import createCampaign from './createCampaign';
-import createTwibbon from './createTwibbon';
+import twibbon from './twibbon';
 
 import campaign from './campaign';
 
 
 export default {
   auth,
-  createCampaign,
   campaign,
-  createTwibbon,
+  twibbon,
   router: routerReducer,
 };

@@ -68,7 +68,7 @@ class Home extends Component {
     }
 
     return (
-      <Container hideOverflow={isLoading}>
+      <Container>
         <Navbar>
           <Logo />
           {

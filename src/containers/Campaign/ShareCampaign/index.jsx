@@ -1,25 +1,25 @@
+import 'react-toastify/dist/ReactToastify.min.css';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { connect } from 'react-redux';
+import { Button, ButtonCss } from '../../../components/Button';
 
-import { Button, ButtonCss } from '../../components/Button';
+import config from '../../../config';
 
-import config from '../../config';
-
+@connect(state => ({ campaign: state.campaign }))
 class ShareCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
       campaign: PropTypes.object.isRequired,
-      loading: PropTypes.bool.isRequired
-    }).isRequired
+      loading: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   state = {
-    isCopied: false
+    isCopied: false,
   };
 
   toastId = null;
@@ -35,7 +35,6 @@ class ShareCampaign extends Component {
       (this.props.campaign.campaign
         ? this.props.campaign.campaign.campaign_url
         : '');
-    let toastContainer;
     return (
       <Container>
         <h1>Share your campaign</h1>
@@ -54,7 +53,7 @@ class ShareCampaign extends Component {
           position="bottom-left"
           type="info"
           autoClose={2000}
-          hideProgressBar={true}
+          hideProgressBar
           newestOnTop={false}
           closeOnClick
           pauseOnHover
@@ -89,15 +88,6 @@ const Container = styled.div`
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     display: flex;
     flex-direction: column;
-  }
-`;
-
-const FormTitle = styled.div`
-  font-size: ${props => props.theme.fontSize.large};
-  font-weight: bolder;
-  margin-top: 2rem;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.medium};
   }
 `;
 
