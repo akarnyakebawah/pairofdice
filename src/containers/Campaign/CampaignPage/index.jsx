@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 import Spinner from 'react-spinkit';
+import Ionicon from 'react-ionicons';
 import styled from 'styled-components';
 import { ButtonCss, Button } from '../../../components/Button';
 import { createTwibbon, onImageChange, clearImage } from '../../../redux/modules/twibbon';
@@ -125,7 +126,11 @@ class Campaign extends Component {
         </Container>
         <Flex>
           <BackButton onClick={this.props.clearImage}>
-            <img src={BackButtonIcon} alt="back-button-icon" />
+            <Icon
+              icon="md-arrow-round-back"
+              fontSize="1.5rem"
+              color="white"
+            />
           </BackButton>
           <Button onClick={this.createTwibbon}>
             <span>Upload</span>
@@ -167,7 +172,12 @@ class Campaign extends Component {
         <Twibbon src={result} />
         <Flex>
           <BackButton onClick={this.props.clearImage}>
-            <img src={BackButtonIcon} alt="back-button-icon" />
+            <Icon
+              icon="md-arrow-round-back"
+              fontSize="1.5rem"
+              color="white"
+              onClick={this.props.clearImage}
+            />
           </BackButton>
           <ButtonLink href={result} download="twibbon.png">
             <span>Download</span>
@@ -334,15 +344,11 @@ const CaptionsForm = styled.textarea`
   }
 `;
 
-const BackButton = styled.button`
+const Icon = styled(Ionicon)`
   border-radius: 100%;
   border: solid 1px white;
-  background: transparent;
   margin-right: 1rem;
-  img {
-    width: 1.5rem;
-    padding: 0.25rem;
-  }
+  padding: 0.5rem;
   cursor: pointer;
 `;
 
@@ -350,4 +356,12 @@ const Flex = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1rem;
+`;
+
+const BackButton = styled.button`
+  border: none;
+  background: transparent;
+  :focus {
+    outline: none;
+  }
 `;
