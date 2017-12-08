@@ -21,7 +21,6 @@ import CreateCampaign from './CreateCampaign';
 import Landing from './Landing';
 import Login from './Login';
 import Register from './Register';
-import ShareCampaign from './ShareCampaign';
 import Campaign from './Campaign';
 
 @withRouter
