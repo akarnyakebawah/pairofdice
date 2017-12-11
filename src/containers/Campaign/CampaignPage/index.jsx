@@ -59,6 +59,8 @@ class Campaign extends Component {
       alert('Invalid files to be uploaded');
       return;
     }
+    console.log('!!!!');
+    console.log(file);
 
     // Get original width of original file
     reader.onload = () => {
@@ -82,7 +84,8 @@ class Campaign extends Component {
               canvas.setAttribute('crossOrigin', 'anonymous');
               const imageDataUrl = canvas.toDataURL();
               this.props.onImageChange({ imageDataUrl, imageFile: file });
-              const imageFile = helpers.dataUrlToFile(imageDataUrl);
+              const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
+              console.log(imageFile);
               this.props.onImageChange({ imageDataUrl, imageFile });
               clearInterval(interval);
 

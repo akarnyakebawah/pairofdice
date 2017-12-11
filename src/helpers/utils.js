@@ -13,23 +13,34 @@ function dataURItoBlob(dataURI) {
     .split(':')[1]
     .split(';')[0];
 
+
   // write the bytes of the string to a typed array
   const ia = new Uint8Array(byteString.length);
   for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
 
-  return new Blob([ia], { type: mimeString });
+  const blob = new Blob([ia], { type: mimeString });
+  
+  console.log(blob);
+
+  return blob;
 }
+
 
 export function getDataUrlExtension(dataUrl) {
   return dataUrl.substring('data:image/'.length, dataUrl.indexOf(';base64'));
 }
 
-export function dataUrlToFile(dataUrl) {
+export function dataUrlToFile(dataUrl, name = 'random') {
   const blob = dataURItoBlob(dataUrl);
   const extension = getDataUrlExtension(dataUrl);
-  const file = new File([blob], `randomName.${extension}`);
+  // blob.name = `${name}.${extension}`;
+  // blob.lastModifiedDate = new Date();
+  // console.log(blob);
+  // return blob;
+  const file = new File([blob], `${name}.${extension}`, { type: `image/${extension}` });
+  file.type = `image/${extension}`;
   return file;
 }
 
