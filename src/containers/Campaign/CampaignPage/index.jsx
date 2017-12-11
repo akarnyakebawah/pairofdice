@@ -10,16 +10,18 @@ import ReactGA from 'react-ga';
 import Spinner from 'react-spinkit';
 import Ionicon from 'react-ionicons';
 import styled from 'styled-components';
+import loadImage from 'blueimp-load-image';
 import { ButtonCss, Button } from '../../../components/Button';
-import { createTwibbon, onImageChange, clearImage } from '../../../redux/modules/twibbon';
+import { createTwibbon, onImageChange, clearImage, resize } from '../../../redux/modules/twibbon';
 import * as apiUrl from '../../../constants/apiUrl';
 import theme from '../../../constants/theme';
-import BackButtonIcon from '../../../../static/assets/back-button-icon.png';
+import * as helpers from '../../../helpers/utils';
 
 @connect(state => ({ campaign: state.campaign, twibbon: state.twibbon }), {
   createTwibbon,
   onImageChange,
   clearImage,
+  resize,
 })
 class Campaign extends Component {
   static propTypes = {
@@ -31,12 +33,14 @@ class Campaign extends Component {
     twibbon: PropTypes.shape({
       result: PropTypes.string.isRequired,
       loading: PropTypes.bool.isRequired,
+      resize: PropTypes.bool.isRequired,
       uploaded: PropTypes.bool.isRequired,
       imageDataUrl: PropTypes.string.isRequired,
     }).isRequired,
     clearImage: PropTypes.func.isRequired,
     createTwibbon: PropTypes.func.isRequired,
     onImageChange: PropTypes.func.isRequired,
+    resize: PropTypes.func.isRequired,
   };
 
   state = {
@@ -58,7 +62,43 @@ class Campaign extends Component {
 
     // Get original width of original file
     reader.onload = () => {
-      this.props.onImageChange({ imageDataUrl: reader.result, imageFile: file });
+      const img = new Image();
+      img.onload = () => {
+        const { width, height } = img;
+        if (width * height >= 1024 * 1024) {
+          const options = {
+            maxWidth: 1024,
+            maxHeight: 1024,
+            canvas: true,
+          };
+          this.props.resize();
+          let counter = 0;
+          const interval = setInterval(() => { counter += 1; }, 10);
+          loadImage(
+            file,
+            (canvas) => {
+              const imageDataUrl = canvas.toDataURL();
+              this.props.onImageChange({ imageDataUrl, imageFile: file });
+              const imageFile = helpers.dataUrlToFile(imageDataUrl);
+              this.props.onImageChange({ imageDataUrl, imageFile });
+              clearInterval(interval);
+
+              // Debug purposes
+              const img2 = new Image();
+              img2.onload = () => {
+                console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
+              };
+              img2.src = imageDataUrl;
+              console.log('Time elapsed for resizing your image in second: ', counter / 100.0);
+              console.log(`Your image file size: ${imageFile.size / 1000} kB`);
+            },
+            options,
+          );
+        } else {
+          this.props.onImageChange({ imageDataUrl: reader.result, imageFile: file });
+        }
+      };
+      img.src = reader.result;
     };
     reader.readAsDataURL(file);
   };
@@ -90,11 +130,17 @@ class Campaign extends Component {
 
   renderCropper = () => {
     const { campaign } = this.props.campaign;
-    const { imageDataUrl } = this.props.twibbon;
+    const { imageDataUrl, resizing } = this.props.twibbon;
     return (
       <Container>
         <Title>{campaign.name}</Title>
         <Container>
+          {this.props.resizing && (
+            <LoadingImageIndicator>
+              <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
+              <Subtitle>Resizing your image so it won't crash...</Subtitle>
+            </LoadingImageIndicator>
+          )}
           <Cropper
             ref={(elem) => {
               this.cropper = elem;

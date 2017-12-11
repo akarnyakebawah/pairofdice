@@ -11,6 +11,7 @@ const IMAGE_RESIZED = 'twibbon/IMAGE_RESIZED';
 const IMAGE_CHANGED = 'twibbon/IMAGE_CHANGED';
 const IMAGE_CLEARED = 'twibbon/IMAGE_CLEARED';
 const REHYDRATE = 'persist/REHYDRATE';
+const RESIZING = 'twibbon/RESIZING';
 
 const INITIAL_STATE = {
   result: '',
@@ -19,6 +20,7 @@ const INITIAL_STATE = {
   imageFile: '',
   loading: false,
   loaded: false,
+  resizing: false,
   error: null,
 };
 
@@ -37,11 +39,13 @@ export default function reducer(state = Object.assign({}, INITIAL_STATE), action
     case LOADING_COMPLETE:
       return { ...state, loading: false };
     case IMAGE_CHANGED:
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload, resizing: false };
     case IMAGE_CLEARED:
       return { ...INITIAL_STATE };
     case IMAGE_RESIZED:
       return { ...state, relativeImage: action.payload.relative_img };
+    case RESIZING:
+      return { ...state, resizing: true };
     case REHYDRATE:
       if (!action.payload || !action.payload.createTwibbon) return state;
       return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
@@ -129,6 +133,12 @@ export function createTwibbon({ x, y, width, height }) {
     }
 
     dispatch(completeLoading());
+  };
+}
+
+export function resize() {
+  return (dispatch) => {
+    dispatch({ type: RESIZING });
   };
 }
 
