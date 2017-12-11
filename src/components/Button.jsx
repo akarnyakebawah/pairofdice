@@ -11,6 +11,7 @@ export const ButtonCss = css`
   box-shadow: 0 2px 9px 0 rgba(54, 54, 54, 0.6);
   color: ${props => props.theme.color.white};
   cursor: pointer;
+  display: -webkit-flex;
   display: flex;
   align-items: center;
   justify-content: center;

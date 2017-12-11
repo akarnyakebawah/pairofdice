@@ -182,7 +182,7 @@ class Campaign extends Component {
               color="white"
             />
           </BackButton>
-          <Button onClick={this.createTwibbon}>
+          <Button onClick={this.createTwibbon} style={{ margin: 'auto' }}>
             <span>Upload</span>
           </Button>
         </Flex>
