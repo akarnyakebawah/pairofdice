@@ -70,6 +70,8 @@ class Campaign extends Component {
             maxWidth: 1024,
             maxHeight: 1024,
             canvas: true,
+            orientation: true,
+            crossOrigin: 'anonymous',
           };
           this.props.resize();
           let counter = 0;
