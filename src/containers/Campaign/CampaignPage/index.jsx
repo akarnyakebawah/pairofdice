@@ -79,6 +79,7 @@ class Campaign extends Component {
           loadImage(
             file,
             (canvas) => {
+              canvas.setAttribute('crossOrigin', 'anonymous');
               const imageDataUrl = canvas.toDataURL();
               this.props.onImageChange({ imageDataUrl, imageFile: file });
               const imageFile = helpers.dataUrlToFile(imageDataUrl);
@@ -87,6 +88,7 @@ class Campaign extends Component {
 
               // Debug purposes
               const img2 = new Image();
+              img2.setAttribute('crossOrigin', 'anonymous');
               img2.onload = () => {
                 console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
               };

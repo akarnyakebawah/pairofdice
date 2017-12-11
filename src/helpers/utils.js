@@ -1,10 +1,9 @@
 function dataURItoBlob(dataURI) {
   // convert base64/URLEncoded data component to raw binary data held in a string
-  var byteString;
+  let byteString;
   if (dataURI.split(',')[0].indexOf('base64') >= 0) {
     byteString = atob(dataURI.split(',')[1]);
-  }
-  else {
+  } else {
     byteString = unescape(dataURI.split(',')[1]);
   }
 
@@ -47,6 +46,7 @@ export function toDataURL(url, callback) {
     };
     reader.readAsDataURL(xhr.response);
   };
+  xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
   xhr.withCredentials = true;
   xhr.open('GET', url);
   xhr.responseType = 'blob';
