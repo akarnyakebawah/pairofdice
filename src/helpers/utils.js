@@ -32,15 +32,13 @@ export function getDataUrlExtension(dataUrl) {
 }
 
 export function dataUrlToFile(dataUrl, name = 'random') {
-  const blob = dataURItoBlob(dataUrl);
+  const blob = dataURItoBlob(dataUrl);  
   // const extension = getDataUrlExtension(dataUrl);
   // new File([blob]) is not supported in Safari
   // const file = new File([blob], `${name}.${extension}`, { type: `image/${extension}` });
   // file.type = `image/${extension}`;
-  const formData = new FormData();
-  formData.append('image', blob, name);
-  const file = formData.get('image');
-  return file;
+  blob.name = name;
+  return blob;
 }
 
 export function capitalize(string) {

@@ -33,7 +33,7 @@ class Campaign extends Component {
     twibbon: PropTypes.shape({
       result: PropTypes.string.isRequired,
       loading: PropTypes.bool.isRequired,
-      resize: PropTypes.bool.isRequired,
+      resize: PropTypes.bool,
       uploaded: PropTypes.bool.isRequired,
       imageDataUrl: PropTypes.string.isRequired,
     }).isRequired,
@@ -59,12 +59,11 @@ class Campaign extends Component {
       alert('Invalid files to be uploaded');
       return;
     }
-    console.log('!!!!');
-    console.log(file);
 
     // Get original width of original file
     reader.onload = () => {
       const img = new Image();
+      // img.crossorigin = 'anonymous';
       img.onload = () => {
         const { width, height } = img;
         if (width * height >= 1024 * 1024) {
@@ -81,23 +80,22 @@ class Campaign extends Component {
           loadImage(
             file,
             (canvas) => {
-              canvas.setAttribute('crossOrigin', 'anonymous');
               const imageDataUrl = canvas.toDataURL();
-              this.props.onImageChange({ imageDataUrl, imageFile: file });
-              const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
-              console.log(imageFile);
-              this.props.onImageChange({ imageDataUrl, imageFile });
+              // this.props.onImageChange({ imageDataUrl, imageFile: file });
+              
               clearInterval(interval);
-
+              
               // Debug purposes
               const img2 = new Image();
-              img2.setAttribute('crossOrigin', 'anonymous');
+              img2.setAttribute('crossorigin', 'anonymous');
               img2.onload = () => {
                 console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
               };
               img2.src = imageDataUrl;
               console.log('Time elapsed for resizing your image in second: ', counter / 100.0);
-              console.log(`Your image file size: ${imageFile.size / 1000} kB`);
+              
+              const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
+              this.props.onImageChange({ imageDataUrl, imageFile });
             },
             options,
           );
@@ -181,7 +179,7 @@ class Campaign extends Component {
           <BackButton onClick={this.props.clearImage}>
             <Icon
               icon="md-arrow-round-back"
-              fontSize="1.5rem"
+              // fontSize="1.5rem"
               color="white"
             />
           </BackButton>
@@ -227,7 +225,7 @@ class Campaign extends Component {
           <BackButton onClick={this.props.clearImage}>
             <Icon
               icon="md-arrow-round-back"
-              fontSize="1.5rem"
+              // fontSize="1.5rem"
               color="white"
               onClick={this.props.clearImage}
             />

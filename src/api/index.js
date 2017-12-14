@@ -46,5 +46,7 @@ export async function postTwibbon({ campaignUrl, image, caption }) {
 }
 
 export async function uploadImage({ imageFile }) {
-  return request.post(apiUrl.imageResizer()).field('img', imageFile);
+  const formData = new FormData();
+  formData.append('img', imageFile, imageFile.name);
+  return request.post(apiUrl.imageResizer()).send(formData);
 }
