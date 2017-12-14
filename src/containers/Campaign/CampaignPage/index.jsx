@@ -127,10 +127,10 @@ class Campaign extends Component {
 
     // Calculate scaled & cropped dimensions before overlay
     const cropperData = this.cropper.getData();
-    const x = parseInt(cropperData.x * this.state.scale, 10);
-    const y = parseInt(cropperData.y * this.state.scale, 10);
-    const width = parseInt(cropperData.width * this.state.scale, 10);
-    const height = parseInt(cropperData.height * this.state.scale, 10);
+    const x = parseInt(cropperData.x * cropperData.scaleX, 10);
+    const y = parseInt(cropperData.y * cropperData.scaleY, 10);
+    const width = parseInt(cropperData.width * cropperData.scaleX, 10);
+    const height = parseInt(cropperData.height * cropperData.scaleY, 10);
 
     await this.props.createTwibbon({ x, y, width, height });
   };

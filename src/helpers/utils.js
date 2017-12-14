@@ -21,8 +21,7 @@ function dataURItoBlob(dataURI) {
   }
 
   const blob = new Blob([ia], { type: mimeString });
-  
-  console.log(blob);
+
 
   return blob;
 }
@@ -34,13 +33,13 @@ export function getDataUrlExtension(dataUrl) {
 
 export function dataUrlToFile(dataUrl, name = 'random') {
   const blob = dataURItoBlob(dataUrl);
-  const extension = getDataUrlExtension(dataUrl);
-  // blob.name = `${name}.${extension}`;
-  // blob.lastModifiedDate = new Date();
-  // console.log(blob);
-  // return blob;
-  const file = new File([blob], `${name}.${extension}`, { type: `image/${extension}` });
-  file.type = `image/${extension}`;
+  // const extension = getDataUrlExtension(dataUrl);
+  // new File([blob]) is not supported in Safari
+  // const file = new File([blob], `${name}.${extension}`, { type: `image/${extension}` });
+  // file.type = `image/${extension}`;
+  const formData = new FormData();
+  formData.append('image', blob, name);
+  const file = formData.get('image');
   return file;
 }
 
