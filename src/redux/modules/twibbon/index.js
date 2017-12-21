@@ -46,9 +46,9 @@ export default function reducer(state = Object.assign({}, INITIAL_STATE), action
       return { ...state, relativeImage: action.payload.relative_img };
     case RESIZING:
       return { ...state, resizing: true };
-    case REHYDRATE:
-      if (!action.payload || !action.payload.createTwibbon) return state;
-      return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
+    // case REHYDRATE:
+    //   if (!action.payload || !action.payload.createTwibbon) return state;
+    //   return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
     default:
       return state;
   }
