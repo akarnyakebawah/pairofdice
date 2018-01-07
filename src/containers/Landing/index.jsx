@@ -20,9 +20,9 @@ class Landing extends Component {
         <Subtitle>
           {subtitle}
         </Subtitle>
-        {/* <UnflexButton primary to={CREATE_CAMPAIGN_ROUTE}>
+        <UnflexButton primary to={CREATE_CAMPAIGN_ROUTE}>
           <span>{buttonText}</span>
-        </UnflexButton> */}
+        </UnflexButton>
       </Container>
     );
   }

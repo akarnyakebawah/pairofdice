@@ -31,8 +31,13 @@ export function getDataUrlExtension(dataUrl) {
   return dataUrl.substring('data:image/'.length, dataUrl.indexOf(';base64'));
 }
 
+<<<<<<< 7cb85a769dc125eeedd4fbd28a8a0dd09980d97a
 export function dataUrlToFile(dataUrl, name = 'random') {
   const blob = dataURItoBlob(dataUrl);  
+=======
+export function dataUrlToFile(dataUrl, name = 'random.png') {
+  const blob = dataURItoBlob(dataUrl);
+>>>>>>> Enable create campaign
   // const extension = getDataUrlExtension(dataUrl);
   // new File([blob]) is not supported in Safari
   // const file = new File([blob], `${name}.${extension}`, { type: `image/${extension}` });

@@ -81,7 +81,7 @@ class Home extends Component {
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
           <Route path={routes.REGISTER_ROUTE} component={Register} />
-          {/* <Route path={routes.CREATE_CAMPAIGN_ROUTE} component={CreateCampaign} /> */}
+          <Route path={routes.CREATE_CAMPAIGN_ROUTE} component={CreateCampaign} />
           <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
         </Switch>
         {
