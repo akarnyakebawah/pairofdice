@@ -17,12 +17,6 @@ import {
   REGISTER_ROUTE
 } from "../../constants/routes";
 
-@connect(
-  state => ({
-    auth: state.auth
-  }),
-  { clearError, login }
-)
 class Login extends Component {
   static propTypes = {
     auth: PropTypes.shape({
@@ -174,4 +168,9 @@ const RedirectToRegister = styled.div`
   }
 `;
 
-export default Login;
+export default connect(
+  state => ({
+    auth: state.auth
+  }),
+  { clearError, login }
+)(Login);

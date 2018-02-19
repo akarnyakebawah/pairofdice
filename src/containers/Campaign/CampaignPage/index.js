@@ -22,12 +22,140 @@ import * as apiUrl from "../../../constants/apiUrl";
 import theme from "../../../constants/theme";
 import * as helpers from "../../../helpers/utils";
 
-@connect(state => ({ campaign: state.campaign, twibbon: state.twibbon }), {
-  createTwibbon,
-  onImageChange,
-  clearImage,
-  resize
-})
+
+const Overlay = styled.div`
+  position: absolute;
+  pointer-events: none;
+  width: 400px;
+  height: 400px;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  z-index: 4;
+`;
+
+const Container = styled.div`
+  margin: 0;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    margin-top: 0;
+  }
+`;
+
+const Title = styled.h1`
+  margin: 0;
+  margin-bottom: 30px;
+  color: ${props => props.theme.color.white};
+  font-size: 3rem;
+  display: block;
+  text-align: center;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: 3rem;
+  }
+`;
+
+const ButtonDiv = styled.div`
+  ${ButtonCss} ${props => props.hidden && "display: none"};
+`;
+
+const Label = styled.label`
+  position: relative;
+  input {
+    display: none;
+  }
+  img {
+    background-color: ${props => props.theme.color.grayTransparent(0.1)};
+    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 10rem;
+    margin: 1rem 0;
+    object-fit: scale-down;
+    padding: 1rem;
+    &.hover {
+      border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
+    }
+    .loaded {
+      display: none;
+    }
+    @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+      width: auto;
+      max-width: 100%;
+    }
+  }
+`;
+
+const LoadingImageIndicator = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%:
+`;
+
+const Subtitle = styled(Title)`
+  font-size: ${props => props.theme.fontSize.medium};
+`;
+
+const ButtonLink = styled.a`
+  ${ButtonCss} margin-bottom: 1rem;
+`;
+
+const Twibbon = styled.img`
+  width: 500px;
+  height: 500px;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    width: 80%;
+    height: 80%;
+  }
+`;
+
+const CaptionsForm = styled.textarea`
+  background-color: ${props => props.theme.color.grayTransparent(0.2)};
+  border-radius: 0.5rem;
+  border: none;
+  color: ${props => props.theme.color.white};
+  font-size: ${props => props.theme.fontSize.medium};
+  margin: 1rem 0;
+  min-height: 10rem;
+  padding: 1rem;
+  resize: none;
+  width: 80%;
+  &:focus {
+    outline: none;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    padding: 0.25rem;
+  }
+`;
+
+const Icon = styled(Ionicon)`
+  border-radius: 100%;
+  border: solid 1px white;
+  margin-right: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
+const BackButton = styled.button`
+  border: none;
+  background: transparent;
+  :focus {
+    outline: none;
+  }
+`;
+
+
 class Campaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
@@ -308,136 +436,13 @@ class Campaign extends Component {
   }
 }
 
-export default Campaign;
+const mapStateToProps = state => ({ campaign: state.campaign, twibbon: state.twibbon });
 
-const Overlay = styled.div`
-  position: absolute;
-  pointer-events: none;
-  width: 400px;
-  height: 400px;
-  top: 0;
-  left: 0;
-  background-size: cover;
-  z-index: 4;
-`;
+const mapDispatchToProps =  {
+  createTwibbon,
+  onImageChange,
+  clearImage,
+  resize
+};
 
-const Container = styled.div`
-  margin: 0;
-  align-self: center;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  position: relative;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    margin-top: 0;
-  }
-`;
-
-const Title = styled.h1`
-  margin: 0;
-  margin-bottom: 30px;
-  color: ${props => props.theme.color.white};
-  font-size: 3rem;
-  display: block;
-  text-align: center;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: 3rem;
-  }
-`;
-
-const ButtonDiv = styled.div`
-  ${ButtonCss} ${props => props.hidden && "display: none"};
-`;
-
-const Label = styled.label`
-  position: relative;
-  input {
-    display: none;
-  }
-  img {
-    background-color: ${props => props.theme.color.grayTransparent(0.1)};
-    border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} dashed;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    width: 10rem;
-    margin: 1rem 0;
-    object-fit: scale-down;
-    padding: 1rem;
-    &.hover {
-      border: 0.5rem ${props => props.theme.color.grayTransparent(0.5)} solid;
-    }
-    .loaded {
-      display: none;
-    }
-    @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-      width: auto;
-      max-width: 100%;
-    }
-  }
-`;
-
-const LoadingImageIndicator = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%:
-`;
-
-const Subtitle = styled(Title)`
-  font-size: ${props => props.theme.fontSize.medium};
-`;
-
-const ButtonLink = styled.a`
-  ${ButtonCss} margin-bottom: 1rem;
-`;
-
-const Twibbon = styled.img`
-  width: 500px;
-  height: 500px;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    width: 80%;
-    height: 80%;
-  }
-`;
-
-const CaptionsForm = styled.textarea`
-  background-color: ${props => props.theme.color.grayTransparent(0.2)};
-  border-radius: 0.5rem;
-  border: none;
-  color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.medium};
-  margin: 1rem 0;
-  min-height: 10rem;
-  padding: 1rem;
-  resize: none;
-  width: 80%;
-  &:focus {
-    outline: none;
-  }
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    padding: 0.25rem;
-  }
-`;
-
-const Icon = styled(Ionicon)`
-  border-radius: 100%;
-  border: solid 1px white;
-  margin-right: 1rem;
-  padding: 0.5rem;
-  cursor: pointer;
-`;
-
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-`;
-
-const BackButton = styled.button`
-  border: none;
-  background: transparent;
-  :focus {
-    outline: none;
-  }
-`;
+export default connect(mapStateToProps, mapDispatchToProps)(Campaign);

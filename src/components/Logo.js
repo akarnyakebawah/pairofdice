@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { BASE_ROUTE } from "../constants/routes.js";
-import twiggsyLogoUrl from "../../static/assets/logo-white.png";
+import twiggsyLogoUrl from "../assets/logo-white.png";
 
 const Image = styled.img`
   margin: 2rem;

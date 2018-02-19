@@ -20,12 +20,69 @@ import { Button } from "../../components/Button";
 import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
 import ErrorIndicator from "../../components/ErrorIndicator";
 
-@connect(
-  state => ({
-    auth: state.auth
-  }),
-  { register }
-)
+
+const margin = "1rem";
+
+const RegisterButton = styled(Button)`
+  self-align: center;
+  width: 30%;
+`;
+
+const Input = styled.input`
+  border: none;
+  width: 100%;
+  color: ${props => props.theme.color.white};
+  font-size: ${props => props.theme.fontSize.medium};
+  padding: 1rem 0rem 0.5rem 0rem;
+  border: none;
+  border-bottom: 3px rgba(255, 255, 255, 0.75) solid;
+  background-color: transparent;
+  color: ${props => props.theme.color.white};
+  font-size: ${props => props.theme.fontSize.medium};
+  margin: 1rem 0;
+
+  &:focus {
+    outline: none;
+  }
+  &::placeholder {
+    color: ${props => props.theme.color.grayTransparent(0.5)};
+  }
+
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.medium};
+  }
+`;
+
+const Form = styled.form`
+  min-width: 15rem;
+  max-width: 40rem;
+  align-self: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  color: ${props => props.theme.color.white};
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+  }
+`;
+
+const FormTitle = styled.div`
+  font-size: ${props => props.theme.fontSize.large};
+  font-weight: bolder;
+  margin: 1rem 0;
+  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+    font-size: ${props => props.theme.fontSize.large};
+  }
+`;
+
+const RedirectToRegister = styled.div`
+  margin-top: 1rem;
+  a {
+    font-weight: bold;
+    color: ${props => props.theme.color.white};
+  }
+`;
+
+
 class Register extends Component {
   static propTypes = {
     auth: PropTypes.shape({
@@ -139,65 +196,9 @@ class Register extends Component {
   }
 }
 
-const margin = "1rem";
-
-const RegisterButton = styled(Button)`
-  self-align: center;
-  width: 30%;
-`;
-
-const Input = styled.input`
-  border: none;
-  width: 100%;
-  color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.medium};
-  padding: 1rem 0rem 0.5rem 0rem;
-  border: none;
-  border-bottom: 3px rgba(255, 255, 255, 0.75) solid;
-  background-color: transparent;
-  color: ${props => props.theme.color.white};
-  font-size: ${props => props.theme.fontSize.medium};
-  margin: 1rem 0;
-
-  &:focus {
-    outline: none;
-  }
-  &::placeholder {
-    color: ${props => props.theme.color.grayTransparent(0.5)};
-  }
-
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.medium};
-  }
-`;
-
-const Form = styled.form`
-  min-width: 15rem;
-  max-width: 40rem;
-  align-self: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  color: ${props => props.theme.color.white};
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-  }
-`;
-
-const FormTitle = styled.div`
-  font-size: ${props => props.theme.fontSize.large};
-  font-weight: bolder;
-  margin: 1rem 0;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.large};
-  }
-`;
-
-const RedirectToRegister = styled.div`
-  margin-top: 1rem;
-  a {
-    font-weight: bold;
-    color: ${props => props.theme.color.white};
-  }
-`;
-
-export default Register;
+export default connect(
+  state => ({
+    auth: state.auth
+  }),
+  { register }
+)(Register);
