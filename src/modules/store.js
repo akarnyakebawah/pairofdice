@@ -1,13 +1,24 @@
-import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { routerMiddleware } from "react-router-redux";
-import { persistStore, persistCombineReducers } from "redux-persist";
 import storage from "redux-persist/es/storage";
 import createHistory from "history/createBrowserHistory";
 import logger from "redux-logger";
-import rootReducer from "./modules";
+import { createStore, applyMiddleware, compose } from "redux";
+import { routerMiddleware } from "react-router-redux";
+import { persistStore, persistCombineReducers } from "redux-persist";
+import { routerReducer } from "react-router-redux";
 
-const isOnProduction = process.env.NODE_ENV === "production";
+import auth from "./auth";
+import twibbon from "./twibbon";
+import campaign from "./campaign";
+
+const rootReducer = {
+  auth,
+  campaign,
+  twibbon,
+  router: routerReducer
+};
+
+const isOnProduction = () => process.env.NODE_ENV === "production";
 
 export default function configureStore(initialState) {
   const config = {
@@ -15,13 +26,12 @@ export default function configureStore(initialState) {
     storage
   };
 
-  // eslint-disable-next-line
   const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const history = createHistory();
 
-  const enhancer = isOnProduction
+  const enhancer = isOnProduction()
     ? composeEnhancers(applyMiddleware(routerMiddleware(history), thunk))
     : composeEnhancers(
         applyMiddleware(routerMiddleware(history), thunk, logger)
@@ -32,11 +42,11 @@ export default function configureStore(initialState) {
     initialState,
     enhancer
   );
+
   const persistor = persistStore(store);
 
-  if (!isOnProduction && module.hot) {
+  if (!isOnProduction() && module.hot) {
     module.hot.accept("./modules", () =>
-      // eslint-disable-next-line global-require
       store.replaceReducer(require("./modules").default)
     );
   }

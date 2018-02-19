@@ -32,11 +32,6 @@ export default function reducer(state = INITIAL_STATE, action = {}) {
       return { ...state, loading: true };
     case LOADING_COMPLETE:
       return { ...state, loading: false };
-    // case REHYDRATE:
-    //   if (!action.payload || !action.payload.campaign || !action.payload.campaign.campaign) {
-    //     return state;
-    //   }
-    //   return { ...action.payload.campaign, loading: false, loaded: true, error: null };
     default:
       return state;
   }
