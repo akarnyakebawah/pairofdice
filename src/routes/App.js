@@ -17,11 +17,12 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import Logo from "../components/Logo";
 
 // Containers
-import CreateCampaign from "./CreateCampaign";
-import Landing from "./Landing";
-import Login from "./Login";
-import Register from "./Register";
-import Campaign from "./Campaign";
+import Landing from "./landing";
+import Campaign from "./campaign";
+import CreateCampaign from "./t/create";
+import Login from "./t/login";
+import Logout from "./t/logout";
+import Register from "./t/register";
 
 // Layouts
 import DefaultLayout from "./_layouts/Default";

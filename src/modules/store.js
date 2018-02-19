@@ -8,7 +8,7 @@ import { persistStore, persistCombineReducers } from "redux-persist";
 import { routerReducer } from "react-router-redux";
 
 import auth from "./auth";
-import twibbon from "./twibbon";
+import twibbon from "./twiggsy";
 import campaign from "./campaign";
 
 const rootReducer = {
@@ -46,9 +46,7 @@ export default function configureStore(initialState) {
   const persistor = persistStore(store);
 
   if (!isOnProduction() && module.hot) {
-    module.hot.accept("./modules", () =>
-      store.replaceReducer(require("./modules").default)
-    );
+    module.hot.accept("./", () => store.replaceReducer(rootReducer));
   }
 
   return { history, persistor, store };

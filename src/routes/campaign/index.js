@@ -7,15 +7,9 @@ import NotFound from "../../components/NotFound";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import { loadCampaign } from "../../redux/modules/campaign";
 
-import CampaignPage from "./CampaignPage";
-import ShareCampaign from "./ShareCampaign";
+import CampaignPage from "./campaign";
+import ShareCampaign from "./share";
 
-@connect(
-  state => ({
-    campaign: state.campaign
-  }),
-  { loadCampaign }
-)
 class Campaign extends Component {
   static propTypes = {
     loadCampaign: PropTypes.func.isRequired,
@@ -52,4 +46,9 @@ class Campaign extends Component {
   }
 }
 
-export default Campaign;
+export default connect(
+  state => ({
+    campaign: state.campaign
+  }),
+  { loadCampaign }
+)(Campaign);

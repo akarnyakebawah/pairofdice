@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components";
 import { ConnectedRouter } from "react-router-redux";
 import { PersistGate } from "redux-persist/es/integration/react";
 
-import App from ".routes/App";
+import App from "./routes/App";
 import configureStore from "./modules/store";
 import registerServiceWorker from "./registerServiceWorker";
 import theme from "./_constants/theme";

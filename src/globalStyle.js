@@ -1,11 +1,13 @@
 import { injectGlobal } from "styled-components";
-import { Apercu } from "./constants/theme";
+
+import { Apercu } from "./_constants/theme";
+import { ApercuLight } from "./_constants/theme";
+import { SFProDisplay } from "./_constants/theme";
+
 import ApercuFontUrl from "./assets/fonts/Apercu_Regular.otf";
-import { ApercuLight } from "./constants/theme";
 import ApercuLightFontUrl from "./assets/fonts/Apercu_Light.otf";
-import { SFProDisplay } from "./constants/theme";
 import SFProDisplayFontUrl from "./assets/fonts/SanFranciscoDisplay-Regular.otf";
-/* eslint-disable no-unused-expressions */
+
 injectGlobal`
   html {
     font-size: 100%;
@@ -20,4 +22,3 @@ injectGlobal`
     font-style: normal;
   }
 `;
-/* eslint-enable */
