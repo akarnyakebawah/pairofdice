@@ -1,25 +1,28 @@
-import * as api from '../../../api';
-import * as localStorageKey from '../../../constants/localStorage';
+import * as api from "../../../api";
+import * as localStorageKey from "../../../constants/localStorage";
 
-const ERROR_CLEAR = 'auth/error_clear';
-const ERROR_SET = 'auth/error_set';
-const LOADED = 'auth/loaded';
-const LOADING = 'auth/loading';
-const LOADING_COMPLETE = 'auth/loading_complete';
-const LOGIN = 'auth/login';
-const LOGOUT = 'auth/logout';
-const TOKEN_SET = 'auth/token_set';
-const REHYDRATE = 'persist/REHYDRATE';
+const ERROR_CLEAR = "auth/error_clear";
+const ERROR_SET = "auth/error_set";
+const LOADED = "auth/loaded";
+const LOADING = "auth/loading";
+const LOADING_COMPLETE = "auth/loading_complete";
+const LOGIN = "auth/login";
+const LOGOUT = "auth/logout";
+const TOKEN_SET = "auth/token_set";
+const REHYDRATE = "persist/REHYDRATE";
 
 const INITIAL_STATE = {
   loading: true,
   loaded: false,
   error: null,
   user: {},
-  token: '',
+  token: ""
 };
 
-export default function reducer(state = Object.assign({}, INITIAL_STATE), action = {}) {
+export default function reducer(
+  state = Object.assign({}, INITIAL_STATE),
+  action = {}
+) {
   switch (action.type) {
     case ERROR_SET:
       return { ...state, error: action.payload };
@@ -32,12 +35,21 @@ export default function reducer(state = Object.assign({}, INITIAL_STATE), action
     case LOADING_COMPLETE:
       return { ...state, loading: false };
     case LOGIN:
-      return { ...state, user: { ...action.payload.user }, token: action.payload.token };
+      return {
+        ...state,
+        user: { ...action.payload.user },
+        token: action.payload.token
+      };
     case LOGOUT:
-      return { ...state, error: {}, user: {}, token: '' };
+      return { ...state, error: {}, user: {}, token: "" };
     case REHYDRATE:
       if (!action.payload || !action.payload.auth) return state;
-      return { ...action.payload.auth, loading: false, loaded: true, error: null };
+      return {
+        ...action.payload.auth,
+        loading: false,
+        loaded: true,
+        error: null
+      };
     case TOKEN_SET:
       return { ...state, loaded: true, token: action.payload };
     default:
@@ -74,14 +86,13 @@ export function setToken(payload) {
   return { type: TOKEN_SET, payload };
 }
 
-
 export function clearError() {
   return dispatch => dispatch({ type: ERROR_CLEAR });
 }
 
 // Thunk
 export function reload() {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     const token = localStorage.getItem(localStorageKey.TOKEN);
     if (token) {
@@ -94,7 +105,7 @@ export function reload() {
 }
 
 export function login(credentials) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
       const { body: result } = await api.login(credentials);
@@ -110,7 +121,7 @@ export function login(credentials) {
 }
 
 export function logout() {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     localStorage.removeItem(localStorageKey.TOKEN);
     api.setAuthorizationToken(null);
@@ -120,7 +131,7 @@ export function logout() {
 }
 
 export function register(credentials) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
       await api.register(credentials);

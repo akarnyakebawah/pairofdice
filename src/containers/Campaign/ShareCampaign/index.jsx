@@ -1,25 +1,25 @@
-import 'react-toastify/dist/ReactToastify.min.css';
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { ToastContainer, toast } from 'react-toastify';
-import { connect } from 'react-redux';
-import { Button, ButtonCss } from '../../../components/Button';
+import "react-toastify/dist/ReactToastify.min.css";
+import React, { Component } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { ToastContainer, toast } from "react-toastify";
+import { connect } from "react-redux";
+import { Button, ButtonCss } from "../../../components/Button";
 
-import config from '../../../config';
+import config from "../../../config";
 
 @connect(state => ({ campaign: state.campaign }))
 class ShareCampaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
       campaign: PropTypes.object.isRequired,
-      loading: PropTypes.bool.isRequired,
-    }).isRequired,
+      loading: PropTypes.bool.isRequired
+    }).isRequired
   };
 
   state = {
-    isCopied: false,
+    isCopied: false
   };
 
   toastId = null;
@@ -34,7 +34,7 @@ class ShareCampaign extends Component {
       config.WEB_URL +
       (this.props.campaign.campaign
         ? this.props.campaign.campaign.campaign_url
-        : '');
+        : "");
     return (
       <Container>
         <h1>Share your campaign</h1>
@@ -61,7 +61,7 @@ class ShareCampaign extends Component {
         <CopyToClipboard
           text={campaignUrl}
           onCopy={() => {
-            this.notify('Copied');
+            this.notify("Copied");
           }}
         >
           <Button>
@@ -130,6 +130,8 @@ const UrlForm = styled(Input)`
   }
 `;
 
-const Link = styled.a`${ButtonCss};`;
+const Link = styled.a`
+  ${ButtonCss};
+`;
 
 export default ShareCampaign;

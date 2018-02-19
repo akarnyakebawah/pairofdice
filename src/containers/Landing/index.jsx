@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import styled from "styled-components";
 
-import { ButtonLink } from '../../components/Button';
-import { CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
+import { ButtonLink } from "../../components/Button";
+import { CREATE_CAMPAIGN_ROUTE } from "../../constants/routes";
 
-const title = 'Build a better campaign.';
-const subtitle = 'Easily share your campaign filter with friends and family.';
-const buttonText = 'CREATE CAMPAIGN';
+const title = "Build a better campaign.";
+const subtitle = "Easily share your campaign filter with friends and family.";
+const buttonText = "CREATE CAMPAIGN";
 
 class Landing extends Component {
-  state = { sesuatu: 'wow' }
+  state = { sesuatu: "wow" };
 
   render() {
     return (
       <Container>
-        <Title>
-          {title}
-        </Title>
-        <Subtitle>
-          {subtitle}
-        </Subtitle>
+        <Title>{title}</Title>
+        <Subtitle>{subtitle}</Subtitle>
         <UnflexButton primary to={CREATE_CAMPAIGN_ROUTE}>
           <span>{buttonText}</span>
         </UnflexButton>
@@ -28,8 +24,8 @@ class Landing extends Component {
   }
 }
 
-const margin = '2rem';
-const mobileMargin = '1rem';
+const margin = "2rem";
+const mobileMargin = "1rem";
 
 const Container = styled.div`
   align-self: center;
@@ -57,7 +53,8 @@ const Title = styled.div`
     margin: 0 ${mobileMargin};
     width: auto;
   }
-  @media screen and (min-width: ${props => props.theme.breakpoint.largeDesktop}) {
+  @media screen and (min-width: ${props =>
+      props.theme.breakpoint.largeDesktop}) {
     font-size: ${props => props.theme.fontSize.huge};
   }
 `;
@@ -74,7 +71,8 @@ const Subtitle = styled.div`
     font-size: ${props => props.theme.fontSize.large};
     width: auto;
   }
-  @media screen and (min-width: ${props => props.theme.breakpoint.largeDesktop}) {
+  @media screen and (min-width: ${props =>
+      props.theme.breakpoint.largeDesktop}) {
     font-size: ${props => props.theme.fontSize.jumbo};
   }
 `;

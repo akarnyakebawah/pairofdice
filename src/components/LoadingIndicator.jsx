@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Spinner from 'react-spinkit';
-import PropTypes from 'prop-types';
+import React from "react";
+import styled from "styled-components";
+import Spinner from "react-spinkit";
+import PropTypes from "prop-types";
 
 const Container = styled.div`
   position: absolute;
@@ -17,7 +17,7 @@ const Container = styled.div`
   animation: fadein 1s;
   background: ${props => props.theme.color.grayTransparent(0.25)};
   @keyframes fadein {
-  overflow-y: hidden;
+    overflow-y: hidden;
     from {
       opacity: 0;
     }
@@ -36,9 +36,9 @@ export default function LoadingIndicator(props) {
 }
 
 LoadingIndicator.propTypes = {
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 LoadingIndicator.defaultProps = {
-  className: null,
+  className: null
 };

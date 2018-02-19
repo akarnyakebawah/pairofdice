@@ -1,17 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 // Redux
-import { clearError, login } from '../../redux/modules/auth';
+import { clearError, login } from "../../redux/modules/auth";
 
 // Components
-import { Button } from '../../components/Button';
-import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
+import { Button } from "../../components/Button";
+import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
 
-import { BASE_ROUTE, CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from '../../constants/routes';
+import {
+  BASE_ROUTE,
+  CREATE_CAMPAIGN_ROUTE,
+  REGISTER_ROUTE
+} from "../../constants/routes";
 
 @connect(
   state => ({
@@ -23,20 +27,20 @@ class Login extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
-      token: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired
     }).isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
-      push: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired
     }).isRequired,
 
     clearError: PropTypes.func.isRequired,
-    login: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired
   };
 
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   };
 
   componentDidMount() {
@@ -87,7 +91,7 @@ class Login extends Component {
         <LoginButton
           onClick={e => this.login(e)}
           disabled={loading}
-          style={{ display: 'flex' }}
+          style={{ display: "flex" }}
         >
           {!loading && <span>Login</span>}
           {loading && <LoadingButtonIndicator />}
@@ -108,7 +112,7 @@ const ErrorHelper = styled.div`
   text-decoration: underline;
 `;
 
-const margin = '1rem';
+const margin = "1rem";
 
 const LoginButton = styled(Button)`
   self-align: center;
@@ -123,7 +127,7 @@ const Input = styled.input`
   font-size: ${props => props.theme.fontSize.medium};
   padding: 1rem 0rem 0.5rem 0rem;
   border: none;
-  border-bottom: 3px rgba(255,255,255,0.75) solid;
+  border-bottom: 3px rgba(255, 255, 255, 0.75) solid;
   background-color: transparent;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
@@ -150,7 +154,6 @@ const Form = styled.form`
   flex-direction: column;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-
   }
 `;
 

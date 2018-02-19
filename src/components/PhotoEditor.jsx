@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
 /**
  * PhotoCropper GG
@@ -43,11 +43,11 @@ class PhotoEditor extends Component {
 
   static defaultProps = {
     className: null,
-    overlayImage: '',
+    overlayImage: "",
     // zoom: 1,
     hidden: false,
     disabled: false,
-    image: '',
+    image: ""
   };
 
   constructor(props) {
@@ -86,8 +86,8 @@ class PhotoEditor extends Component {
   }
 
   getImage() {
-    return new Promise((resolve) => {
-      const context = this.canvas.getContext('2d');
+    return new Promise(resolve => {
+      const context = this.canvas.getContext("2d");
       const img = new Image();
       img.src = this.props.image;
 
@@ -129,7 +129,7 @@ class PhotoEditor extends Component {
           0,
           0,
           exportSize,
-          exportSize,
+          exportSize
         );
 
         if (!this.props.overlayImage) {
@@ -148,7 +148,7 @@ class PhotoEditor extends Component {
             0,
             0,
             exportSize,
-            exportSize,
+            exportSize
           );
           resolve(this.canvas.toDataURL());
         };
@@ -174,7 +174,7 @@ class PhotoEditor extends Component {
 
     this.setState({
       x: this.originX + (e.screenX - this.startingX),
-      y: this.originY + (e.screenY - this.startingY),
+      y: this.originY + (e.screenY - this.startingY)
     });
   }
 
@@ -186,7 +186,7 @@ class PhotoEditor extends Component {
 
   changeZoom(dir) {
     this.setState({
-      zoom: this.state.zoom + 0.25 * (dir ? 1 : -1),
+      zoom: this.state.zoom + 0.25 * (dir ? 1 : -1)
     });
   }
 
@@ -201,7 +201,7 @@ class PhotoEditor extends Component {
           onMouseMove={e => this.captureOnMove(e)}
           onMouseUp={() => this.captureRelease()}
           onMouseLeave={() => this.captureRelease()}
-          onWheel={(e) => {
+          onWheel={e => {
             e.preventDefault();
             this.changeZoom(e.deltaY < 0);
           }}
@@ -226,7 +226,7 @@ class PhotoEditor extends Component {
           />
         </Container>
         <canvas
-          ref={(elem) => {
+          ref={elem => {
             // eslint-disable-next-line
             if (!!elem) {
               this.canvas = elem;
@@ -257,8 +257,8 @@ const PictureBox = styled.img`
   max-width: ${props => props.size}px;
   max-height: ${props => props.size}px;
   transform: translateX(${props => props.translateX}px)
-  translateY(${props => props.translateY}px)
-  scale(${props => (props.zoom + 10) / 10});
+    translateY(${props => props.translateY}px)
+    scale(${props => (props.zoom + 10) / 10});
 `;
 
 const Overlay = styled.img`
@@ -271,7 +271,7 @@ const Overlay = styled.img`
   bottom: 0px;
   width: ${props => props.size}px;
   height: ${props => props.size}px;
-  opacity: ${props => (props.transparent ? '0.7' : '1')};
+  opacity: ${props => (props.transparent ? "0.7" : "1")};
 `;
 
 export default PhotoEditor;

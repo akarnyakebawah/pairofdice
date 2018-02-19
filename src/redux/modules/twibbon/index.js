@@ -1,30 +1,33 @@
-import * as api from '../../../api';
-import * as apiUrl from '../../../constants/apiUrl';
+import * as api from "../../../api";
+import * as apiUrl from "../../../constants/apiUrl";
 
-const TWIBBON_CREATED = 'twibbon/CAMPAIGN_CREATED';
-const ERROR_CLEAR = 'twibbon/ERROR_CLEAR';
-const ERROR_SET = 'twibbon/ERROR_SET';
-const LOADED = 'twibbon/LOADED';
-const LOADING = 'twibbon/LOADING';
-const LOADING_COMPLETE = 'twibbon/LOADING_COMPLETE';
-const IMAGE_RESIZED = 'twibbon/IMAGE_RESIZED';
-const IMAGE_CHANGED = 'twibbon/IMAGE_CHANGED';
-const IMAGE_CLEARED = 'twibbon/IMAGE_CLEARED';
-const REHYDRATE = 'persist/REHYDRATE';
-const RESIZING = 'twibbon/RESIZING';
+const TWIBBON_CREATED = "twibbon/CAMPAIGN_CREATED";
+const ERROR_CLEAR = "twibbon/ERROR_CLEAR";
+const ERROR_SET = "twibbon/ERROR_SET";
+const LOADED = "twibbon/LOADED";
+const LOADING = "twibbon/LOADING";
+const LOADING_COMPLETE = "twibbon/LOADING_COMPLETE";
+const IMAGE_RESIZED = "twibbon/IMAGE_RESIZED";
+const IMAGE_CHANGED = "twibbon/IMAGE_CHANGED";
+const IMAGE_CLEARED = "twibbon/IMAGE_CLEARED";
+const REHYDRATE = "persist/REHYDRATE";
+const RESIZING = "twibbon/RESIZING";
 
 const INITIAL_STATE = {
-  result: '',
+  result: "",
   uploaded: false,
-  imageDataUrl: '',
-  imageFile: '',
+  imageDataUrl: "",
+  imageFile: "",
   loading: false,
   loaded: false,
   resizing: false,
-  error: null,
+  error: null
 };
 
-export default function reducer(state = Object.assign({}, INITIAL_STATE), action = {}) {
+export default function reducer(
+  state = Object.assign({}, INITIAL_STATE),
+  action = {}
+) {
   switch (action.type) {
     case TWIBBON_CREATED:
       return { ...state, result: action.payload, uploaded: true };
@@ -58,7 +61,7 @@ export default function reducer(state = Object.assign({}, INITIAL_STATE), action
 export function imageChanged(payload) {
   return {
     type: IMAGE_CHANGED,
-    payload,
+    payload
   };
 }
 
@@ -113,8 +116,8 @@ export function createTwibbon({ x, y, width, height }) {
 
       // Tembak ke imgix buat di overlay
       let campaignUrl = overlayImage;
-      if (campaignUrl.indexOf('?') !== -1) {
-        campaignUrl = campaignUrl.slice(0, campaignUrl.indexOf('?'));
+      if (campaignUrl.indexOf("?") !== -1) {
+        campaignUrl = campaignUrl.slice(0, campaignUrl.indexOf("?"));
       }
 
       // Query to generate overlayed image
@@ -124,7 +127,7 @@ export function createTwibbon({ x, y, width, height }) {
         x,
         y,
         width,
-        height,
+        height
       );
 
       dispatch(createdTwibbon(result));
@@ -137,16 +140,20 @@ export function createTwibbon({ x, y, width, height }) {
 }
 
 export function resize() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: RESIZING });
   };
 }
 
 export function createTwibbonBeneran({ campaignUrl, caption, image }) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await api.postTwibbon({ campaignUrl, caption, image });
+      const { body: result } = await api.postTwibbon({
+        campaignUrl,
+        caption,
+        image
+      });
       dispatch(createdTwibbon(result));
       dispatch(clearError());
       dispatch(loaded());
@@ -158,7 +165,7 @@ export function createTwibbonBeneran({ campaignUrl, caption, image }) {
 }
 
 export function uploadImage({ image }) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
       const { body: result } = await api.uploadImage({ image });
@@ -171,13 +178,13 @@ export function uploadImage({ image }) {
 }
 
 export function onImageChange({ imageDataUrl, imageFile }) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(imageChanged({ imageDataUrl, imageFile }));
   };
 }
 
 export function clearImage() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(imageCleared());
   };
 }

@@ -1,15 +1,15 @@
-import 'babel-polyfill';
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
-import { ConnectedRouter } from 'react-router-redux';
-import { PersistGate } from 'redux-persist/es/integration/react';
+import "babel-polyfill";
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { ThemeProvider } from "styled-components";
+import { ConnectedRouter } from "react-router-redux";
+import { PersistGate } from "redux-persist/es/integration/react";
 
-import configureStore from './redux/configureStore';
-import App from './containers/';
-import theme from './constants/theme';
-import './style';
+import configureStore from "./redux/configureStore";
+import App from "./containers/";
+import theme from "./constants/theme";
+import "./style";
 
 const { persistor, store, history } = configureStore();
 
@@ -24,5 +24,5 @@ render(
     </PersistGate>
   </Provider>,
   // eslint-disable-next-line
-  document.getElementById('app')
+  document.getElementById("app")
 );

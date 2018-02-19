@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import Spinner from 'react-spinkit';
-import PropTypes from 'prop-types';
+import React from "react";
+import styled from "styled-components";
+import Spinner from "react-spinkit";
+import PropTypes from "prop-types";
 
-import theme from '../constants/theme';
+import theme from "../constants/theme";
 
 const Container = styled.div`
   display: flex;
@@ -30,5 +30,5 @@ LoadingButtonComponent.propTypes = {
 
 LoadingButtonComponent.defaultProps = {
   className: null,
-  children: 'Loading...'
+  children: "Loading..."
 };

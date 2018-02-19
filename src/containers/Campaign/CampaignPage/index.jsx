@@ -1,52 +1,57 @@
-import 'cropperjs/dist/cropper.css';
-import 'react-toastify/dist/ReactToastify.min.css';
-import { connect } from 'react-redux';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { toast, ToastContainer } from 'react-toastify';
-import Cropper from 'react-cropper';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import ReactGA from 'react-ga';
-import Spinner from 'react-spinkit';
-import Ionicon from 'react-ionicons';
-import styled from 'styled-components';
-import loadImage from 'blueimp-load-image';
-import { ButtonCss, Button } from '../../../components/Button';
-import { createTwibbon, onImageChange, clearImage, resize } from '../../../redux/modules/twibbon';
-import * as apiUrl from '../../../constants/apiUrl';
-import theme from '../../../constants/theme';
-import * as helpers from '../../../helpers/utils';
+import "cropperjs/dist/cropper.css";
+import "react-toastify/dist/ReactToastify.min.css";
+import { connect } from "react-redux";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { toast, ToastContainer } from "react-toastify";
+import Cropper from "react-cropper";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import ReactGA from "react-ga";
+import Spinner from "react-spinkit";
+import Ionicon from "react-ionicons";
+import styled from "styled-components";
+import loadImage from "blueimp-load-image";
+import { ButtonCss, Button } from "../../../components/Button";
+import {
+  createTwibbon,
+  onImageChange,
+  clearImage,
+  resize
+} from "../../../redux/modules/twibbon";
+import * as apiUrl from "../../../constants/apiUrl";
+import theme from "../../../constants/theme";
+import * as helpers from "../../../helpers/utils";
 
 @connect(state => ({ campaign: state.campaign, twibbon: state.twibbon }), {
   createTwibbon,
   onImageChange,
   clearImage,
-  resize,
+  resize
 })
 class Campaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
       campaign: PropTypes.shape({
-        twibbon_img: PropTypes.string,
-      }).isRequired,
+        twibbon_img: PropTypes.string
+      }).isRequired
     }).isRequired,
     twibbon: PropTypes.shape({
       result: PropTypes.string.isRequired,
       loading: PropTypes.bool.isRequired,
       resize: PropTypes.bool,
       uploaded: PropTypes.bool.isRequired,
-      imageDataUrl: PropTypes.string.isRequired,
+      imageDataUrl: PropTypes.string.isRequired
     }).isRequired,
     clearImage: PropTypes.func.isRequired,
     createTwibbon: PropTypes.func.isRequired,
     onImageChange: PropTypes.func.isRequired,
-    resize: PropTypes.func.isRequired,
+    resize: PropTypes.func.isRequired
   };
 
   state = {
-    image: '',
+    image: "",
     imageFile: {},
-    scale: 1,
+    scale: 1
   };
 
   onFileChange = async (e, f) => {
@@ -56,7 +61,7 @@ class Campaign extends Component {
 
     if (!file.type.match(pattern)) {
       // eslint-disable-next-line
-      alert('Invalid files to be uploaded');
+      alert("Invalid files to be uploaded");
       return;
     }
 
@@ -72,35 +77,45 @@ class Campaign extends Component {
             maxHeight: 1024,
             canvas: true,
             orientation: true,
-            crossOrigin: 'anonymous',
+            crossOrigin: "anonymous"
           };
           this.props.resize();
           let counter = 0;
-          const interval = setInterval(() => { counter += 1; }, 10);
+          const interval = setInterval(() => {
+            counter += 1;
+          }, 10);
           loadImage(
             file,
-            (canvas) => {
+            canvas => {
               const imageDataUrl = canvas.toDataURL();
               // this.props.onImageChange({ imageDataUrl, imageFile: file });
-              
+
               clearInterval(interval);
-              
+
               // Debug purposes
               const img2 = new Image();
-              img2.setAttribute('crossorigin', 'anonymous');
+              img2.setAttribute("crossorigin", "anonymous");
               img2.onload = () => {
-                console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
+                console.log(
+                  `Your image is scaled to ${img2.width}x${img2.height}`
+                );
               };
               img2.src = imageDataUrl;
-              console.log('Time elapsed for resizing your image in second: ', counter / 100.0);
-              
+              console.log(
+                "Time elapsed for resizing your image in second: ",
+                counter / 100.0
+              );
+
               const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
               this.props.onImageChange({ imageDataUrl, imageFile });
             },
-            options,
+            options
           );
         } else {
-          this.props.onImageChange({ imageDataUrl: reader.result, imageFile: file });
+          this.props.onImageChange({
+            imageDataUrl: reader.result,
+            imageFile: file
+          });
         }
       };
       img.src = reader.result;
@@ -110,13 +125,13 @@ class Campaign extends Component {
 
   toastId = null;
 
-  notify = (message) => {
+  notify = message => {
     if (!toast.isActive(this.toastId)) {
       this.toastId = toast(message);
     }
   };
 
-  createTwibbon = async (e) => {
+  createTwibbon = async e => {
     e.preventDefault();
     const { campaign } = this.props.campaign;
 
@@ -142,17 +157,21 @@ class Campaign extends Component {
         <Container>
           {this.props.resizing && (
             <LoadingImageIndicator>
-              <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
+              <Spinner
+                name="three-bounce"
+                color={theme.color.white}
+                fadeIn="none"
+              />
               <Subtitle>Resizing your image so it won't crash...</Subtitle>
             </LoadingImageIndicator>
           )}
           <Cropper
-            ref={(elem) => {
+            ref={elem => {
               this.cropper = elem;
             }}
             style={{
               height: Math.min(400, 0.8 * window.innerWidth),
-              width: Math.min(400, 0.8 * window.innerWidth),
+              width: Math.min(400, 0.8 * window.innerWidth)
             }}
             src={imageDataUrl}
             cropBoxMovable={false}
@@ -171,7 +190,7 @@ class Campaign extends Component {
             style={{
               backgroundImage: `url(${campaign && campaign.twibbon_img})`,
               width: Math.min(400, 0.8 * window.innerWidth),
-              height: Math.min(400, 0.8 * window.innerWidth),
+              height: Math.min(400, 0.8 * window.innerWidth)
             }}
           />
         </Container>
@@ -183,7 +202,7 @@ class Campaign extends Component {
               color="white"
             />
           </BackButton>
-          <Button onClick={this.createTwibbon} style={{ margin: 'auto' }}>
+          <Button onClick={this.createTwibbon} style={{ margin: "auto" }}>
             <span>Upload</span>
           </Button>
         </Flex>
@@ -198,14 +217,16 @@ class Campaign extends Component {
         <Title>{campaign.name}</Title>
         <Twibbon src={campaign.twibbon_img} />
         <Label>
-          <ButtonDiv onClick={() => ReactGA.modalview(`${campaign.campaign_url}/crop`)}>
+          <ButtonDiv
+            onClick={() => ReactGA.modalview(`${campaign.campaign_url}/crop`)}
+          >
             <span>Select Image</span>
           </ButtonDiv>
           <input
             type="file"
             accept="image/*"
             onChange={this.onFileChange}
-            ref={(elem) => {
+            ref={elem => {
               this.file = elem;
             }}
           />
@@ -250,7 +271,7 @@ class Campaign extends Component {
               <CopyToClipboard
                 text={campaign.caption_template}
                 onCopy={() => {
-                  this.notify('Copied.');
+                  this.notify("Copied.");
                 }}
               >
                 <Button>
@@ -268,7 +289,11 @@ class Campaign extends Component {
     if (loading) {
       return (
         <LoadingImageIndicator>
-          <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
+          <Spinner
+            name="three-bounce"
+            color={theme.color.white}
+            fadeIn="none"
+          />
           <Subtitle>Uploading your image...</Subtitle>
         </LoadingImageIndicator>
       );
@@ -321,7 +346,7 @@ const Title = styled.h1`
 `;
 
 const ButtonDiv = styled.div`
-  ${ButtonCss} ${props => props.hidden && 'display: none'};
+  ${ButtonCss} ${props => props.hidden && "display: none"};
 `;
 
 const Label = styled.label`

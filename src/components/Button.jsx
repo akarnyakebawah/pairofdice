@@ -1,6 +1,6 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { Link as RouterLink } from 'react-router-dom';
+import React from "react";
+import styled, { css } from "styled-components";
+import { Link as RouterLink } from "react-router-dom";
 
 export const ButtonCss = css`
   letter-spacing: 0.1rem;
@@ -22,8 +22,8 @@ export const ButtonCss = css`
   text-align: center;
   text-decoration: none;
   position: relative;
-  ${props => props.secondary && 'background: transparent;'}
-  ${props => props.caps && 'text-transform: uppercase;'};
+  ${props => props.secondary && "background: transparent;"} ${props =>
+      props.caps && "text-transform: uppercase;"};
   > * {
     font-size: ${props => props.theme.fontSize.small};
     font-weight: 900;
@@ -51,13 +51,13 @@ export const ButtonCss = css`
 `;
 
 export const Button = styled.button`
-  ${ButtonCss}
+  ${ButtonCss};
 `;
 
 export const ButtonLink = styled(({ primary, caps, bold, gray, ...rest }) => (
   <RouterLink {...rest} />
 ))`
-  ${ButtonCss}
+  ${ButtonCss};
 `;
 
 export default Button;

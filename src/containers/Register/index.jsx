@@ -1,47 +1,51 @@
 /* @flow */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 // Constants
-import { BASE_ROUTE, LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from '../../constants/routes';
+import {
+  BASE_ROUTE,
+  LOGIN_ROUTE,
+  CREATE_CAMPAIGN_ROUTE
+} from "../../constants/routes";
 
 // Redux
-import { register } from '../../redux/modules/auth';
+import { register } from "../../redux/modules/auth";
 
 // Components
-import { Button } from '../../components/Button';
-import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
-import ErrorIndicator from '../../components/ErrorIndicator';
+import { Button } from "../../components/Button";
+import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
+import ErrorIndicator from "../../components/ErrorIndicator";
 
 @connect(
   state => ({
-    auth: state.auth,
+    auth: state.auth
   }),
-  { register },
+  { register }
 )
 class Register extends Component {
   static propTypes = {
     auth: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       token: PropTypes.string.isRequired,
-      error: PropTypes.object.isRequired,
+      error: PropTypes.object.isRequired
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired,
+      replace: PropTypes.func.isRequired
     }).isRequired,
-    register: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
   };
 
   state = {
-    name: '',
+    name: "",
     birthDate: null,
-    email: '',
-    password: '',
-    username: '',
+    email: "",
+    password: "",
+    username: ""
   };
 
   componentDidMount() {
@@ -65,17 +69,19 @@ class Register extends Component {
   render() {
     const { username, name, birthDate, email, password } = this.state;
     const { loading, error } = this.props.auth;
-    let nameError = '';
-    let dateError = '';
-    let emailError = '';
-    let passwordError = '';
-    let usernameError = '';
+    let nameError = "";
+    let dateError = "";
+    let emailError = "";
+    let passwordError = "";
+    let usernameError = "";
     if (error && error.status === 400) {
-      usernameError = error.response.body.name && error.response.body.username[0];
+      usernameError =
+        error.response.body.name && error.response.body.username[0];
       nameError = error.response.body.name && error.response.body.name[0];
       dateError = error.response.body.date && error.response.body.date[0];
       emailError = error.response.body.email && error.response.body.email[0];
-      passwordError = error.response.body.password && error.response.body.password[0];
+      passwordError =
+        error.response.body.password && error.response.body.password[0];
     }
     return (
       <Form>
@@ -120,7 +126,7 @@ class Register extends Component {
         <RegisterButton
           onClick={e => this.register(e)}
           disabled={loading}
-          style={{ display: 'flex' }}
+          style={{ display: "flex" }}
         >
           {!loading && <span>Register</span>}
           {loading && <LoadingButtonIndicator />}
@@ -133,7 +139,7 @@ class Register extends Component {
   }
 }
 
-const margin = '1rem';
+const margin = "1rem";
 
 const RegisterButton = styled(Button)`
   self-align: center;
@@ -147,7 +153,7 @@ const Input = styled.input`
   font-size: ${props => props.theme.fontSize.medium};
   padding: 1rem 0rem 0.5rem 0rem;
   border: none;
-  border-bottom: 3px rgba(255,255,255,0.75) solid;
+  border-bottom: 3px rgba(255, 255, 255, 0.75) solid;
   background-color: transparent;
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.medium};
@@ -174,7 +180,6 @@ const Form = styled.form`
   flex-direction: column;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-
   }
 `;
 

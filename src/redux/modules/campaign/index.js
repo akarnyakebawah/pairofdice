@@ -1,19 +1,19 @@
-import * as api from '../../../api';
+import * as api from "../../../api";
 
-const CAMPAIGN_CREATED = 'campaign/CAMPAIGN_CREATED';
-const CAMPAIGN_LOADED = 'campaign/CAMPAIGN_LOADED';
-const ERROR_CLEAR = 'campaign/ERROR_CLEAR';
-const ERROR_SET = 'campaign/ERROR_SET';
-const LOADED = 'campaign/LOADED';
-const LOADING = 'campaign/LOADING';
-const LOADING_COMPLETE = 'campaign/LOADING_COMPLETE';
-const REHYDRATE = 'persist/REHYDRATE';
+const CAMPAIGN_CREATED = "campaign/CAMPAIGN_CREATED";
+const CAMPAIGN_LOADED = "campaign/CAMPAIGN_LOADED";
+const ERROR_CLEAR = "campaign/ERROR_CLEAR";
+const ERROR_SET = "campaign/ERROR_SET";
+const LOADED = "campaign/LOADED";
+const LOADING = "campaign/LOADING";
+const LOADING_COMPLETE = "campaign/LOADING_COMPLETE";
+const REHYDRATE = "persist/REHYDRATE";
 
 const INITIAL_STATE = {
   campaign: {},
   loading: false,
   loaded: false,
-  error: null,
+  error: null
 };
 
 export default function reducer(state = INITIAL_STATE, action = {}) {
@@ -73,7 +73,7 @@ function setError(payload) {
 
 // Thunks
 export function loadCampaign(campaignUrl) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
       const { body: campaign } = await api.getCampaign(campaignUrl);
@@ -89,10 +89,15 @@ export function loadCampaign(campaignUrl) {
 
 // Thunk
 export function createCampaign({ captions, name, image, url }) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch(loading());
     try {
-      const { body: campaign } = await api.postCampaign({ captions, name, image, url });
+      const { body: campaign } = await api.postCampaign({
+        captions,
+        name,
+        image,
+        url
+      });
       dispatch(clearError());
       dispatch(createdCampaign(campaign));
     } catch (error) {

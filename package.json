@@ -65,6 +65,7 @@
     "start": "poi src/index.jsx",
     "build": "poi build",
     "serve": "node server.js",
-    "flow": "flow"
+    "flow": "flow",
+    "prettier": "prettier"
   }
 }

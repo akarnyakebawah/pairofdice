@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Switch, Route } from "react-router-dom";
 
+import NotFound from "../../components/NotFound";
+import LoadingIndicator from "../../components/LoadingIndicator";
+import { loadCampaign } from "../../redux/modules/campaign";
 
-import NotFound from '../../components/NotFound';
-import LoadingIndicator from '../../components/LoadingIndicator';
-import { loadCampaign } from '../../redux/modules/campaign';
-
-import CampaignPage from './CampaignPage';
-import ShareCampaign from './ShareCampaign';
+import CampaignPage from "./CampaignPage";
+import ShareCampaign from "./ShareCampaign";
 
 @connect(
   state => ({
-    campaign: state.campaign,
+    campaign: state.campaign
   }),
-  { loadCampaign },
+  { loadCampaign }
 )
 class Campaign extends Component {
   static propTypes = {
@@ -24,10 +23,10 @@ class Campaign extends Component {
     campaign: PropTypes.object.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
-        campaignUrl: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-  }
+        campaignUrl: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired
+  };
 
   componentDidMount() {
     this.props.loadCampaign(this.props.match.params.campaignUrl);
@@ -37,28 +36,17 @@ class Campaign extends Component {
     const { match, campaign } = this.props;
 
     if (campaign.loading) {
-      return (
-        <LoadingIndicator />
-      );
+      return <LoadingIndicator />;
     }
 
     if (campaign.error) {
-      return (
-        <NotFound />
-      );
+      return <NotFound />;
     }
 
     return (
       <Switch>
-        <Route
-          exact
-          path={`${match.url}/`}
-          render={() => <CampaignPage />}
-        />
-        <Route
-          path={`${match.url}/share`}
-          render={() => <ShareCampaign />}
-        />
+        <Route exact path={`${match.url}/`} render={() => <CampaignPage />} />
+        <Route path={`${match.url}/share`} render={() => <ShareCampaign />} />
       </Switch>
     );
   }

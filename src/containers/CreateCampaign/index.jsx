@@ -1,45 +1,43 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Dropzone from 'react-dropzone';
-import { createCampaign } from '../../redux/modules/campaign';
-import { Button } from '../../components/Button';
-import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
-import ErrorIndicator from '../../components/ErrorIndicator';
-import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
-import { dataUrlToFile, capitalize } from '../../helpers/utils';
+import React, { Component } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import Dropzone from "react-dropzone";
+import { createCampaign } from "../../redux/modules/campaign";
+import { Button } from "../../components/Button";
+import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
+import ErrorIndicator from "../../components/ErrorIndicator";
+import { BASE_ROUTE, LOGIN_ROUTE } from "../../constants/routes";
+import { dataUrlToFile, capitalize } from "../../helpers/utils";
 
-
-@connect(
-  state => ({ campaign: state.campaign, auth: state.auth }),
-  { createCampaign },
-)
+@connect(state => ({ campaign: state.campaign, auth: state.auth }), {
+  createCampaign
+})
 class CreateCampaign extends Component {
   static propTypes = {
     auth: PropTypes.shape({
-      token: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired
     }).isRequired,
     campaign: PropTypes.shape({
       error: PropTypes.object.isRequired,
       loading: PropTypes.bool.isRequired,
-      campaign: PropTypes.object.isRequired,
+      campaign: PropTypes.object.isRequired
     }).isRequired,
     createCampaign: PropTypes.func.isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+      push: PropTypes.func.isRequired
+    }).isRequired
   };
 
   state = {
-    name: '',
-    url: '',
-    captions: '',
+    name: "",
+    url: "",
+    captions: "",
 
     // Image upload
     isImageLoaded: false,
-    image: {}, // Image in dataUrl, parse to File to be sent to server
+    image: {} // Image in dataUrl, parse to File to be sent to server
   };
 
   componentDidMount() {
@@ -49,15 +47,18 @@ class CreateCampaign extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.auth.token !== nextProps.auth.token && !nextProps.auth.token) {
+    if (
+      this.props.auth.token !== nextProps.auth.token &&
+      !nextProps.auth.token
+    ) {
       this.props.history.replace(LOGIN_ROUTE);
     }
   }
 
-  onChangeState = (e) => {
+  onChangeState = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  }
+  };
 
   async createCampaign(e) {
     e.preventDefault();
@@ -72,20 +73,19 @@ class CreateCampaign extends Component {
   }
 
   render() {
-    const {
-      name,
-      url,
-      captions,
-    } = this.state;
+    const { name, url, captions } = this.state;
     const { loading, error } = this.props.campaign;
-    let nameError = '';
-    let urlError = '';
-    let imageError = '';
+    let nameError = "";
+    let urlError = "";
+    let imageError = "";
     if (error && error.status === 400) {
       nameError = error.response.body.name && error.response.body.name[0];
-      urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
-      imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
-      if (imageError === 'image ratio must be 1:1') imageError += '. Try moving and using the cropper.';
+      urlError =
+        error.response.body.campaign_url && error.response.body.campaign_url[0];
+      imageError =
+        error.response.body.twibbon_img && error.response.body.twibbon_img[0];
+      if (imageError === "image ratio must be 1:1")
+        imageError += ". Try moving and using the cropper.";
     }
     return (
       <Container>
@@ -93,23 +93,27 @@ class CreateCampaign extends Component {
         <Dropzone
           style={{
             width: Math.min(300, 0.8 * window.innerWidth),
-            height: Math.min(300, 0.8 * window.innerHeight),
+            height: Math.min(300, 0.8 * window.innerHeight)
           }}
-          onDrop={ this.onDrop }
+          onDrop={this.onDrop}
           accept="image/png"
-          multiple={ false }
-          onDropRejected={ this.onDropRejected }
+          multiple={false}
+          onDropRejected={this.onDropRejected}
         >
           Drag a file or click to upload.
         </Dropzone>
-        {!!imageError && <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>}
+        {!!imageError && (
+          <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>
+        )}
         <FormTitle>Campaign Name</FormTitle>
         <NameForm
           name="name"
           value={name}
           onChange={e => this.onChangeState(e)}
         />
-        {!!nameError && <ErrorIndicator>{capitalize(nameError)}</ErrorIndicator>}
+        {!!nameError && (
+          <ErrorIndicator>{capitalize(nameError)}</ErrorIndicator>
+        )}
         <FormTitle>Campaign URL</FormTitle>
         <UrlFormContainer>
           <div>twiggsy.com/</div>
@@ -172,7 +176,6 @@ const UrlFormContainer = styled.div`
     width: 95%;
   }
 `;
-
 
 const Input = styled.input`
   border: none;

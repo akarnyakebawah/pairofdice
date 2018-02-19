@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import {
   Row,
   Col,
@@ -7,8 +7,8 @@ import {
   FormControl,
   ControlLabel,
   HelpBlock
-} from 'react-bootstrap';
-import styled from 'styled-components';
+} from "react-bootstrap";
+import styled from "styled-components";
 
 const StyledFormGroup = styled(FormGroup)`
   padding-top: 0.5rem;
@@ -52,7 +52,7 @@ function Input(props) {
 
 Input.defaultProps = {
   validationState: null,
-  value: '',
+  value: "",
   placeholder: null,
   name: null,
   help: null
