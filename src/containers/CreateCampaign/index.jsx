@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import Dropzone from 'react-dropzone';
 import { createCampaign } from '../../redux/modules/campaign';
 import { Button } from '../../components/Button';
-import FileUploader from '../../components/FileUploader';
 import LoadingButtonIndicator from '../../components/LoadingButtonIndicator';
 import ErrorIndicator from '../../components/ErrorIndicator';
 import { BASE_ROUTE, LOGIN_ROUTE } from '../../constants/routes';
@@ -79,7 +78,6 @@ class CreateCampaign extends Component {
       captions,
     } = this.state;
     const { loading, error } = this.props.campaign;
-    /* eslint-disable */
     let nameError = '';
     let urlError = '';
     let imageError = '';
@@ -89,14 +87,21 @@ class CreateCampaign extends Component {
       imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
       if (imageError === 'image ratio must be 1:1') imageError += '. Try moving and using the cropper.';
     }
-    /* eslint-enable */
     return (
       <Container>
         <FormTitle>Filters</FormTitle>
-        <FileUploader
-          setState={e => this.setState(e)}
-          ref={(elem) => { this.fileUploader = elem; }}
-        />
+        <Dropzone
+          style={{
+            width: Math.min(300, 0.8 * window.innerWidth),
+            height: Math.min(300, 0.8 * window.innerHeight),
+          }}
+          onDrop={ this.onDrop }
+          accept="image/png"
+          multiple={ false }
+          onDropRejected={ this.onDropRejected }
+        >
+          Drag a file or click to upload.
+        </Dropzone>
         {!!imageError && <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>}
         <FormTitle>Campaign Name</FormTitle>
         <NameForm

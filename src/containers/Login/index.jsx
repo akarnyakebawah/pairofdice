@@ -53,8 +53,8 @@ class Login extends Component {
 
   async login(event) {
     event.preventDefault();
-    const { email, password } = this.state;
-    await this.props.login({ email, password });
+    const { username, password } = this.state;
+    await this.props.login({ username, password });
     // eslint-disable-next-line
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
@@ -63,16 +63,15 @@ class Login extends Component {
   }
 
   render() {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
     const { loading, error } = this.props.auth;
     return (
       <Form>
         <Input
-          name="email"
+          name="username"
           onChange={e => this.onChangeState(e)}
-          placeholder="Email"
-          type="email"
-          value={email}
+          placeholder="Username / Email"
+          value={username}
         />
         <Input
           name="password"

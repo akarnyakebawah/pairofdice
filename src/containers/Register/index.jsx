@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -40,7 +41,9 @@ class Register extends Component {
     birthDate: null,
     email: '',
     password: '',
+    username: '',
   };
+
   componentDidMount() {
     if (this.props.auth.token) {
       this.props.history.replace(BASE_ROUTE);
@@ -54,20 +57,21 @@ class Register extends Component {
   async register(event) {
     event.preventDefault();
     await this.props.register(this.state);
-    // eslint-disable-next-line
     if (!!this.props.auth.token) {
       this.props.history.push(CREATE_CAMPAIGN_ROUTE);
     }
   }
 
   render() {
-    const { name, birthDate, email, password } = this.state;
+    const { username, name, birthDate, email, password } = this.state;
     const { loading, error } = this.props.auth;
     let nameError = '';
     let dateError = '';
     let emailError = '';
     let passwordError = '';
+    let usernameError = '';
     if (error && error.status === 400) {
+      usernameError = error.response.body.name && error.response.body.username[0];
       nameError = error.response.body.name && error.response.body.name[0];
       dateError = error.response.body.date && error.response.body.date[0];
       emailError = error.response.body.email && error.response.body.email[0];
@@ -75,6 +79,13 @@ class Register extends Component {
     }
     return (
       <Form>
+        <Input
+          name="username"
+          onChange={e => this.onChangeState(e)}
+          placeholder="Username"
+          value={username}
+        />
+        {usernameError && <ErrorIndicator>{nameError}</ErrorIndicator>}
         <Input
           name="name"
           onChange={e => this.onChangeState(e)}

@@ -11,9 +11,10 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "blueimp-load-image": "^2.17.1",
-    "cropperjs": "git+https://github.com/satraul/cropperjs.git",
+    "cropperjs": "^1.2.2",
     "eslint-config-airbnb": "^15.1.0",
     "express": "^4.16.2",
+    "flow-bin": "^0.66.0",
     "history": "^4.7.2",
     "morgan": "^1.9.0",
     "prop-types": "^15.6.0",
@@ -48,11 +49,22 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.4.0",
-    "poi": "^9.5.2"
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.1",
+    "poi": "^9.5.2",
+    "prettier": "^1.10.2"
+  },
+  "lint-staged": {
+    "*.{js, jsx, css, md, json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "poi src/index.jsx",
     "build": "poi build",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "flow": "flow"
   }
 }
