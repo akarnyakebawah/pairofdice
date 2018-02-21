@@ -13,7 +13,6 @@ import ShareCampaign from "./share";
 class Campaign extends Component {
   static propTypes = {
     loadCampaign: PropTypes.func.isRequired,
-    // eslint-disable-next-line
     campaign: PropTypes.object.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({

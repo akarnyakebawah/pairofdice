@@ -1,6 +1,6 @@
 /* @flow */
 import { connect } from "react-redux";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
@@ -10,6 +10,8 @@ import { reload as reloadAuth, logout } from "../modules/authentication";
 
 // Routes
 import * as routes from "./constants";
+
+import NotFound from "components/NotFound";
 
 // Containers
 import Landing from "./landing";
@@ -50,8 +52,8 @@ class App extends React.Component<PropTypes, any> {
 
   render() {
     return (
-      <Switch>
-        <DefaultLayout>
+      <DefaultLayout>
+        <Switch>
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
           <Route path={routes.REGISTER_ROUTE} component={Register} />
@@ -64,8 +66,9 @@ class App extends React.Component<PropTypes, any> {
             component={Campaign}
           />
           <Route path={routes.LOGOUT_ROUTE} component={Logout} />
-        </DefaultLayout>
-      </Switch>
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </DefaultLayout>
     );
   }
 }

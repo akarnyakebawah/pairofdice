@@ -4,7 +4,7 @@ const config = {
     WEB_URL: "https://twiggsy.com/"
   },
   development: {
-    API_URL: "http://twiggsy-api.herokuapp.com/v1/",
+    API_URL: "https://api.twiggsy.com/v1/",
     WEB_URL: "https://twiggsy.com/"
   },
   local: {

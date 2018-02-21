@@ -135,7 +135,7 @@ export function register(credentials) {
   return async dispatch => {
     dispatch(loading());
     try {
-      await UserService.register(credentials);
+      await UserService.postUser(credentials);
       await dispatch(login(credentials));
     } catch (error) {
       dispatch(setError(error));

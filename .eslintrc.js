@@ -5,9 +5,10 @@ module.exports = {
     "prettier",
     "prettier/flowtype",
     "prettier/react",
-    "prettier/standard"
+    "prettier/standard",
+    "react-app"
   ],
-  plugins: ["flowtype", "react", "prettier"],
+  plugins: ["flowtype", "react", "prettier", "standard"],
   env: {
     es6: true,
     node: true

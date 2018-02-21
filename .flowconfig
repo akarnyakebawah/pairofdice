@@ -1,6 +1,8 @@
 [ignore]
+.*/node_modules
 
 [include]
+./src/
 
 [libs]
 
@@ -8,4 +10,5 @@
 
 [options]
 
-[strict]
+module.name_mapper='^@views\(.*\)$' -> '<PROJECT_ROOT>/src/views/\1'
+module.name_mapper='^views\(.*\)$' -> '<PROJECT_ROOT>/src/views/\1'
