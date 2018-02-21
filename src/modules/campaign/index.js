@@ -1,5 +1,4 @@
-import CampaignService from "../../services/campaign";
-import Campaign from "../../models/Campaign";
+import { CampaignService } from "services/";
 
 const CAMPAIGN_CREATED = "campaign/CAMPAIGN_CREATED";
 const CAMPAIGN_LOADED = "campaign/CAMPAIGN_LOADED";
@@ -8,7 +7,6 @@ const ERROR_SET = "campaign/ERROR_SET";
 const LOADED = "campaign/LOADED";
 const LOADING = "campaign/LOADING";
 const LOADING_COMPLETE = "campaign/LOADING_COMPLETE";
-const REHYDRATE = "persist/REHYDRATE";
 
 const INITIAL_STATE = {
   campaign: {},
@@ -72,7 +70,7 @@ export function loadCampaign(campaignUrl) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: campaign } = await CampaignService.getCampaign(campaignUrl);
+      const { body: campaign } = await CampaignService().getCampaign({ campaignUrl });
       dispatch(clearError());
       dispatch(loadedCampaign(campaign));
       dispatch(loaded());
@@ -88,7 +86,7 @@ export function createCampaign({ captions, name, image, url }) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: campaign } = await CampaignService.postCampaign({
+      const { body: campaign } = await CampaignService().postCampaign({
         captions,
         name,
         image,

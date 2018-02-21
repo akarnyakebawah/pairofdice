@@ -1,4 +1,3 @@
-/* @flow */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -6,21 +5,15 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Constants
-import {
-  BASE_ROUTE,
-  LOGIN_ROUTE,
-  CREATE_CAMPAIGN_ROUTE
-} from "routes/constants";
+import { BASE_ROUTE, LOGIN_ROUTE, CREATE_CAMPAIGN_ROUTE } from "routes/constants";
 
 // Redux
-import { register } from "modules/authentication";
+import { register } from "modules/auth";
 
 // Components
 import { Button } from "components/Button";
 import LoadingButtonIndicator from "components/LoadingButtonIndicator";
 import ErrorIndicator from "components/ErrorIndicator";
-
-const margin = "1rem";
 
 const RegisterButton = styled(Button)`
   self-align: center;
@@ -64,14 +57,14 @@ const Form = styled.form`
   }
 `;
 
-const FormTitle = styled.div`
-  font-size: ${props => props.theme.fontSize.large};
-  font-weight: bolder;
-  margin: 1rem 0;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.large};
-  }
-`;
+// const FormTitle = styled.div`
+//   font-size: ${props => props.theme.fontSize.large};
+//   font-weight: bolder;
+//   margin: 1rem 0;
+//   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
+//     font-size: ${props => props.theme.fontSize.large};
+//   }
+// `;
 
 const RedirectToRegister = styled.div`
   margin-top: 1rem;
@@ -130,13 +123,11 @@ class Register extends Component {
     let passwordError = "";
     let usernameError = "";
     if (error && error.status === 400) {
-      usernameError =
-        error.response.body.name && error.response.body.username[0];
+      usernameError = error.response.body.name && error.response.body.username[0];
       nameError = error.response.body.name && error.response.body.name[0];
       dateError = error.response.body.date && error.response.body.date[0];
       emailError = error.response.body.email && error.response.body.email[0];
-      passwordError =
-        error.response.body.password && error.response.body.password[0];
+      passwordError = error.response.body.password && error.response.body.password[0];
     }
     return (
       <Form>
@@ -147,12 +138,7 @@ class Register extends Component {
           value={username}
         />
         {usernameError && <ErrorIndicator>{nameError}</ErrorIndicator>}
-        <Input
-          name="name"
-          onChange={e => this.onChangeState(e)}
-          placeholder="Name"
-          value={name}
-        />
+        <Input name="name" onChange={e => this.onChangeState(e)} placeholder="Name" value={name} />
         {nameError && <ErrorIndicator>{nameError}</ErrorIndicator>}
         <Input
           name="birthDate"

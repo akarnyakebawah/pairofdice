@@ -1,10 +1,10 @@
+/* @flow */
 import "cropperjs/dist/cropper.css";
 // import "react-toastify/dist/ReactToastify.min.css";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // import { toast, ToastContainer } from "react-toastify";
 import Cropper from "react-cropper";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
 import Spinner from "react-spinkit";
@@ -12,12 +12,7 @@ import Ionicon from "react-ionicons";
 import styled from "styled-components";
 import loadImage from "blueimp-load-image";
 import { ButtonCss, Button } from "components/Button";
-import {
-  createTwibbon,
-  onImageChange,
-  clearImage,
-  resize
-} from "modules/twiggsy";
+import { createTwibbon, onImageChange, clearImage, resize } from "modules/twibbon";
 
 import theme from "commons/theme";
 import * as helpers from "commons/utils";
@@ -154,26 +149,26 @@ const BackButton = styled.button`
   }
 `;
 
-class Campaign extends Component {
-  static propTypes = {
-    campaign: PropTypes.shape({
-      campaign: PropTypes.shape({
-        twibbon_img: PropTypes.string
-      }).isRequired
-    }).isRequired,
-    twibbon: PropTypes.shape({
-      result: PropTypes.string.isRequired,
-      loading: PropTypes.bool.isRequired,
-      resize: PropTypes.bool,
-      uploaded: PropTypes.bool.isRequired,
-      imageDataUrl: PropTypes.string.isRequired
-    }).isRequired,
-    clearImage: PropTypes.func.isRequired,
-    createTwibbon: PropTypes.func.isRequired,
-    onImageChange: PropTypes.func.isRequired,
-    resize: PropTypes.func.isRequired
+interface Props {
+  campaign: {
+    campaign: {
+      twibbon_img: string
+    }
   };
+  twibbon: {
+    result: string,
+    loading: boolean,
+    resize: boolean,
+    uploaded: boolean,
+    imageDataUrl: string
+  };
+  clearImage: func;
+  createTwibbon: func;
+  onImageChange: func;
+  resize: func;
+}
 
+class Campaign extends Component<Props, any> {
   state = {
     image: "",
     imageFile: {},
@@ -222,15 +217,10 @@ class Campaign extends Component {
               const img2 = new Image();
               img2.setAttribute("crossorigin", "anonymous");
               img2.onload = () => {
-                console.log(
-                  `Your image is scaled to ${img2.width}x${img2.height}`
-                );
+                console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
               };
               img2.src = imageDataUrl;
-              console.log(
-                "Time elapsed for resizing your image in second: ",
-                counter / 100.0
-              );
+              console.log("Time elapsed for resizing your image in second: ", counter / 100.0);
 
               const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
               this.props.onImageChange({ imageDataUrl, imageFile });
@@ -276,18 +266,14 @@ class Campaign extends Component {
 
   renderCropper = () => {
     const { campaign } = this.props.campaign;
-    const { imageDataUrl, resizing } = this.props.twibbon;
+    const { imageDataUrl } = this.props.twibbon;
     return (
       <Container>
         <Title>{campaign.name}</Title>
         <Container>
           {this.props.resizing && (
             <LoadingImageIndicator>
-              <Spinner
-                name="three-bounce"
-                color={theme.color.white}
-                fadeIn="none"
-              />
+              <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
               <Subtitle>Resizing your image so it won't crash...</Subtitle>
             </LoadingImageIndicator>
           )}
@@ -343,9 +329,7 @@ class Campaign extends Component {
         <Title>{campaign.name}</Title>
         <Twibbon src={campaign.twibbon_img} />
         <Label>
-          <ButtonDiv
-            onClick={() => ReactGA.modalview(`${campaign.campaign_url}/crop`)}
-          >
+          <ButtonDiv onClick={() => ReactGA.modalview(`${campaign.campaign_url}/crop`)}>
             <span>Select Image</span>
           </ButtonDiv>
           <input
@@ -411,15 +395,11 @@ class Campaign extends Component {
   };
 
   render() {
-    const { loading, uploaded, result, imageDataUrl } = this.props.twibbon;
+    const { loading, uploaded, imageDataUrl } = this.props.twibbon;
     if (loading) {
       return (
         <LoadingImageIndicator>
-          <Spinner
-            name="three-bounce"
-            color={theme.color.white}
-            fadeIn="none"
-          />
+          <Spinner name="three-bounce" color={theme.color.white} fadeIn="none" />
           <Subtitle>Uploading your image...</Subtitle>
         </LoadingImageIndicator>
       );
@@ -434,10 +414,7 @@ class Campaign extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  campaign: state.campaign,
-  twibbon: state.twibbon
-});
+const mapStateToProps = state => state;
 
 const mapDispatchToProps = {
   createTwibbon,

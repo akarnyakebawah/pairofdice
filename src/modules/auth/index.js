@@ -1,6 +1,5 @@
 import * as localStorageKey from "commons/localStorage";
-import AuthenticationService from "../../services/authentication";
-import UserService from "../../services/user";
+import { AuthService, UserService } from "../../services/";
 
 const ERROR_CLEAR = "auth/error_clear";
 const ERROR_SET = "auth/error_set";
@@ -20,10 +19,7 @@ const INITIAL_STATE = {
   token: ""
 };
 
-export default function reducer(
-  state = Object.assign({}, INITIAL_STATE),
-  action = {}
-) {
+export default function reducer(state = Object.assign({}, INITIAL_STATE), action = {}) {
   switch (action.type) {
     case ERROR_SET:
       return { ...state, error: action.payload };
@@ -97,7 +93,7 @@ export function reload() {
     dispatch(loading());
     const token = localStorage.getItem(localStorageKey.TOKEN);
     if (token) {
-      AuthenticationService.setAuthorizationToken(`JWT ${token}`);
+      AuthService().setAuthorizationToken(`JWT ${token}`);
       dispatch(setToken(token));
     }
     dispatch(loaded());
@@ -109,9 +105,9 @@ export function login(credentials) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await AuthenticationService.login(credentials);
+      const { body: result } = await AuthService().login(credentials);
       localStorage.setItem(localStorageKey.TOKEN, result.token);
-      AuthenticationService.setAuthorizationToken(`JWT ${result.token}`);
+      AuthService().setAuthorizationToken(`JWT ${result.token}`);
       dispatch(onLogin(result));
       dispatch(clearError());
     } catch (error) {
@@ -125,7 +121,7 @@ export function logout() {
   return async dispatch => {
     dispatch(loading());
     localStorage.removeItem(localStorageKey.TOKEN);
-    AuthenticationService.setAuthorizationToken(null);
+    AuthService().setAuthorizationToken(null);
     dispatch(onLogout());
     dispatch(completeLoading());
   };
@@ -135,7 +131,7 @@ export function register(credentials) {
   return async dispatch => {
     dispatch(loading());
     try {
-      await UserService.postUser(credentials);
+      await UserService().postUser(credentials);
       await dispatch(login(credentials));
     } catch (error) {
       dispatch(setError(error));

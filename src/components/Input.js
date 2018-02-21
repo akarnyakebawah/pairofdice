@@ -1,13 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Row,
-  Col,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  HelpBlock
-} from "react-bootstrap";
+import { Row, Col, FormGroup, FormControl, ControlLabel, HelpBlock } from "react-bootstrap";
 import styled from "styled-components";
 
 const StyledFormGroup = styled(FormGroup)`

@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import { Switch, Route, withRouter } from "react-router-dom";
 import React from "react";
 import ReactGA from "react-ga";
-import styled from "styled-components";
 
 // Redux
-import { reload as reloadAuth, logout } from "../modules/authentication";
+import { reload as reloadAuth } from "../modules/auth";
 
 // Routes
 import * as routes from "./constants";
@@ -55,17 +54,11 @@ class App extends React.Component<PropTypes, any> {
       <DefaultLayout>
         <Switch>
           <Route exact path={routes.BASE_ROUTE} component={Landing} />
+          <Route path={routes.LOGOUT_ROUTE} component={Logout} />
           <Route path={routes.LOGIN_ROUTE} component={Login} />
           <Route path={routes.REGISTER_ROUTE} component={Register} />
-          <Route
-            path={routes.CREATE_CAMPAIGN_ROUTE}
-            component={CreateCampaign}
-          />
-          <Route
-            path={`${routes.BASE_ROUTE}:campaignUrl`}
-            component={Campaign}
-          />
-          <Route path={routes.LOGOUT_ROUTE} component={Logout} />
+          <Route path={routes.CREATE_CAMPAIGN_ROUTE} component={CreateCampaign} />
+          <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
           <Route path="*" component={NotFound} />
         </Switch>
       </DefaultLayout>

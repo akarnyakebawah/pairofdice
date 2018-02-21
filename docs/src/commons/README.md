@@ -1,4 +1,4 @@
-### _services
+### services
 _All API services are listed here_
 Rules & Styleguides:
 -  To list a new endpoints, create a new variable (variable name is noun),

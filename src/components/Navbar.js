@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 // Redux Modules
-import { logout } from "../modules/authentication";
+import { logout } from "../modules/auth";
 
 import * as routes from "routes/constants";
 

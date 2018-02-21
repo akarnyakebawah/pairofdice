@@ -5,17 +5,13 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Redux
-import { clearError, login } from "modules/authentication";
+import { clearError, login } from "modules/auth";
 
 // Components
 import { Button } from "components/Button";
 import LoadingButtonIndicator from "components/LoadingButtonIndicator";
 
-import {
-  BASE_ROUTE,
-  CREATE_CAMPAIGN_ROUTE,
-  REGISTER_ROUTE
-} from "routes/constants";
+import { BASE_ROUTE, CREATE_CAMPAIGN_ROUTE, REGISTER_ROUTE } from "routes/constants";
 
 class Login extends Component {
   static propTypes = {
@@ -82,11 +78,7 @@ class Login extends Component {
           error.status === 400 && (
             <ErrorHelper>Unable to login with provided credentials</ErrorHelper>
           )}
-        <LoginButton
-          onClick={e => this.login(e)}
-          disabled={loading}
-          style={{ display: "flex" }}
-        >
+        <LoginButton onClick={e => this.login(e)} disabled={loading} style={{ display: "flex" }}>
           {!loading && <span>Login</span>}
           {loading && <LoadingButtonIndicator />}
         </LoginButton>
@@ -105,8 +97,6 @@ const ErrorHelper = styled.div`
   font-size: ${props => props.theme.fontSize.medium};
   text-decoration: underline;
 `;
-
-const margin = "1rem";
 
 const LoginButton = styled(Button)`
   self-align: center;
@@ -148,15 +138,6 @@ const Form = styled.form`
   flex-direction: column;
   color: ${props => props.theme.color.white};
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-  }
-`;
-
-const FormTitle = styled.div`
-  font-size: ${props => props.theme.fontSize.large};
-  font-weight: bolder;
-  margin: 1rem 0;
-  @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
-    font-size: ${props => props.theme.fontSize.large};
   }
 `;
 

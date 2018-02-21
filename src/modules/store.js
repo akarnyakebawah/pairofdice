@@ -7,8 +7,8 @@ import { routerMiddleware } from "react-router-redux";
 import { persistStore, persistCombineReducers } from "redux-persist";
 import { routerReducer } from "react-router-redux";
 
-import auth from "./authentication";
-import twibbon from "./twiggsy";
+import auth from "./auth";
+import twibbon from "./twibbon";
 import campaign from "./campaign";
 
 const rootReducer = {
@@ -26,22 +26,15 @@ export default function configureStore(initialState) {
     storage
   };
 
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const history = createHistory();
 
   const enhancer = isOnProduction()
     ? composeEnhancers(applyMiddleware(routerMiddleware(history), thunk))
-    : composeEnhancers(
-        applyMiddleware(routerMiddleware(history), thunk, logger)
-      );
+    : composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger));
 
-  const store = createStore(
-    persistCombineReducers(config, rootReducer),
-    initialState,
-    enhancer
-  );
+  const store = createStore(persistCombineReducers(config, rootReducer), initialState, enhancer);
 
   const persistor = persistStore(store);
 

@@ -1,14 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 
 // Components
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
-
-// Routes
-import * as routes from "routes/constants";
 
 const Container = styled.div`
   background: ${props => props.theme.linearGradient.main};

@@ -2,13 +2,12 @@
 import config from "../config";
 import request from "./";
 
-import User from "../models/User";
+import { User } from "models/";
 
-export default class UserService {
-  static userUrl = () => `${config.API_URL}users/`;
+export function UserService() {
+  const userUrl = () => `${config.API_URL}users/`;
 
-  static async postUser(user: User): any {
-    const { userUrl } = UserService;
+  async function postUser(user: User): any {
     const { username, name, birthDate, email, password } = user;
     return request.post(userUrl()).send({
       username,
@@ -18,4 +17,11 @@ export default class UserService {
       password
     });
   }
+
+  return {
+    url: {
+      userUrl
+    },
+    postUser
+  };
 }

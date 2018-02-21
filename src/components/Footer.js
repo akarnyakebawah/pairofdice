@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 
 import * as routes from "../routes/constants";
 
-import { logout } from "modules/authentication";
+import { logout } from "modules/auth";
 
 const LogoutButton = styled.button`
   text-decoration: underline;

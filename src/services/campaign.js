@@ -1,13 +1,11 @@
-import config from "../config";
 import request, { baseUrl } from "./";
 
-import Campaign from "../models/Campaign";
+import { Campaign } from "models/";
 
-export default class CampaignService {
-  static campaignsUrl = (campaignUrl = "") =>
-    baseUrl(`campaigns/${campaignUrl}`);
+export function CampaignService() {
+  const campaignsUrl = (campaignUrl = "") => baseUrl(`campaigns/${campaignUrl}`);
 
-  static async postCampaign(campaign: Campaign): Promise {
+  async function postCampaign(campaign: Campaign): Promise<Campaign> {
     const { captions, name, image, url } = campaign;
     const { campaignsUrl } = CampaignService;
     return request
@@ -18,9 +16,16 @@ export default class CampaignService {
       .field("captions", captions);
   }
 
-  static async getCampaign(campaign: Campaign): Promise {
-    const { campaignsUrl } = CampaignService;
+  async function getCampaign(campaign: Campaign): Promise<Campaign> {
     const { campaignUrl } = campaign;
     return request.get(campaignsUrl(campaignUrl));
   }
+
+  return {
+    getCampaign,
+    postCampaign,
+    url: {
+      campaignsUrl
+    }
+  };
 }

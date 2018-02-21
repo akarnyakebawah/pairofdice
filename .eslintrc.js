@@ -1,5 +1,6 @@
 module.exports = {
   extends: [
+    "airbnb",
     "standard",
     "plugin:flowtype/recommended",
     "plugin:react/recommended",

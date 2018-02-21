@@ -1,5 +1,4 @@
-import HelpersService from "../../services/helpers";
-import TwiggsyService from "../../services/twiggsy";
+import { HelpersService } from "services";
 
 const TWIBBON_CREATED = "twibbon/CAMPAIGN_CREATED";
 const ERROR_CLEAR = "twibbon/ERROR_CLEAR";
@@ -10,7 +9,6 @@ const LOADING_COMPLETE = "twibbon/LOADING_COMPLETE";
 const IMAGE_RESIZED = "twibbon/IMAGE_RESIZED";
 const IMAGE_CHANGED = "twibbon/IMAGE_CHANGED";
 const IMAGE_CLEARED = "twibbon/IMAGE_CLEARED";
-const REHYDRATE = "persist/REHYDRATE";
 const RESIZING = "twibbon/RESIZING";
 
 const INITIAL_STATE = {
@@ -24,10 +22,7 @@ const INITIAL_STATE = {
   error: null
 };
 
-export default function reducer(
-  state = Object.assign({}, INITIAL_STATE),
-  action = {}
-) {
+export default function reducer(state = Object.assign({}, INITIAL_STATE), action = {}) {
   switch (action.type) {
     case TWIBBON_CREATED:
       return { ...state, result: action.payload, uploaded: true };
@@ -49,9 +44,6 @@ export default function reducer(
       return { ...state, relativeImage: action.payload.relative_img };
     case RESIZING:
       return { ...state, resizing: true };
-    // case REHYDRATE:
-    //   if (!action.payload || !action.payload.createTwibbon) return state;
-    //   return { ...action.payload.createTwibbon, loading: false, loaded: true, error: null };
     default:
       return state;
   }
@@ -111,7 +103,7 @@ export function createTwibbon({ x, y, width, height }) {
       const { imageFile } = state.twibbon;
 
       // Get url of original image and of campaign
-      const { body } = await HelpersService.uploadImage({ imageFile });
+      const { body } = await HelpersService().uploadImage(imageFile);
       const relativeImage = body.relative_img;
 
       // Tembak ke imgix buat di overlay
@@ -121,7 +113,7 @@ export function createTwibbon({ x, y, width, height }) {
       }
 
       // Query to generate overlayed image
-      const result = HelpersService.overlayImageQuery(
+      const result = HelpersService().overlayImageQuery(
         relativeImage,
         encodeURI(campaignUrl),
         x,
@@ -145,30 +137,11 @@ export function resize() {
   };
 }
 
-export function createTwibbonBeneran({ campaignUrl, caption, image }) {
-  return async dispatch => {
-    dispatch(loading());
-    try {
-      const { body: result } = await TwiggsyService.postTwibbon({
-        campaignUrl,
-        caption,
-        image
-      });
-      dispatch(createdTwibbon(result));
-      dispatch(clearError());
-      dispatch(loaded());
-    } catch (error) {
-      dispatch(setError(error));
-    }
-    dispatch(completeLoading());
-  };
-}
-
 export function uploadImage({ image }) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await HelpersService.uploadImage({ image });
+      const { body: result } = await HelpersService().uploadImage({ image });
       dispatch(resizedImage(result));
     } catch (error) {
       dispatch(setError(error));
