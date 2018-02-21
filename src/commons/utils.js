@@ -1,3 +1,5 @@
+import loadImage from "blueimp-load-image";
+
 function dataURItoBlob(dataURI) {
   // convert base64/URLEncoded data component to raw binary data held in a string
   let byteString;
@@ -56,4 +58,32 @@ export function toDataURL(url, callback) {
   xhr.open("GET", url);
   xhr.responseType = "blob";
   xhr.send();
+}
+
+export async function fileToDataUrl(file, callback) {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    callback(reader.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+const defaultResizeImageOptions = {
+  maxWidth: 1024,
+  maxHeight: 1024,
+  canvas: true,
+  orientation: true,
+  crossOrigin: "anonymous"
+};
+
+export async function resizeImage(file, callback, cropOptions = defaultResizeImageOptions) {
+  loadImage(
+    file,
+    canvas => {
+      const imageDataUrl = canvas.toDataURL();
+      const imageFile = dataUrlToFile(imageDataUrl, file.name);
+      callback({ imageDataUrl, imageFile });
+    },
+    cropOptions
+  );
 }

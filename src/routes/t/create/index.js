@@ -1,15 +1,21 @@
+/* @flow */
+import "cropperjs/dist/cropper.css";
 import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Cropper from "react-cropper";
 import Dropzone from "react-dropzone";
-
 import { createCampaign } from "modules/campaign";
 import { Button } from "components/Button";
 import LoadingButtonIndicator from "components/LoadingButtonIndicator";
 import ErrorIndicator from "components/ErrorIndicator";
 import { BASE_ROUTE, LOGIN_ROUTE } from "routes/constants";
-import { dataUrlToFile, capitalize } from "../../../commons/utils";
+import { capitalize, dataUrlToFile, resizeImage } from "../../../commons/utils";
+
+import { toastActions } from "../../../modules/toast/toastActions";
+
+import Campaign from "models/Campaign";
 
 const Container = styled.div`
   align-self: center;
@@ -106,7 +112,32 @@ const UrlForm = styled(Input)`
   }
 `;
 
-class CreateCampaign extends Component {
+interface Props {
+  auth: {
+    token: string
+  };
+  campaign: {
+    error: any,
+    loading: boolean,
+    campaign: Campaign
+  };
+  createCampaign: func;
+  history: {
+    replace: func,
+    push: func
+  };
+}
+
+interface State {
+  name: string;
+  url: string;
+  captions: string;
+
+  isImageLoaded: boolean;
+  images: Array<string>;
+}
+
+class CreateCampaign extends Component<Props, State> {
   static propTypes = {
     auth: PropTypes.shape({
       token: PropTypes.string.isRequired
@@ -130,8 +161,10 @@ class CreateCampaign extends Component {
 
     // Image upload
     isImageLoaded: false,
-    image: {} // Image in dataUrl, parse to File to be sent to server
+    images: [] // Image in dataUrl, parse to File to be sent to server
   };
+
+  cropper = [];
 
   componentDidMount() {
     if (!this.props.auth.token) {
@@ -140,10 +173,7 @@ class CreateCampaign extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.auth.token !== nextProps.auth.token &&
-      !nextProps.auth.token
-    ) {
+    if (this.props.auth.token !== nextProps.auth.token && !nextProps.auth.token) {
       this.props.history.replace(LOGIN_ROUTE);
     }
   }
@@ -155,8 +185,12 @@ class CreateCampaign extends Component {
 
   async createCampaign(e) {
     e.preventDefault();
+    if (this.cropper.length === 0) {
+      toastActions.showErrorToast({ message: "You haven't upload any images yet." });
+      return;
+    }
     const { name, url, captions } = this.state;
-    const image = dataUrlToFile(await this.fileUploader.getCroppedImage());
+    const image = dataUrlToFile(await this.cropper[0].getCroppedCanvas().toDataURL("image/png"));
     await this.props.createCampaign({ name, url, captions, image });
 
     // If the campaign is created and no error, redirect to share page
@@ -165,64 +199,85 @@ class CreateCampaign extends Component {
     }
   }
 
+  onDrop = acceptedFiles => {
+    let counter = 0;
+    acceptedFiles.forEach(acceptedFile => {
+      resizeImage(acceptedFile, ({ imageDataUrl }) => {
+        const { images } = this.state;
+        this.setState({ images: images.concat(imageDataUrl) });
+        counter += 1;
+        if (counter === acceptedFiles.length) {
+          this.setState({ isImageLoaded: true });
+        }
+      });
+    });
+  };
+
   render() {
-    const { name, url, captions } = this.state;
+    const { name, url, captions, isImageLoaded, images } = this.state;
     const { loading, error } = this.props.campaign;
     let nameError = "";
     let urlError = "";
     let imageError = "";
     if (error && error.status === 400) {
       nameError = error.response.body.name && error.response.body.name[0];
-      urlError =
-        error.response.body.campaign_url && error.response.body.campaign_url[0];
-      imageError =
-        error.response.body.twibbon_img && error.response.body.twibbon_img[0];
+      urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
+      imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
       if (imageError === "image ratio must be 1:1")
         imageError += ". Try moving and using the cropper.";
     }
     return (
       <Container>
         <FormTitle>Filters</FormTitle>
-        <Dropzone
-          style={{
-            width: Math.min(300, 0.8 * window.innerWidth),
-            height: Math.min(300, 0.8 * window.innerHeight)
-          }}
-          onDrop={this.onDrop}
-          accept="image/png"
-          multiple={false}
-          onDropRejected={this.onDropRejected}
-        >
-          Drag a file or click to upload.
-        </Dropzone>
-        {!!imageError && (
-          <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>
+        {!isImageLoaded && (
+          <Dropzone
+            onDrop={this.onDrop}
+            accept="image/png"
+            multiple={false}
+            onDropRejected={() =>
+              toastActions.showErrorToast({ message: "Only .png files are allowed." })
+            }
+          >
+            <div>Click or drag to upload images.</div>
+            <div>Supported files: .png</div>
+          </Dropzone>
         )}
+        {isImageLoaded &&
+          images.map((image, index) => (
+            <Cropper
+              ref={elem => {
+                this.cropper.push(elem);
+              }}
+              style={{
+                height: Math.min(400, 0.8 * window.innerWidth),
+                width: Math.min(400, 0.8 * window.innerWidth)
+              }}
+              src={image}
+              cropBoxMovable={false}
+              cropBoxResizable={false}
+              dragMode="move"
+              toggleDragModeOnDblclick={false}
+              viewMode={3}
+              autoCropArea={1}
+              // Cropper.js options
+              aspectRatio={1}
+              modal={false}
+              center={false}
+              guides={false}
+            />
+          ))}
+        {!!imageError && <ErrorIndicator>{capitalize(imageError)}</ErrorIndicator>}
         <FormTitle>Campaign Name</FormTitle>
-        <NameForm
-          name="name"
-          value={name}
-          onChange={e => this.onChangeState(e)}
-        />
-        {!!nameError && (
-          <ErrorIndicator>{capitalize(nameError)}</ErrorIndicator>
-        )}
+        <NameForm name="name" value={name} onChange={e => this.onChangeState(e)} />
+        {!!nameError && <ErrorIndicator>{capitalize(nameError)}</ErrorIndicator>}
         <FormTitle>Campaign URL</FormTitle>
         <UrlFormContainer>
           <div>twiggsy.com/</div>
-          <UrlForm
-            name="url"
-            onChange={e => this.onChangeState(e)}
-            value={url}
-          />
+          <UrlForm name="url" onChange={e => this.onChangeState(e)} value={url} />
         </UrlFormContainer>
         {!!urlError && <ErrorIndicator>{capitalize(urlError)}</ErrorIndicator>}
         <FormTitle>Captions</FormTitle>
-        <CaptionsForm
-          name="captions"
-          onChange={e => this.onChangeState(e)}
-          value={captions}
-        />
+        <CaptionsForm name="captions" onChange={e => this.onChangeState(e)} value={captions} />
         <Button primary onClick={e => this.createCampaign(e)}>
           {loading && <LoadingButtonIndicator />}
           {!loading && <span>Create</span>}

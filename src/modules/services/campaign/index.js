@@ -7,12 +7,12 @@ export function createCampaignService() {
 
   async function postCampaign(campaign: Campaign): Promise<Campaign> {
     const { captions, name, image, url } = campaign;
-    return request
-      .post(campaignsUrl())
-      .field("campaign_url", url)
-      .field("name", name)
-      .field("twibbon_img", image)
-      .field("captions", captions);
+    const formData = new FormData();
+    formData.append("twibbon_img", image, image.name);
+    formData.append("name", name);
+    formData.append("captions", captions);
+    formData.append("campaign_url", url);
+    return request.post(campaignsUrl()).send(formData);
   }
 
   async function getCampaign(campaign: Campaign): Promise<Campaign> {

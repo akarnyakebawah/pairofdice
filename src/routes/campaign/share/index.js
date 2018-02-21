@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { Button, ButtonCss } from "components/Button";
 
 import config from "config";
+import { toastActions } from "modules/toast/toastActions";
 
 const Container = styled.div`
   align-self: center;
@@ -79,19 +80,10 @@ class ShareCampaign extends Component {
     isCopied: false
   };
 
-  // toastId = null;
-  // notify(message) {
-  //   if (!toast.isActive(this.toastId)) {
-  //     this.toastId = toast(message);
-  //   }
-  // }
-
   render() {
     const campaignUrl =
       config.WEB_URL +
-      (this.props.campaign.campaign
-        ? this.props.campaign.campaign.campaign_url
-        : "");
+      (this.props.campaign.campaign ? this.props.campaign.campaign.campaign_url : "");
     return (
       <Container>
         <h1>Share your campaign</h1>
@@ -100,25 +92,13 @@ class ShareCampaign extends Component {
           <UrlForm
             disabled
             name="url"
-            value={
-              this.props.campaign.campaign &&
-              this.props.campaign.campaign.campaign_url
-            }
+            value={this.props.campaign.campaign && this.props.campaign.campaign.campaign_url}
           />
         </UrlFormContainer>
-        {/* <ToastContainer
-          position="bottom-left"
-          type="info"
-          autoClose={2000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          pauseOnHover
-        /> */}
         <CopyToClipboard
           text={campaignUrl}
           onCopy={() => {
-            this.notify("Copied");
+            toastActions.showToast("Copied");
           }}
         >
           <Button>

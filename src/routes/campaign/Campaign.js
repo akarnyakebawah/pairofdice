@@ -8,12 +8,13 @@ import ReactGA from "react-ga";
 import Spinner from "react-spinkit";
 import Ionicon from "react-ionicons";
 import styled from "styled-components";
-import loadImage from "blueimp-load-image";
 import { ButtonCss, Button } from "components/Button";
 import { createTwibbon, onImageChange, clearImage, resize } from "modules/twibbon";
 
 import theme from "commons/theme";
 import * as helpers from "commons/utils";
+
+import { toastActions } from "modules/toast/toastActions";
 
 const Overlay = styled.div`
   position: absolute;
@@ -191,40 +192,11 @@ class Campaign extends Component<Props, any> {
       img.onload = () => {
         const { width, height } = img;
         if (width * height >= 1024 * 1024) {
-          const options = {
-            maxWidth: 1024,
-            maxHeight: 1024,
-            canvas: true,
-            orientation: true,
-            crossOrigin: "anonymous"
-          };
+          // Set flag resizing to true
           this.props.resize();
-          let counter = 0;
-          const interval = setInterval(() => {
-            counter += 1;
-          }, 10);
-          loadImage(
-            file,
-            canvas => {
-              const imageDataUrl = canvas.toDataURL();
-              // this.props.onImageChange({ imageDataUrl, imageFile: file });
-
-              clearInterval(interval);
-
-              // Debug purposes
-              const img2 = new Image();
-              img2.setAttribute("crossorigin", "anonymous");
-              img2.onload = () => {
-                console.log(`Your image is scaled to ${img2.width}x${img2.height}`);
-              };
-              img2.src = imageDataUrl;
-              console.log("Time elapsed for resizing your image in second: ", counter / 100.0);
-
-              const imageFile = helpers.dataUrlToFile(imageDataUrl, file.name);
-              this.props.onImageChange({ imageDataUrl, imageFile });
-            },
-            options
-          );
+          helpers.resizeImage(file, ({ imageFile, imageDataUrl }) => {
+            this.props.onImageChange({ imageDataUrl, imageFile });
+          });
         } else {
           this.props.onImageChange({
             imageDataUrl: reader.result,
@@ -235,14 +207,6 @@ class Campaign extends Component<Props, any> {
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
-  };
-
-  toastId = null;
-
-  notify = message => {
-    // if (!toast.isActive(this.toastId)) {
-    //   this.toastId = toast(message);
-    // }
   };
 
   createTwibbon = async e => {
@@ -370,7 +334,7 @@ class Campaign extends Component<Props, any> {
               <CopyToClipboard
                 text={campaign.caption_template}
                 onCopy={() => {
-                  this.notify("Copied.");
+                  toastActions.showToast("Copied.");
                 }}
               >
                 <Button>
