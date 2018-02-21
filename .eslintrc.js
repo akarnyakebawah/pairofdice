@@ -1,5 +1,6 @@
 module.exports = {
   extends: [
+    "standard",
     "plugin:flowtype/recommended",
     "plugin:react/recommended",
     "prettier",
