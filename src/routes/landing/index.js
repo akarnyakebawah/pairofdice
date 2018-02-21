@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import { ButtonLink } from "../../components/Button";
-import { CREATE_CAMPAIGN_ROUTE } from "../../constants/routes";
+import { ButtonLink } from "components/Button";
+import { CREATE_CAMPAIGN_ROUTE } from "routes/constants";
 
 const title = "Build a better campaign.";
 const subtitle = "Easily share your campaign filter with friends and family.";

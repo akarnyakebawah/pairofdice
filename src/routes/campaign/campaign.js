@@ -1,8 +1,8 @@
 import "cropperjs/dist/cropper.css";
-import "react-toastify/dist/ReactToastify.min.css";
+// import "react-toastify/dist/ReactToastify.min.css";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { toast, ToastContainer } from "react-toastify";
+// import { toast, ToastContainer } from "react-toastify";
 import Cropper from "react-cropper";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -11,17 +11,16 @@ import Spinner from "react-spinkit";
 import Ionicon from "react-ionicons";
 import styled from "styled-components";
 import loadImage from "blueimp-load-image";
-import { ButtonCss, Button } from "../../../components/Button";
+import { ButtonCss, Button } from "components/Button";
 import {
   createTwibbon,
   onImageChange,
   clearImage,
   resize
-} from "../../../redux/modules/twibbon";
-import * as apiUrl from "../../../constants/apiUrl";
-import theme from "../../../constants/theme";
-import * as helpers from "../../../helpers/utils";
+} from "modules/twiggsy";
 
+import theme from "commons/theme";
+import * as helpers from "commons/utils";
 
 const Overlay = styled.div`
   position: absolute;
@@ -155,7 +154,6 @@ const BackButton = styled.button`
   }
 `;
 
-
 class Campaign extends Component {
   static propTypes = {
     campaign: PropTypes.shape({
@@ -254,9 +252,9 @@ class Campaign extends Component {
   toastId = null;
 
   notify = message => {
-    if (!toast.isActive(this.toastId)) {
-      this.toastId = toast(message);
-    }
+    // if (!toast.isActive(this.toastId)) {
+    //   this.toastId = toast(message);
+    // }
   };
 
   createTwibbon = async e => {
@@ -387,7 +385,7 @@ class Campaign extends Component {
           campaign.caption_template && (
             <Container>
               <CaptionsForm value={campaign.caption_template} disabled />
-              <ToastContainer
+              {/* <ToastContainer
                 position="bottom-left"
                 type="info"
                 autoClose={2000}
@@ -395,7 +393,7 @@ class Campaign extends Component {
                 newestOnTop={false}
                 closeOnClick
                 pauseOnHover
-              />
+              /> */}
               <CopyToClipboard
                 text={campaign.caption_template}
                 onCopy={() => {
@@ -436,9 +434,12 @@ class Campaign extends Component {
   }
 }
 
-const mapStateToProps = state => ({ campaign: state.campaign, twibbon: state.twibbon });
+const mapStateToProps = state => ({
+  campaign: state.campaign,
+  twibbon: state.twibbon
+});
 
-const mapDispatchToProps =  {
+const mapDispatchToProps = {
   createTwibbon,
   onImageChange,
   clearImage,

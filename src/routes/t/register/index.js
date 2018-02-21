@@ -10,16 +10,15 @@ import {
   BASE_ROUTE,
   LOGIN_ROUTE,
   CREATE_CAMPAIGN_ROUTE
-} from "../../constants/routes";
+} from "routes/constants";
 
 // Redux
-import { register } from "../../redux/modules/auth";
+import { register } from "modules/authentication";
 
 // Components
-import { Button } from "../../components/Button";
-import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
-import ErrorIndicator from "../../components/ErrorIndicator";
-
+import { Button } from "components/Button";
+import LoadingButtonIndicator from "components/LoadingButtonIndicator";
+import ErrorIndicator from "components/ErrorIndicator";
 
 const margin = "1rem";
 
@@ -81,7 +80,6 @@ const RedirectToRegister = styled.div`
     color: ${props => props.theme.color.white};
   }
 `;
-
 
 class Register extends Component {
   static propTypes = {

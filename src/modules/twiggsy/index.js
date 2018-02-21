@@ -1,5 +1,5 @@
-import * as api from "../../../api";
-import * as apiUrl from "../../../constants/apiUrl";
+import HelpersService from "../../services/helpers";
+import TwiggsyService from "../../services/twiggsy";
 
 const TWIBBON_CREATED = "twibbon/CAMPAIGN_CREATED";
 const ERROR_CLEAR = "twibbon/ERROR_CLEAR";
@@ -111,7 +111,7 @@ export function createTwibbon({ x, y, width, height }) {
       const { imageFile } = state.twibbon;
 
       // Get url of original image and of campaign
-      const { body } = await api.uploadImage({ imageFile });
+      const { body } = await HelpersService.uploadImage({ imageFile });
       const relativeImage = body.relative_img;
 
       // Tembak ke imgix buat di overlay
@@ -121,7 +121,7 @@ export function createTwibbon({ x, y, width, height }) {
       }
 
       // Query to generate overlayed image
-      const result = apiUrl.overlayImageQuery(
+      const result = HelpersService.overlayImageQuery(
         relativeImage,
         encodeURI(campaignUrl),
         x,
@@ -149,7 +149,7 @@ export function createTwibbonBeneran({ campaignUrl, caption, image }) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await api.postTwibbon({
+      const { body: result } = await TwiggsyService.postTwibbon({
         campaignUrl,
         caption,
         image
@@ -168,7 +168,7 @@ export function uploadImage({ image }) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await api.uploadImage({ image });
+      const { body: result } = await HelpersService.uploadImage({ image });
       dispatch(resizedImage(result));
     } catch (error) {
       dispatch(setError(error));

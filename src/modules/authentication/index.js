@@ -1,5 +1,6 @@
-import * as api from "../../../api";
-import * as localStorageKey from "../../../constants/localStorage";
+import * as localStorageKey from "commons/localStorage";
+import AuthenticationService from "../../services/authentication";
+import UserService from "../../services/user";
 
 const ERROR_CLEAR = "auth/error_clear";
 const ERROR_SET = "auth/error_set";
@@ -96,7 +97,7 @@ export function reload() {
     dispatch(loading());
     const token = localStorage.getItem(localStorageKey.TOKEN);
     if (token) {
-      api.setAuthorizationToken(`JWT ${token}`);
+      AuthenticationService.setAuthorizationToken(`JWT ${token}`);
       dispatch(setToken(token));
     }
     dispatch(loaded());
@@ -108,9 +109,9 @@ export function login(credentials) {
   return async dispatch => {
     dispatch(loading());
     try {
-      const { body: result } = await api.login(credentials);
+      const { body: result } = await AuthenticationService.login(credentials);
       localStorage.setItem(localStorageKey.TOKEN, result.token);
-      api.setAuthorizationToken(`JWT ${result.token}`);
+      AuthenticationService.setAuthorizationToken(`JWT ${result.token}`);
       dispatch(onLogin(result));
       dispatch(clearError());
     } catch (error) {
@@ -124,7 +125,7 @@ export function logout() {
   return async dispatch => {
     dispatch(loading());
     localStorage.removeItem(localStorageKey.TOKEN);
-    api.setAuthorizationToken(null);
+    AuthenticationService.setAuthorizationToken(null);
     dispatch(onLogout());
     dispatch(completeLoading());
   };
@@ -134,7 +135,7 @@ export function register(credentials) {
   return async dispatch => {
     dispatch(loading());
     try {
-      await api.register(credentials);
+      await UserService.register(credentials);
       await dispatch(login(credentials));
     } catch (error) {
       dispatch(setError(error));

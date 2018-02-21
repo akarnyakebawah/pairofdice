@@ -8,7 +8,7 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import App from "./routes/App";
 import configureStore from "./modules/store";
 import registerServiceWorker from "./registerServiceWorker";
-import theme from "./_constants/theme";
+import theme from "./commons/theme";
 
 import "./globalStyle";
 

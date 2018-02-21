@@ -6,15 +6,10 @@ import ReactGA from "react-ga";
 import styled from "styled-components";
 
 // Redux
-import { reload as reloadAuth, logout } from "../redux/modules/auth";
+import { reload as reloadAuth, logout } from "../modules/authentication";
 
 // Routes
-import * as routes from "../constants/routes";
-
-// Components
-import { Button } from "../components/Button";
-import LoadingIndicator from "../components/LoadingIndicator";
-import Logo from "../components/Logo";
+import * as routes from "./constants";
 
 // Containers
 import Landing from "./landing";
@@ -75,6 +70,4 @@ class App extends React.Component<PropTypes, any> {
   }
 }
 
-export default withRouter(
-  connect(state => ({ ...state }), { logout, reloadAuth })(App)
-);
+export default withRouter(connect(state => state, { reloadAuth })(App));

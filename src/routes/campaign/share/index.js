@@ -1,13 +1,13 @@
-import "react-toastify/dist/ReactToastify.min.css";
+// import "react-toastify/dist/ReactToastify.min.css";
 import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import { connect } from "react-redux";
-import { Button, ButtonCss } from "../../../components/Button";
+import { Button, ButtonCss } from "components/Button";
 
-import config from "../../../config";
+import config from "config";
 
 const Container = styled.div`
   align-self: center;
@@ -79,12 +79,12 @@ class ShareCampaign extends Component {
     isCopied: false
   };
 
-  toastId = null;
-  notify(message) {
-    if (!toast.isActive(this.toastId)) {
-      this.toastId = toast(message);
-    }
-  }
+  // toastId = null;
+  // notify(message) {
+  //   if (!toast.isActive(this.toastId)) {
+  //     this.toastId = toast(message);
+  //   }
+  // }
 
   render() {
     const campaignUrl =
@@ -106,7 +106,7 @@ class ShareCampaign extends Component {
             }
           />
         </UrlFormContainer>
-        <ToastContainer
+        {/* <ToastContainer
           position="bottom-left"
           type="info"
           autoClose={2000}
@@ -114,7 +114,7 @@ class ShareCampaign extends Component {
           newestOnTop={false}
           closeOnClick
           pauseOnHover
-        />
+        /> */}
         <CopyToClipboard
           text={campaignUrl}
           onCopy={() => {

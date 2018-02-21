@@ -1,8 +1,8 @@
 import { injectGlobal } from "styled-components";
 
-import { Apercu } from "./_constants/theme";
-import { ApercuLight } from "./_constants/theme";
-import { SFProDisplay } from "./_constants/theme";
+import { Apercu } from "./commons/theme";
+import { ApercuLight } from "./commons/theme";
+import { SFProDisplay } from "./commons/theme";
 
 import ApercuFontUrl from "./assets/fonts/Apercu_Regular.otf";
 import ApercuLightFontUrl from "./assets/fonts/Apercu_Light.otf";

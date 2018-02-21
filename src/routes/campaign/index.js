@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 
-import NotFound from "../../components/NotFound";
-import LoadingIndicator from "../../components/LoadingIndicator";
-import { loadCampaign } from "../../redux/modules/campaign";
+import NotFound from "components/NotFound";
+import LoadingIndicator from "components/LoadingIndicator";
+import { loadCampaign } from "modules/campaign";
 
 import CampaignPage from "./campaign";
 import ShareCampaign from "./share";

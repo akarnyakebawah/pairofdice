@@ -3,13 +3,13 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Dropzone from "react-dropzone";
-import { createCampaign } from "../../redux/modules/campaign";
-import { Button } from "../../components/Button";
-import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
-import ErrorIndicator from "../../components/ErrorIndicator";
-import { BASE_ROUTE, LOGIN_ROUTE } from "../../constants/routes";
-import { dataUrlToFile, capitalize } from "../../helpers/utils";
 
+import { createCampaign } from "modules/campaign";
+import { Button } from "components/Button";
+import LoadingButtonIndicator from "components/LoadingButtonIndicator";
+import ErrorIndicator from "components/ErrorIndicator";
+import { BASE_ROUTE, LOGIN_ROUTE } from "routes/constants";
+import { dataUrlToFile, capitalize } from "../../../commons/utils";
 
 const Container = styled.div`
   align-self: center;
@@ -232,7 +232,10 @@ class CreateCampaign extends Component {
   }
 }
 
-const mapStateToProps = state => ({ campaign: state.campaign, auth: state.auth });
+const mapStateToProps = state => ({
+  campaign: state.campaign,
+  auth: state.auth
+});
 const mapDispatchToProps = { createCampaign };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateCampaign);

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Spinner from "react-spinkit";
 import PropTypes from "prop-types";
 
-import theme from "../constants/theme";
+import theme from "commons/theme";
 
 const Container = styled.div`
   display: flex;

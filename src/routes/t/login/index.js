@@ -5,17 +5,17 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Redux
-import { clearError, login } from "../../redux/modules/auth";
+import { clearError, login } from "modules/authentication";
 
 // Components
-import { Button } from "../../components/Button";
-import LoadingButtonIndicator from "../../components/LoadingButtonIndicator";
+import { Button } from "components/Button";
+import LoadingButtonIndicator from "components/LoadingButtonIndicator";
 
 import {
   BASE_ROUTE,
   CREATE_CAMPAIGN_ROUTE,
   REGISTER_ROUTE
-} from "../../constants/routes";
+} from "routes/constants";
 
 class Login extends Component {
   static propTypes = {
