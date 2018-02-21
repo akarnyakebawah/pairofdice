@@ -1,5 +1,5 @@
 /* @flow */
-import request, { baseUrl } from "./";
+import request, { baseUrl } from "../";
 
 export function createHelpersService() {
   const helperImagesUrl = () => baseUrl("helper/images/");

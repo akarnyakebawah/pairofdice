@@ -7,6 +7,8 @@ import { routerMiddleware } from "react-router-redux";
 import { persistStore, persistCombineReducers } from "redux-persist";
 import { routerReducer } from "react-router-redux";
 
+import { toastMiddleware } from "./toast/toastMiddleware";
+
 import {
   createAuthService,
   createCampaignService,
@@ -42,6 +44,7 @@ export default function configureStore(initialState) {
     applyMiddleware(
       isOnProduction() ? null : logger, // important, don't turn on logger on production!
       routerMiddleware(history),
+      toastMiddleware,
       thunk.withExtraArgument({
         AuthService: createAuthService(),
         CampaignService: createCampaignService(),

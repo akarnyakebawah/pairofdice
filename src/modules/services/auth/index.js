@@ -1,6 +1,6 @@
 /* @flow */
 
-import request, { baseUrl } from "./";
+import request, { baseUrl } from "../";
 
 import { User } from "models/";
 

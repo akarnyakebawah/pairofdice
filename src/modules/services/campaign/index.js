@@ -1,4 +1,4 @@
-import request, { baseUrl } from "./";
+import request, { baseUrl } from "../";
 
 import { Campaign } from "models/";
 
