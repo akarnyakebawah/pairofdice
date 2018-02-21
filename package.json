@@ -47,11 +47,12 @@
   },
   "lint-staged": {
     "*.{js, css, md, json}": [
-      "prettier --write",
+      "prettier --config .prettierrc.js --write",
       "git add"
     ]
   },
   "scripts": {
+    "autoformat": "prettier --config .prettierrc.js --write", 
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
