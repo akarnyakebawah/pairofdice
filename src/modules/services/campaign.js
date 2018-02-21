@@ -2,12 +2,11 @@ import request, { baseUrl } from "./";
 
 import { Campaign } from "models/";
 
-export function CampaignService() {
+export function createCampaignService() {
   const campaignsUrl = (campaignUrl = "") => baseUrl(`campaigns/${campaignUrl}`);
 
   async function postCampaign(campaign: Campaign): Promise<Campaign> {
     const { captions, name, image, url } = campaign;
-    const { campaignsUrl } = CampaignService;
     return request
       .post(campaignsUrl())
       .field("campaign_url", url)

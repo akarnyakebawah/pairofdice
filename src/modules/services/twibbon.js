@@ -3,7 +3,7 @@ import request, { baseUrl } from "./";
 
 import { Twibbon } from "models/";
 
-export function TwibbonService() {
+export function createTwibbonService() {
   const twibbonsUrl = (campaignUrl = "") => baseUrl(`twibbons/${campaignUrl}/`);
 
   async function postTwibbon(twibbon: Twibbon) {

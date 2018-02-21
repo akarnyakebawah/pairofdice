@@ -1,5 +1,5 @@
 import defaults from "superagent-defaults";
-import config from "../config";
+import config from "config";
 
 export const request = defaults();
 

@@ -7,6 +7,7 @@
     "cropperjs": "^1.2.2",
     "flow-bin": "^0.66.0",
     "prop-types": "^15.6.0",
+    "react": "^16.2.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-cropper": "^1.0.1",
     "react-dom": "^16.2.0",
@@ -14,20 +15,19 @@
     "react-ga": "^2.3.5",
     "react-ionicons": "^2.0.2",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
-    "react-router": "^4.2.0",
     "react-scripts": "1.1.1",
     "react-spinkit": "^3.0.0",
-    "react-toastify": "^2.2.0",
-    "react": "^16.2.0",
+    "react-toastify": "^3.3.4",
+    "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.3.5",
     "redux-thunk": "^2.2.0",
-    "redux": "^3.7.2",
     "styled-components": "^2.2.3",
-    "superagent-defaults": "^0.1.14",
-    "superagent": "^3.8.1"
+    "superagent": "^3.8.1",
+    "superagent-defaults": "^0.1.14"
   },
   "devDependencies": {
     "eslint": "^4.11.0",
@@ -52,7 +52,7 @@
     ]
   },
   "scripts": {
-    "autoformat": "prettier --config .prettierrc.js --write", 
+    "autoformat": "prettier --config .prettierrc.js --write",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

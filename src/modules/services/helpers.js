@@ -1,9 +1,8 @@
 /* @flow */
-import config from "../config";
-import request from "./";
+import request, { baseUrl } from "./";
 
-export function HelpersService() {
-  const helperImagesUrl = () => `${config.API_URL}helper/images/`;
+export function createHelpersService() {
+  const helperImagesUrl = () => baseUrl("helper/images/");
 
   const resizeImageBasePath = "https://twiggsy.imgix.net/";
 

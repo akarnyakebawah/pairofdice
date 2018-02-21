@@ -1,5 +1,3 @@
-import { CampaignService } from "services/";
-
 const CAMPAIGN_CREATED = "campaign/CAMPAIGN_CREATED";
 const CAMPAIGN_LOADED = "campaign/CAMPAIGN_LOADED";
 const ERROR_CLEAR = "campaign/ERROR_CLEAR";
@@ -67,10 +65,10 @@ function setError(payload) {
 
 // Thunks
 export function loadCampaign(campaignUrl) {
-  return async dispatch => {
+  return async (dispatch, getState, { CampaignService }) => {
     dispatch(loading());
     try {
-      const { body: campaign } = await CampaignService().getCampaign({ campaignUrl });
+      const { body: campaign } = await CampaignService.getCampaign({ campaignUrl });
       dispatch(clearError());
       dispatch(loadedCampaign(campaign));
       dispatch(loaded());
@@ -83,10 +81,10 @@ export function loadCampaign(campaignUrl) {
 
 // Thunk
 export function createCampaign({ captions, name, image, url }) {
-  return async dispatch => {
+  return async (dispatch, getState, { CampaignService }) => {
     dispatch(loading());
     try {
-      const { body: campaign } = await CampaignService().postCampaign({
+      const { body: campaign } = await CampaignService.postCampaign({
         captions,
         name,
         image,

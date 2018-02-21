@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Switch, Route, withRouter } from "react-router-dom";
 import React from "react";
 import ReactGA from "react-ga";
+import { ToastContainer } from "react-toastify";
 
 // Redux
 import { reload as reloadAuth } from "../modules/auth";
@@ -61,6 +62,7 @@ class App extends React.Component<PropTypes, any> {
           <Route path={`${routes.BASE_ROUTE}:campaignUrl`} component={Campaign} />
           <Route path="*" component={NotFound} />
         </Switch>
+        <ToastContainer />
       </DefaultLayout>
     );
   }

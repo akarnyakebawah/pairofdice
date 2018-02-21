@@ -4,7 +4,7 @@ import request, { baseUrl } from "./";
 
 import { User } from "models/";
 
-export function AuthService() {
+export function createAuthService() {
   const authUrl = () => baseUrl("auth/");
 
   function setAuthorizationToken(token?: string | null): void {

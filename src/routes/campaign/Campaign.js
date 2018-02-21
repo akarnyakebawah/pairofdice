@@ -1,9 +1,7 @@
 /* @flow */
 import "cropperjs/dist/cropper.css";
-// import "react-toastify/dist/ReactToastify.min.css";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-// import { toast, ToastContainer } from "react-toastify";
 import Cropper from "react-cropper";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
@@ -369,15 +367,6 @@ class Campaign extends Component<Props, any> {
           campaign.caption_template && (
             <Container>
               <CaptionsForm value={campaign.caption_template} disabled />
-              {/* <ToastContainer
-                position="bottom-left"
-                type="info"
-                autoClose={2000}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                pauseOnHover
-              /> */}
               <CopyToClipboard
                 text={campaign.caption_template}
                 onCopy={() => {

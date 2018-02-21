@@ -1,11 +1,10 @@
 /* @flow */
-import config from "../config";
-import request from "./";
+import request, { baseUrl } from "./";
 
 import { User } from "models/";
 
-export function UserService() {
-  const userUrl = () => `${config.API_URL}users/`;
+export function createUserService() {
+  const userUrl = () => baseUrl("users/");
 
   async function postUser(user: User): any {
     const { username, name, birthDate, email, password } = user;

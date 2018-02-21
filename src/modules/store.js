@@ -7,6 +7,14 @@ import { routerMiddleware } from "react-router-redux";
 import { persistStore, persistCombineReducers } from "redux-persist";
 import { routerReducer } from "react-router-redux";
 
+import {
+  createAuthService,
+  createCampaignService,
+  createHelpersService,
+  createTwibbonService,
+  createUserService
+} from "modules/services";
+
 import auth from "./auth";
 import twibbon from "./twibbon";
 import campaign from "./campaign";
@@ -30,10 +38,19 @@ export default function configureStore(initialState) {
 
   const history = createHistory();
 
-  const enhancer = isOnProduction()
-    ? composeEnhancers(applyMiddleware(routerMiddleware(history), thunk))
-    : composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger));
-
+  const enhancer = composeEnhancers(
+    applyMiddleware(
+      isOnProduction() ? null : logger, // important, don't turn on logger on production!
+      routerMiddleware(history),
+      thunk.withExtraArgument({
+        AuthService: createAuthService(),
+        CampaignService: createCampaignService(),
+        HelpersService: createHelpersService(),
+        UserService: createUserService(),
+        TwibbonService: createTwibbonService()
+      })
+    )
+  );
   const store = createStore(persistCombineReducers(config, rootReducer), initialState, enhancer);
 
   const persistor = persistStore(store);

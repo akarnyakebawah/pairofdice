@@ -1,5 +1,4 @@
 import * as localStorageKey from "commons/localStorage";
-import { AuthService, UserService } from "../../services/";
 
 const ERROR_CLEAR = "auth/error_clear";
 const ERROR_SET = "auth/error_set";
@@ -89,11 +88,11 @@ export function clearError() {
 
 // Thunk
 export function reload() {
-  return async dispatch => {
+  return async (dispatch, getState, { AuthService }) => {
     dispatch(loading());
     const token = localStorage.getItem(localStorageKey.TOKEN);
     if (token) {
-      AuthService().setAuthorizationToken(`JWT ${token}`);
+      AuthService.setAuthorizationToken(`JWT ${token}`);
       dispatch(setToken(token));
     }
     dispatch(loaded());
@@ -102,12 +101,12 @@ export function reload() {
 }
 
 export function login(credentials) {
-  return async dispatch => {
+  return async (dispatch, getState, { AuthService }) => {
     dispatch(loading());
     try {
-      const { body: result } = await AuthService().login(credentials);
+      const { body: result } = await AuthService.login(credentials);
       localStorage.setItem(localStorageKey.TOKEN, result.token);
-      AuthService().setAuthorizationToken(`JWT ${result.token}`);
+      AuthService.setAuthorizationToken(`JWT ${result.token}`);
       dispatch(onLogin(result));
       dispatch(clearError());
     } catch (error) {
@@ -118,20 +117,20 @@ export function login(credentials) {
 }
 
 export function logout() {
-  return async dispatch => {
+  return async (dispatch, getState, { AuthService }) => {
     dispatch(loading());
     localStorage.removeItem(localStorageKey.TOKEN);
-    AuthService().setAuthorizationToken(null);
+    AuthService.setAuthorizationToken(null);
     dispatch(onLogout());
     dispatch(completeLoading());
   };
 }
 
 export function register(credentials) {
-  return async dispatch => {
+  return async (dispatch, getState, { UserService }) => {
     dispatch(loading());
     try {
-      await UserService().postUser(credentials);
+      await UserService.postUser(credentials);
       await dispatch(login(credentials));
     } catch (error) {
       dispatch(setError(error));

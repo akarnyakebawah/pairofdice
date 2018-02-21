@@ -1,5 +1,3 @@
-import { HelpersService } from "services";
-
 const TWIBBON_CREATED = "twibbon/CAMPAIGN_CREATED";
 const ERROR_CLEAR = "twibbon/ERROR_CLEAR";
 const ERROR_SET = "twibbon/ERROR_SET";
@@ -91,7 +89,7 @@ export function setError(payload) {
 
 // Thunk
 export function createTwibbon({ x, y, width, height }) {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, { HelpersService }) => {
     dispatch(loading());
 
     try {
@@ -103,7 +101,7 @@ export function createTwibbon({ x, y, width, height }) {
       const { imageFile } = state.twibbon;
 
       // Get url of original image and of campaign
-      const { body } = await HelpersService().uploadImage(imageFile);
+      const { body } = await HelpersService.uploadImage(imageFile);
       const relativeImage = body.relative_img;
 
       // Tembak ke imgix buat di overlay
@@ -113,7 +111,7 @@ export function createTwibbon({ x, y, width, height }) {
       }
 
       // Query to generate overlayed image
-      const result = HelpersService().overlayImageQuery(
+      const result = HelpersService.overlayImageQuery(
         relativeImage,
         encodeURI(campaignUrl),
         x,
@@ -138,10 +136,10 @@ export function resize() {
 }
 
 export function uploadImage({ image }) {
-  return async dispatch => {
+  return async (dispatch, getState, { HelpersService }) => {
     dispatch(loading());
     try {
-      const { body: result } = await HelpersService().uploadImage({ image });
+      const { body: result } = await HelpersService.uploadImage({ image });
       dispatch(resizedImage(result));
     } catch (error) {
       dispatch(setError(error));
