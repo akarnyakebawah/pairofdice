@@ -10,7 +10,7 @@ export function createCampaignService() {
     const formData = new FormData();
     formData.append("twibbon_img", image, image.name);
     formData.append("name", name);
-    formData.append("captions", captions);
+    formData.append("caption_template", captions);
     formData.append("campaign_url", url);
     return request.post(campaignsUrl()).send(formData);
   }
