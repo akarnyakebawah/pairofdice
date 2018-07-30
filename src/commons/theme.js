@@ -6,6 +6,8 @@
   - Declare all font-family names into const here and export it
 */
 
+import imageFokker from "../assets/fokker.jpg";
+
 export const Apercu = "Apercu";
 export const ApercuLight = "ApercuLight";
 export const SFProDisplay = "SFProDisplay";
@@ -52,6 +54,7 @@ const image = {
 
 const linearGradient = {
   main: `linear-gradient(305deg, ${color.salmon}, ${color.mediumPink})`
+  //   main: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${imageFokker})`
 };
 
 const transition = {

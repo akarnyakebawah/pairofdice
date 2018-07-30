@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import imageFokker from "../../assets/fokker.jpg";
 
 // Components
 import Navbar from "components/Navbar";

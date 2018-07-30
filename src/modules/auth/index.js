@@ -100,16 +100,26 @@ export function reload() {
   };
 }
 
+/**
+ * Sebagai action untuk login
+ * @param {*} credentials
+ */
 export function login(credentials) {
   return async (dispatch, getState, { AuthService }) => {
     dispatch(loading());
+
+    console.log("login action !", credentials);
+
     try {
+      console.log("mau nunggu gan !");
       const { body: result } = await AuthService.login(credentials);
+      console.log("selesai nunggu gan !");
       localStorage.setItem(localStorageKey.TOKEN, result.token);
       AuthService.setAuthorizationToken(`JWT ${result.token}`);
       dispatch(onLogin(result));
       dispatch(clearError());
     } catch (error) {
+      console.log("anjir error");
       dispatch(setError(error));
     }
     dispatch(completeLoading());

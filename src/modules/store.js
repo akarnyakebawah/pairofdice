@@ -1,7 +1,7 @@
 import thunk from "redux-thunk";
 import storage from "redux-persist/es/storage";
 import createHistory from "history/createBrowserHistory";
-import logger from "redux-logger";
+//import logger from "redux-logger";
 import { createStore, applyMiddleware, compose } from "redux";
 import { routerMiddleware } from "react-router-redux";
 import { persistStore, persistCombineReducers } from "redux-persist";
@@ -42,7 +42,7 @@ export default function configureStore(initialState) {
 
   const enhancer = composeEnhancers(
     applyMiddleware(
-      isOnProduction() ? null : logger, // important, don't turn on logger on production!
+      //isOnProduction() ? null : logger, // important, don't turn on logger on production!
       routerMiddleware(history),
       toastMiddleware,
       thunk.withExtraArgument({

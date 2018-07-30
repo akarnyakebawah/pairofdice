@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
+import { GoogleLoginButton } from "react-social-login-buttons";
+
+import config from "./config.json";
 
 // Redux
 import { clearError, login } from "modules/auth";
@@ -38,6 +42,8 @@ class Login extends Component {
       this.props.history.replace(BASE_ROUTE);
       this.props.clearError();
     }
+
+    console.log("NODE_ENV : ", process.env.NODE_ENV);
   }
 
   onChangeState(event) {
@@ -56,6 +62,21 @@ class Login extends Component {
     }
   }
 
+  async googleResponse(event) {
+    this.setState({
+      username: event.tokenObj.id_token,
+      password: "causelovingyouiseasy"
+    });
+    const { username, password } = this.state;
+
+    await this.props.login({ username, password });
+
+    if (!!this.props.auth.token) {
+      this.props.history.push(CREATE_CAMPAIGN_ROUTE);
+      this.props.clearError();
+    }
+  }
+
   render() {
     const { username, password } = this.state;
     const { loading, error } = this.props.auth;
@@ -65,14 +86,12 @@ class Login extends Component {
           name="username"
           onChange={e => this.onChangeState(e)}
           placeholder="Username / Email"
-          value={username}
         />
         <Input
           name="password"
           onChange={e => this.onChangeState(e)}
           placeholder="Password"
           type="password"
-          value={password}
         />
         {error &&
           error.status === 400 && (
@@ -82,6 +101,14 @@ class Login extends Component {
           {!loading && <span>Login</span>}
           {loading && <LoadingButtonIndicator />}
         </LoginButton>
+
+        <GoogleLoginButton>
+          <GoogleLogin
+            clientId={config.GOOGLE_CLIENT_ID}
+            onSuccess={e => this.googleResponse(e)}
+            onFailure={this.onFailure}
+          />
+        </GoogleLoginButton>
         <RedirectToRegister>
           Doesn't have account yet? <Link to={REGISTER_ROUTE}>Register</Link>
         </RedirectToRegister>
