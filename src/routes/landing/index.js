@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { ButtonLink } from "components/Button";
 import { CREATE_CAMPAIGN_ROUTE } from "routes/constants";
 
-const title = "Build a better campaign.";
-const subtitle = "Easily share your campaign filter with friends and family.";
-const buttonText = "CREATE CAMPAIGN";
+const title = "Start a photo campaign!";
+const subtitle =
+  "Twiggsy is a simple tool that let you share a personalized photo frame for your events.";
+const buttonText = "START CAMPAIGN";
 
 class Landing extends Component {
   state = { sesuatu: "wow" };
@@ -46,15 +47,14 @@ const Title = styled.div`
   font-weight: bolder;
   margin: 0 ${margin};
   width: 100%;
-  text-align: center;
+  text-align: left;
   line-height: 1;
   @media screen and (max-width: ${props => props.theme.breakpoint.mobile}) {
     font-size: ${props => props.theme.fontSize.jumbo};
     margin: 0 ${mobileMargin};
     width: auto;
   }
-  @media screen and (min-width: ${props =>
-      props.theme.breakpoint.largeDesktop}) {
+  @media screen and (min-width: ${props => props.theme.breakpoint.largeDesktop}) {
     font-size: ${props => props.theme.fontSize.huge};
   }
 `;
@@ -62,7 +62,7 @@ const Title = styled.div`
 const Subtitle = styled.div`
   color: ${props => props.theme.color.white};
   font-size: ${props => props.theme.fontSize.jumbo};
-  text-align: center;
+  text-align: left;
   line-height: 1;
   margin: ${margin};
   width: 100%;
@@ -71,14 +71,13 @@ const Subtitle = styled.div`
     font-size: ${props => props.theme.fontSize.large};
     width: auto;
   }
-  @media screen and (min-width: ${props =>
-      props.theme.breakpoint.largeDesktop}) {
+  @media screen and (min-width: ${props => props.theme.breakpoint.largeDesktop}) {
     font-size: ${props => props.theme.fontSize.jumbo};
   }
 `;
 
 const UnflexButton = styled(ButtonLink)`
-  align-self: center;
+  align-self: start;
   display: flex;
   width: 20rem;
   > * {

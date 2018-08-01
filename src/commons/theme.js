@@ -42,7 +42,8 @@ const fontSize = {
   small: "0.75rem",
   medium: "1rem",
   large: "1.5rem",
-  jumbo: "2rem",
+  //jumbo: "2rem",
+  jumbo: "3rem",
   huge: "5rem",
   superHuge: "8rem"
 };
