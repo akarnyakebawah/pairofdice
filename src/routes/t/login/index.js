@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
-import { GoogleLoginButton } from "react-social-login-buttons";
+import GoogleButton from "react-google-button";
 
 import config from "./config.json";
 
@@ -102,13 +102,23 @@ class Login extends Component {
           {loading && <LoadingButtonIndicator />}
         </LoginButton>
 
-        <GoogleLoginButton>
-          <GoogleLogin
-            clientId={config.GOOGLE_CLIENT_ID}
-            onSuccess={e => this.googleResponse(e)}
-            onFailure={this.onFailure}
-          />
-        </GoogleLoginButton>
+        <GoogleLogin
+          clientId={config.GOOGLE_CLIENT_ID}
+          onSuccess={e => this.googleResponse(e)}
+          onFailure={this.onFailure}
+          style={{
+            "background-color": "Transparent",
+            "background-repeat": "no-repeat",
+            border: "none",
+            cursor: "pointer",
+            overflow: "hidden",
+            "font-weight": "600",
+            outline: "none"
+          }}
+        >
+          <GoogleButton type="light" />
+        </GoogleLogin>
+
         <RedirectToRegister>
           Doesn't have account yet? <Link to={REGISTER_ROUTE}>Register</Link>
         </RedirectToRegister>

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import imageFokker from "../../assets/fokker.jpg";
+import Footers from "../footer/index";
 
 // Components
 import Navbar from "components/Navbar";
@@ -8,6 +8,7 @@ import Footer from "components/Footer";
 
 const Container = styled.div`
   background: ${props => props.theme.linearGradient.main};
+  background-size: cover;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -27,9 +28,12 @@ class Default extends React.Component {
   render() {
     return (
       <Container>
-        <Navbar />
-        {this.props.children}
+        <Container>
+          <Navbar />
+          {this.props.children}
+        </Container>
         <Footer />
+        <Footers />
       </Container>
     );
   }

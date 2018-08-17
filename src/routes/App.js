@@ -2,7 +2,7 @@
 import { connect } from "react-redux";
 import { Switch, Route, withRouter } from "react-router-dom";
 import React from "react";
-import ReactGA from "react-ga";
+// import ReactGA from "react-ga";
 import { ToastContainer } from "react-toastify";
 
 // Redux
@@ -20,6 +20,8 @@ import CreateCampaign from "./t/create";
 import Login from "./t/login";
 import Logout from "./t/logout";
 import Register from "./t/register";
+
+import "../assets/footerStyle.css";
 
 // Layouts
 import DefaultLayout from "./_layouts/Default";
@@ -39,15 +41,15 @@ interface PropTypes {
 
 class App extends React.Component<PropTypes, any> {
   async componentDidMount() {
-    await this.props.reloadAuth();
-    ReactGA.initialize("UA-109827623-1");
-    ReactGA.pageview(window.location.href);
+    // await this.props.reloadAuth();
+    // ReactGA.initialize("UA-109827623-1");
+    // ReactGA.pageview(window.location.href);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.location.pathname !== nextProps.location.pathname) {
-      ReactGA.pageview(window.location.href);
-    }
+    // if (this.props.location.pathname !== nextProps.location.pathname) {
+    //   ReactGA.pageview(window.location.href);
+    // }
   }
 
   render() {

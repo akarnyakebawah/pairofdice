@@ -4,8 +4,8 @@ const config = {
     WEB_URL: "https://twiggsy.com/"
   },
   development: {
-    API_URL: "https://api.twiggsy.com/v1/",
-    WEB_URL: "https://twiggsy.com/"
+    API_URL: "http://206.189.33.89/v1/",
+    WEB_URL: "http://206.189.33.89:3220/"
   },
   local: {
     API_URL: "http://localhost:8000/v1/",
@@ -13,5 +13,5 @@ const config = {
   }
 };
 
-export default config[process.env.NODE_ENV || "development"];
-//export default config["local"];
+//export default config[process.env.NODE_ENV || "development"];
+export default config["development"];
