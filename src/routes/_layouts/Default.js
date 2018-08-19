@@ -5,6 +5,7 @@ import Footers from "../footer/index";
 // Components
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
+import Featured from "../featured/index";
 
 const Container = styled.div`
   background: ${props => props.theme.linearGradient.main};
@@ -24,6 +25,12 @@ const Container = styled.div`
   `};
 `;
 
+const FeaturedContainer = styled.div`
+  background: #222;
+  display: block;
+  padding-bottom: 10vh;
+`;
+
 class Default extends React.Component {
   render() {
     return (
@@ -33,6 +40,9 @@ class Default extends React.Component {
           {this.props.children}
         </Container>
         <Footer />
+        <FeaturedContainer>
+          <Featured />
+        </FeaturedContainer>
         <Footers />
       </Container>
     );

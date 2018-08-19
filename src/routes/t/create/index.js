@@ -193,9 +193,14 @@ class CreateCampaign extends Component<Props, State> {
     const image = dataUrlToFile(await this.cropper[0].getCroppedCanvas().toDataURL("image/png"));
     await this.props.createCampaign({ name, url, captions, image });
 
-    // If the campaign is created and no error, redirect to share page
+    // If the campaign is created and no error, redirect to share page.
     if (!!this.props.campaign.campaign && !this.props.campaign.error) {
       this.props.history.push(`${BASE_ROUTE}${url}/share`);
+    } else {
+      // temporary : ignore campaign_url error.
+      if (JSON.parse(this.props.campaign.error.response.text).hasOwnProperty("campaign_url")) {
+        this.props.history.push(`${BASE_ROUTE}${url}/share`);
+      }
     }
   }
 
@@ -220,6 +225,7 @@ class CreateCampaign extends Component<Props, State> {
     let urlError = "";
     let imageError = "";
     if (error && error.status === 400) {
+      console.log("urlerror : ", error.response.body);
       nameError = error.response.body.name && error.response.body.name[0];
       urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
       imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];

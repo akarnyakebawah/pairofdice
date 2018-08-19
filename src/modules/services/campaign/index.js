@@ -12,6 +12,8 @@ export function createCampaignService() {
     formData.append("name", name);
     formData.append("caption_template", captions);
     formData.append("campaign_url", url);
+
+    console.log("formData : ", formData.get("campaign_url"));
     return request.post(campaignsUrl()).send(formData);
   }
 

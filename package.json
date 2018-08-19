@@ -21,6 +21,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
     "react-scripts": "1.1.1",
+    "react-slick": "^0.23.1",
     "react-social-login-buttons": "^2.1.0",
     "react-spinkit": "^3.0.0",
     "react-toastify": "^3.3.4",
@@ -28,6 +29,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.3.5",
     "redux-thunk": "^2.2.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^2.2.3",
     "superagent": "^3.8.1",
     "superagent-defaults": "^0.1.14"

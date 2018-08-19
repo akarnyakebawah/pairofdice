@@ -80,6 +80,8 @@ class Login extends Component {
   render() {
     const { username, password } = this.state;
     const { loading, error } = this.props.auth;
+
+    console.log("loading : ", loading);
     return (
       <Form>
         <Input
@@ -107,12 +109,12 @@ class Login extends Component {
           onSuccess={e => this.googleResponse(e)}
           onFailure={this.onFailure}
           style={{
-            "background-color": "Transparent",
-            "background-repeat": "no-repeat",
+            backgroundColor: "Transparent",
+            backgroundRepeat: "no-repeat",
             border: "none",
             cursor: "pointer",
             overflow: "hidden",
-            "font-weight": "600",
+            fontWeight: "600",
             outline: "none"
           }}
         >

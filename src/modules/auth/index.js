@@ -11,7 +11,7 @@ const TOKEN_SET = "auth/token_set";
 const REHYDRATE = "persist/REHYDRATE";
 
 const INITIAL_STATE = {
-  loading: true,
+  loading: false,
   loaded: false,
   error: null,
   user: {},
