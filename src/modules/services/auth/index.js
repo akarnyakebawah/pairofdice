@@ -8,7 +8,7 @@ export function createAuthService() {
   const authUrl = () => baseUrl("auth/");
 
   function setAuthorizationToken(token?: string | null): void {
-    console.log("Authorization gan ");
+    // console.log("Authorization gan ");
     request.set("Authorization", token);
   }
 
@@ -17,8 +17,8 @@ export function createAuthService() {
    * @param {*} user
    */
   async function login(user: User): Promise<User> {
-    console.log("user : ", user);
-    console.log("authUrl gan : ", authUrl());
+    // console.log("user : ", user);
+    // console.log("authUrl gan : ", authUrl());
 
     return request.post(authUrl()).send(user);
   }

@@ -43,7 +43,7 @@ class Login extends Component {
       this.props.clearError();
     }
 
-    console.log("NODE_ENV : ", process.env.NODE_ENV);
+    // console.log("NODE_ENV : ", process.env.NODE_ENV);
   }
 
   onChangeState(event) {
@@ -81,7 +81,7 @@ class Login extends Component {
     const { username, password } = this.state;
     const { loading, error } = this.props.auth;
 
-    console.log("loading : ", loading);
+    // console.log("loading : ", loading);
     return (
       <Form>
         <Input

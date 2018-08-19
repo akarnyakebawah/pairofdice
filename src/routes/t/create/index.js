@@ -225,7 +225,7 @@ class CreateCampaign extends Component<Props, State> {
     let urlError = "";
     let imageError = "";
     if (error && error.status === 400) {
-      console.log("urlerror : ", error.response.body);
+      // console.log("urlerror : ", error.response.body);
       nameError = error.response.body.name && error.response.body.name[0];
       urlError = error.response.body.campaign_url && error.response.body.campaign_url[0];
       imageError = error.response.body.twibbon_img && error.response.body.twibbon_img[0];
